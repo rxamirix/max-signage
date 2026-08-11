@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { site } from "@/lib/site";
-import { cn, InstagramIcon, PhoneIcon, WhatsAppIcon } from "./ui";
+import { cn, PhoneIcon } from "./ui";
 
 export function FloatingActions() {
   const [showTop, setShowTop] = useState(false);
@@ -39,28 +39,6 @@ export function FloatingActions() {
           />
         </svg>
       </button>
-
-      <div className="pointer-events-none fixed bottom-24 left-4 z-40 flex flex-col items-start gap-3 sm:bottom-5 md:bottom-8 md:left-8">
-        <a
-          href={site.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="اینستاگرام مکس"
-          className="pointer-events-auto grid size-14 place-items-center rounded-full bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white shadow-xl shadow-[#dd2a7b]/30 transition-transform hover:scale-105"
-        >
-          <InstagramIcon className="size-7" />
-        </a>
-
-        <a
-          href={`https://wa.me/${site.whatsapp}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="گفتگو در واتساپ"
-          className="pointer-events-auto grid size-14 place-items-center rounded-full bg-[#25D366] text-white shadow-xl shadow-[#25D366]/30 transition-transform hover:scale-105"
-        >
-          <WhatsAppIcon className="size-7" />
-        </a>
-      </div>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-navy-100 bg-brand-white/95 backdrop-blur-md sm:hidden">
         <div className="grid grid-cols-2 gap-2 p-2.5">

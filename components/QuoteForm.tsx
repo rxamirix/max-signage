@@ -11,6 +11,19 @@ const inputClass =
 
 const labelClass = "mb-2 block text-sm font-bold text-navy-800";
 
+const LIMITS = {
+  name: 80,
+  phone: 15,
+  city: 60,
+  service: 80,
+  size: 120,
+  note: 500,
+} as const;
+
+function sanitizeLine(value: string, max: number) {
+  return value.replace(/[\u0000-\u001F\u007F]/g, "").trim().slice(0, max);
+}
+
 export function QuoteForm({ defaultService }: { defaultService?: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -20,23 +33,24 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
   const [note, setNote] = useState("");
   const [touched, setTouched] = useState(false);
 
-  const phoneValid = /^09\d{9}$/.test(phone.replace(/[^\d]/g, ""));
-  const valid = name.trim().length > 1 && phoneValid;
+  const digits = phone.replace(/[^\d]/g, "").slice(0, 11);
+  const phoneValid = /^09\d{9}$/.test(digits);
+  const valid = sanitizeLine(name, LIMITS.name).length > 1 && phoneValid;
 
   const message = useMemo(() => {
     const lines = [
       "سلام، درخواست استعلام قیمت رایگان دارم.",
-      `نام: ${name || "-"}`,
-      `شماره تماس: ${phone || "-"}`,
-      `شهر: ${city || "-"}`,
-      `نوع تابلو: ${service || "-"}`,
-      `ابعاد تقریبی سردر: ${size || "-"}`,
-      note ? `توضیحات: ${note}` : "",
+      `نام: ${sanitizeLine(name, LIMITS.name) || "-"}`,
+      `شماره تماس: ${digits || "-"}`,
+      `شهر: ${sanitizeLine(city, LIMITS.city) || "-"}`,
+      `نوع تابلو: ${sanitizeLine(service, LIMITS.service) || "-"}`,
+      `ابعاد تقریبی سردر: ${sanitizeLine(size, LIMITS.size) || "-"}`,
+      note ? `توضیحات: ${sanitizeLine(note, LIMITS.note)}` : "",
       "",
       "ارسال‌شده از سایت maxtablo.ir",
     ].filter(Boolean);
     return lines.join("\n");
-  }, [name, phone, city, service, size, note]);
+  }, [name, digits, city, service, size, note]);
 
   const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
 
@@ -46,9 +60,8 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
       onSubmit={(event) => {
         event.preventDefault();
         setTouched(true);
-        if (valid) {
-          window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-        }
+        if (!valid) return;
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
       }}
     >
       <div className="grid gap-5 sm:grid-cols-2">
@@ -61,9 +74,10 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
             name="name"
             className={inputClass}
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => setName(event.target.value.slice(0, LIMITS.name))}
             placeholder="مثلاً علی محمدی"
             autoComplete="name"
+            maxLength={LIMITS.name}
             required
           />
         </div>
@@ -84,9 +98,12 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
               touched && !phoneValid && "border-red-400 focus:border-red-500",
             )}
             value={phone}
-            onChange={(event) => setPhone(event.target.value)}
+            onChange={(event) =>
+              setPhone(event.target.value.replace(/[^\d]/g, "").slice(0, 11))
+            }
             placeholder="09xxxxxxxxx"
             autoComplete="tel"
+            maxLength={LIMITS.phone}
             required
           />
           {touched && !phoneValid ? (
@@ -105,7 +122,7 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
             name="city"
             className={inputClass}
             value={city}
-            onChange={(event) => setCity(event.target.value)}
+            onChange={(event) => setCity(event.target.value.slice(0, LIMITS.city))}
           >
             <option value="">انتخاب کنید</option>
             {locations.map((location) => (
@@ -126,7 +143,9 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
             name="service"
             className={inputClass}
             value={service}
-            onChange={(event) => setService(event.target.value)}
+            onChange={(event) =>
+              setService(event.target.value.slice(0, LIMITS.service))
+            }
           >
             <option value="">هنوز مطمئن نیستم</option>
             {services.map((item) => (
@@ -146,8 +165,9 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
             name="size"
             className={inputClass}
             value={size}
-            onChange={(event) => setSize(event.target.value)}
+            onChange={(event) => setSize(event.target.value.slice(0, LIMITS.size))}
             placeholder="مثلاً ۴ متر عرض در ۱ متر ارتفاع"
+            maxLength={LIMITS.size}
           />
         </div>
 
@@ -161,8 +181,9 @@ export function QuoteForm({ defaultService }: { defaultService?: string }) {
             rows={4}
             className={cn(inputClass, "resize-y")}
             value={note}
-            onChange={(event) => setNote(event.target.value)}
+            onChange={(event) => setNote(event.target.value.slice(0, LIMITS.note))}
             placeholder="نام کسب‌وکار، رنگ مورد نظر یا هر نکته‌ای که به ما کمک می‌کند."
+            maxLength={LIMITS.note}
           />
         </div>
       </div>

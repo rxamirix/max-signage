@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { navigation, site } from "@/lib/site";
 import { services } from "@/lib/services";
-import { cn, PhoneIcon, PhoneText } from "./ui";
+import { SiteSearch } from "./SiteSearch";
+import { cn, InstagramIcon, WhatsAppIcon } from "./ui";
 
 export function Header() {
   const pathname = usePathname();
@@ -118,13 +119,7 @@ export function Header() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <a
-                href={`tel:${site.phone}`}
-                className="hidden items-center gap-2 rounded-full bg-brand-yellow px-5 py-2.5 font-bold text-navy-900 transition-transform hover:-translate-y-0.5 sm:inline-flex"
-              >
-                <PhoneIcon className="size-4" />
-                <PhoneText />
-              </a>
+              <SiteSearch variant="desktop" />
 
               <button
                 type="button"
@@ -163,6 +158,8 @@ export function Header() {
           className="fixed inset-0 top-18 z-40 overflow-y-auto bg-navy-950/98 pb-32 backdrop-blur-sm md:top-22 xl:hidden"
         >
           <nav aria-label="منوی موبایل" className="container-page py-6">
+            <SiteSearch variant="mobile" onNavigate={() => setOpen(false)} />
+
             <ul className="flex flex-col gap-1.5">
               {navigation.map((item) => (
                 <li key={item.href}>
@@ -197,13 +194,26 @@ export function Header() {
               ))}
             </ul>
 
-            <a
-              href={`tel:${site.phone}`}
-              className="mt-8 flex items-center justify-center gap-2 rounded-full bg-brand-yellow px-6 py-4 text-lg font-extrabold text-navy-900"
-            >
-              <PhoneIcon />
-              <PhoneText />
-            </a>
+            <div className="mt-8 grid grid-cols-2 gap-2">
+              <a
+                href={`https://wa.me/${site.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-4 text-base font-extrabold text-white"
+              >
+                <WhatsAppIcon className="size-5" />
+                واتساپ
+              </a>
+              <a
+                href={site.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#8134af] px-4 py-4 text-base font-extrabold text-white"
+              >
+                <InstagramIcon className="size-5" />
+                اینستاگرام
+              </a>
+            </div>
           </nav>
         </div>
       ) : null}

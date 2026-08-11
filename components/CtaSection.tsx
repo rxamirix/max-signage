@@ -1,5 +1,5 @@
-import { site, trustBadges } from "@/lib/site";
-import { Button, CheckIcon, PhoneIcon, PhoneText, WhatsAppIcon } from "./ui";
+import { trustBadges } from "@/lib/site";
+import { Button, CheckIcon } from "./ui";
 
 export function CtaSection({
   title = "تابلوی سردر شما، اولین حرفی است که کسب‌وکارتان می‌زند",
@@ -36,19 +36,9 @@ export function CtaSection({
               ))}
             </ul>
 
-            <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button href={`tel:${site.phone}`} size="lg" external>
-                <PhoneIcon className="size-5" />
-                <PhoneText />
-              </Button>
-              <Button
-                href={`https://wa.me/${site.whatsapp}`}
-                size="lg"
-                external
-                className="!border-0 !bg-[#25D366] !text-white shadow-lg shadow-[#25D366]/30 hover:!bg-[#1ebe57]"
-              >
-                <WhatsAppIcon className="size-5" />
-                گفتگو در واتساپ
+            <div className="mt-10 flex justify-center">
+              <Button href="/contact#quote" size="lg">
+                استعلام رایگان
               </Button>
             </div>
           </div>

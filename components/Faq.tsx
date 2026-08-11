@@ -14,11 +14,12 @@ export function Faq({
           key={item.question}
           open={index === 0}
           className={cn(
-            "group rounded-2xl border transition-colors",
+            "group faq-item rounded-2xl border transition-[border-color,box-shadow] duration-300",
             tone === "light"
-              ? "border-navy-100 bg-brand-white open:border-navy-300"
+              ? "border-navy-100 bg-brand-white open:border-navy-300 open:shadow-md open:shadow-navy-900/5"
               : "border-brand-white/10 bg-brand-white/5 open:border-brand-yellow/40",
           )}
+          style={{ animationDelay: `${index * 70}ms` }}
         >
           <summary
             className={cn(
@@ -39,14 +40,18 @@ export function Faq({
               +
             </span>
           </summary>
-          <p
-            className={cn(
-              "px-5 pb-5 leading-8 md:px-6 md:pb-6",
-              tone === "light" ? "text-navy-700/85" : "text-brand-white/75",
-            )}
-          >
-            {item.answer}
-          </p>
+          <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr] motion-reduce:transition-none">
+            <div className="overflow-hidden">
+              <p
+                className={cn(
+                  "px-5 pb-5 leading-8 md:px-6 md:pb-6",
+                  tone === "light" ? "text-navy-700/85" : "text-brand-white/75",
+                )}
+              >
+                {item.answer}
+              </p>
+            </div>
+          </div>
         </details>
       ))}
     </div>

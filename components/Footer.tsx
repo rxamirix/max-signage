@@ -3,7 +3,7 @@ import Link from "next/link";
 import { locations } from "@/lib/locations";
 import { services } from "@/lib/services";
 import { branches, site } from "@/lib/site";
-import { ClockIcon, InstagramIcon, PhoneIcon, PhoneText, PinIcon } from "./ui";
+import { ClockIcon, InstagramIcon, PinIcon, WhatsAppIcon } from "./ui";
 
 export function Footer() {
   const year = new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(
@@ -32,11 +32,13 @@ export function Footer() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
-                  href={`tel:${site.phone}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-brand-yellow px-5 py-2.5 font-bold text-navy-900 transition-transform hover:-translate-y-0.5"
+                  href={`https://wa.me/${site.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-bold text-white transition-transform hover:-translate-y-0.5"
                 >
-                  <PhoneIcon className="size-4" />
-                  <PhoneText />
+                  <WhatsAppIcon className="size-4" />
+                  واتساپ
                 </a>
                 <a
                   href={site.instagram}
@@ -45,7 +47,7 @@ export function Footer() {
                   className="inline-flex items-center gap-2 rounded-full border border-brand-white/20 px-5 py-2.5 font-medium transition-colors hover:border-brand-yellow hover:text-brand-yellow"
                 >
                   <InstagramIcon className="size-4" />
-                  {site.instagramHandle}@
+                  اینستاگرام
                 </a>
               </div>
             </div>
