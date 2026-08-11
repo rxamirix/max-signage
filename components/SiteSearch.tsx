@@ -1,7 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { searchSite, type SearchItem } from "@/lib/search";
 import { cn } from "./ui";
 
@@ -31,12 +38,56 @@ export function SiteSearch({
   variant?: "desktop" | "mobile";
   onNavigate?: () => void;
 }) {
+  const router = useRouter();
   const listId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(variant === "mobile");
+  const [panelStyle, setPanelStyle] = useState<CSSProperties>();
   const results = searchSite(query);
+  const showResults = open && query.trim().length >= 1;
+
+  const close = () => {
+    setQuery("");
+    setOpen(false);
+    if (variant === "desktop") setExpanded(false);
+  };
+
+  const goTo = (href: string) => {
+    close();
+    onNavigate?.();
+    router.push(href);
+  };
+
+  useLayoutEffect(() => {
+    if (!showResults || variant !== "desktop" || !rootRef.current) {
+      setPanelStyle(undefined);
+      return;
+    }
+
+    const update = () => {
+      const rect = rootRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setPanelStyle({
+        position: "fixed",
+        top: rect.bottom + 8,
+        left: rect.left,
+        width: Math.max(rect.width, 288),
+        zIndex: 200,
+      });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [showResults, variant, expanded, query]);
 
   useEffect(() => {
     if (expanded && variant === "desktop") {
@@ -45,30 +96,40 @@ export function SiteSearch({
   }, [expanded, variant]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open && !(variant === "desktop" && expanded)) return;
+
+    const onPointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        rootRef.current?.contains(target) ||
+        panelRef.current?.contains(target)
+      ) {
+        return;
+      }
+      setQuery("");
+      setOpen(false);
+      if (variant === "desktop") setExpanded(false);
+    };
+
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setOpen(false);
         setQuery("");
+        setOpen(false);
         if (variant === "desktop") setExpanded(false);
       }
     };
+
+    window.addEventListener("mousedown", onPointerDown);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, variant]);
-
-  const showResults = open && query.trim().length >= 2;
-
-  const handleSelect = () => {
-    setQuery("");
-    setOpen(false);
-    if (variant === "desktop") setExpanded(false);
-    onNavigate?.();
-  };
+    return () => {
+      window.removeEventListener("mousedown", onPointerDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, expanded, variant]);
 
   if (variant === "mobile") {
     return (
-      <div className="relative mb-6">
+      <div className="relative mb-6" ref={rootRef}>
         <label className="sr-only" htmlFor="mobile-site-search">
           جستجو در سایت
         </label>
@@ -92,89 +153,98 @@ export function SiteSearch({
           />
         </div>
         {showResults ? (
-          <ResultsPanel
-            id={listId}
-            results={results}
-            query={query}
-            onSelect={handleSelect}
-            tone="dark"
-          />
+          <div ref={panelRef} className="relative z-50 mt-2">
+            <ResultsPanel
+              id={listId}
+              results={results}
+              query={query}
+              onSelect={goTo}
+              tone="dark"
+            />
+          </div>
         ) : null}
       </div>
     );
   }
 
   return (
-    <div
-      className="relative hidden sm:block"
-      onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => {
-        if (!query && document.activeElement !== inputRef.current) {
-          setExpanded(false);
-          setOpen(false);
-        }
-      }}
-    >
+    <>
       <div
-        className={cn(
-          "flex h-11 items-center overflow-hidden rounded-full border border-navy-200 bg-brand-white transition-all duration-300 ease-out",
-          expanded ? "w-64 gap-2 px-3 shadow-lg shadow-navy-900/10" : "w-11 justify-center",
-        )}
+        ref={rootRef}
+        className="relative hidden h-[2.625rem] w-[12.5rem] shrink-0 sm:block"
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => {
+          if (!query && !showResults) {
+            setExpanded(false);
+            setOpen(false);
+          }
+        }}
       >
-        <button
-          type="button"
-          aria-label="جستجو در سایت"
-          aria-expanded={expanded}
-          className="grid size-8 shrink-0 place-items-center text-navy-700 transition-colors hover:text-navy-900"
-          onClick={() => {
-            setExpanded(true);
-            setOpen(true);
-            inputRef.current?.focus();
-          }}
-        >
-          <SearchIcon />
-        </button>
-        <input
-          ref={inputRef}
-          type="search"
-          value={query}
-          onChange={(event) => {
-            setQuery(event.target.value);
-            setOpen(true);
-          }}
-          onFocus={() => {
-            setExpanded(true);
-            setOpen(true);
-          }}
-          onBlur={() => {
-            if (!query) {
-              window.setTimeout(() => {
-                setExpanded(false);
-                setOpen(false);
-              }, 150);
-            }
-          }}
-          placeholder="جستجو..."
+        <div
           className={cn(
-            "bg-transparent text-sm text-navy-900 outline-none transition-all duration-300 placeholder:text-navy-400",
-            expanded ? "w-full opacity-100" : "w-0 opacity-0",
+            "absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full bg-brand-yellow text-navy-900 transition-[width,box-shadow] duration-300 ease-out",
+            expanded
+              ? "w-full gap-2 px-4 shadow-md shadow-navy-900/10"
+              : "w-11 justify-center",
           )}
-          aria-controls={listId}
-          aria-autocomplete="list"
-          autoComplete="off"
-          maxLength={200}
-        />
+        >
+          <button
+            type="button"
+            aria-label="جستجو در سایت"
+            aria-expanded={expanded}
+            className="grid size-8 shrink-0 place-items-center"
+            onClick={() => {
+              setExpanded(true);
+              setOpen(true);
+              inputRef.current?.focus();
+            }}
+          >
+            <SearchIcon className="text-navy-900" />
+          </button>
+          <input
+            ref={inputRef}
+            type="search"
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setOpen(true);
+            }}
+            onFocus={() => {
+              setExpanded(true);
+              setOpen(true);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && results[0]) {
+                event.preventDefault();
+                goTo(results[0].href);
+              }
+            }}
+            placeholder="جستجو..."
+            className={cn(
+              "min-w-0 bg-transparent text-sm font-bold text-navy-900 outline-none placeholder:font-medium placeholder:text-navy-700/55",
+              expanded ? "w-full opacity-100" : "w-0 opacity-0",
+            )}
+            aria-controls={listId}
+            aria-autocomplete="list"
+            autoComplete="off"
+            maxLength={200}
+            tabIndex={expanded ? 0 : -1}
+          />
+        </div>
       </div>
-      {showResults ? (
-        <ResultsPanel
-          id={listId}
-          results={results}
-          query={query}
-          onSelect={handleSelect}
-          tone="light"
-        />
+
+      {showResults && panelStyle ? (
+        <div ref={panelRef} style={panelStyle}>
+          <ResultsPanel
+            id={listId}
+            results={results}
+            query={query}
+            onSelect={goTo}
+            tone="light"
+          />
+        </div>
       ) : null}
-    </div>
+    </>
   );
 }
 
@@ -188,7 +258,7 @@ function ResultsPanel({
   id: string;
   results: SearchItem[];
   query: string;
-  onSelect: () => void;
+  onSelect: (href: string) => void;
   tone: "light" | "dark";
 }) {
   return (
@@ -196,9 +266,9 @@ function ResultsPanel({
       id={id}
       role="listbox"
       className={cn(
-        "absolute z-50 mt-2 max-h-80 w-full overflow-y-auto rounded-2xl border p-2 shadow-2xl",
+        "max-h-80 w-full overflow-y-auto rounded-2xl border p-2 shadow-2xl",
         tone === "light"
-          ? "border-navy-100 bg-brand-white shadow-navy-900/10"
+          ? "border-navy-100 bg-brand-white shadow-navy-900/15"
           : "border-brand-white/10 bg-navy-900 shadow-black/40",
       )}
     >
@@ -214,11 +284,12 @@ function ResultsPanel({
       ) : (
         results.map((item) => (
           <li key={item.href} role="option">
-            <Link
-              href={item.href}
-              onClick={onSelect}
+            <button
+              type="button"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => onSelect(item.href)}
               className={cn(
-                "block rounded-xl px-4 py-3 transition-colors",
+                "block w-full rounded-xl px-4 py-3 text-start transition-colors",
                 tone === "light"
                   ? "hover:bg-navy-50"
                   : "hover:bg-brand-white/10",
@@ -240,7 +311,7 @@ function ResultsPanel({
               >
                 {item.description}
               </span>
-            </Link>
+            </button>
           </li>
         ))
       )}

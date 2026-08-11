@@ -154,10 +154,6 @@
   animation: glow-pulse 3.2s ease-in-out infinite;
 }
 
-@utility faq-item {
-  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
 @utility sign-glow {
   text-shadow:
     0 0 18px rgba(234, 234, 53, 0.55),
@@ -177,8 +173,7 @@
   }
 
   .animate-fade-up,
-  .animate-glow,
-  .faq-item {
+  .animate-glow {
     animation: none;
   }
 }

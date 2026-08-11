@@ -118,7 +118,7 @@ export function Header() {
               </ul>
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <SiteSearch variant="desktop" />
 
               <button

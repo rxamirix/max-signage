@@ -35,7 +35,7 @@ export function Footer() {
                   href={`https://wa.me/${site.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-bold text-white transition-transform hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-bold text-white shadow-lg shadow-[#25D366]/30 transition-transform hover:-translate-y-0.5 hover:scale-[1.03]"
                 >
                   <WhatsAppIcon className="size-4" />
                   واتساپ
@@ -44,7 +44,7 @@ export function Footer() {
                   href={site.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-brand-white/20 px-5 py-2.5 font-medium transition-colors hover:border-brand-yellow hover:text-brand-yellow"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#8134af] px-5 py-2.5 font-bold text-white shadow-lg shadow-[#dd2a7b]/35 transition-transform hover:-translate-y-0.5 hover:scale-[1.03]"
                 >
                   <InstagramIcon className="size-4" />
                   اینستاگرام
