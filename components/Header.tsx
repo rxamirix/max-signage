@@ -4,21 +4,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { navigation, site } from "@/lib/site";
 import { services } from "@/lib/services";
 import { SiteSearch } from "./SiteSearch";
 import { cn, InstagramIcon, WhatsAppIcon } from "./ui";
 
-export function Header() {
+type HeaderProps = {
+  /** `hero` = embedded inside the homepage hero; `site` = sticky bar on other pages */
+  variant?: "site" | "hero";
+};
+
+export function Header({ variant = "site" }: HeaderProps) {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [veil, setVeil] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const inHero = variant === "hero";
+  const lightChrome = !inHero || veil > 0.42;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -33,25 +39,73 @@ export function Header() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!inHero) return;
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      // Ease across ~180px so the white glass fades in gently
+      const raw = Math.min(1, Math.max(0, (y - 12) / 180));
+      const eased = raw * raw * (3 - 2 * raw); // smoothstep
+      setVeil(eased);
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [inHero]);
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  return (
-    <>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-100 focus:rounded-full focus:bg-brand-yellow focus:px-5 focus:py-2 focus:font-bold focus:text-navy-900"
-      >
-        رفتن به محتوای اصلی
-      </a>
+  const skipLink = (
+    <a
+      href="#main"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:right-4 focus:z-100 focus:rounded-full focus:bg-brand-yellow focus:px-5 focus:py-2 focus:font-bold focus:text-navy-900"
+    >
+      رفتن به محتوای اصلی
+    </a>
+  );
 
+  /* Homepage uses the hero-embedded nav — skip the global sticky bar */
+  if (variant === "site" && pathname === "/") {
+    return skipLink;
+  }
+
+  const shell = (
+    <>
       <header
         className={cn(
-          "sticky top-0 z-50 transition-all duration-300",
-          scrolled
-            ? "bg-brand-white/95 shadow-lg shadow-navy-900/5 backdrop-blur-md"
-            : "bg-brand-white",
+          "z-[100] w-full",
+          inHero && "fixed inset-x-0 top-0 text-brand-white",
+          !inHero &&
+            "sticky top-0 bg-white/80 text-navy-900 shadow-lg shadow-navy-900/10 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-white/70",
+          inHero && lightChrome && "text-navy-900",
         )}
+        style={
+          inHero
+            ? {
+                backgroundColor: `rgba(254, 255, 249, ${0.94 * veil})`,
+                backdropFilter:
+                  veil > 0.02
+                    ? `blur(${18 * veil}px) saturate(${100 + 40 * veil}%)`
+                    : "none",
+                WebkitBackdropFilter:
+                  veil > 0.02
+                    ? `blur(${18 * veil}px) saturate(${100 + 40 * veil}%)`
+                    : "none",
+                boxShadow:
+                  veil > 0.08
+                    ? `0 10px 36px rgba(15, 23, 42, ${0.12 * veil})`
+                    : "none",
+              }
+            : undefined
+        }
       >
         <div className="container-page">
           <div className="flex h-18 items-center justify-between gap-4 md:h-22">
@@ -60,18 +114,53 @@ export function Header() {
               className="flex shrink-0 items-center gap-3"
               aria-label={`${site.name} - صفحه اصلی`}
             >
-              <Image
-                src="/logo-max-navy.png"
-                alt={`لوگوی ${site.name}`}
-                width={908}
-                height={262}
-                priority
-                sizes="160px"
-                className="h-8 w-auto md:h-10"
-              />
-              <span className="hidden border-r border-navy-200 pr-3 text-xs leading-tight text-navy-600 lg:block">
-                <span className="block font-bold">{site.motto}</span>
-                <span className="block text-navy-500">تابلو تبلیغاتی مازندران</span>
+              <span className="relative inline-grid h-9 w-12 place-items-center md:h-11 md:w-14">
+                <Image
+                  src="/logo-mark-white.png"
+                  alt=""
+                  width={160}
+                  height={160}
+                  priority
+                  sizes="48px"
+                  className="col-start-1 row-start-1 h-9 w-auto transition-opacity duration-700 ease-out md:h-11"
+                  style={{ opacity: inHero ? 1 - veil : 0 }}
+                  aria-hidden={lightChrome}
+                />
+                <Image
+                  src="/logo-mark-navy.png"
+                  alt={`لوگوی ${site.name}`}
+                  width={160}
+                  height={160}
+                  priority
+                  sizes="48px"
+                  className="col-start-1 row-start-1 h-9 w-auto transition-opacity duration-700 ease-out md:h-11"
+                  style={{ opacity: inHero ? veil : 1 }}
+                />
+              </span>
+              <span
+                className={cn(
+                  "hidden border-r pr-3 text-xs leading-tight transition-[color,border-color] duration-700 ease-out lg:block",
+                  lightChrome
+                    ? "border-navy-900/15 text-navy-700"
+                    : "border-white/25 text-white/85",
+                )}
+              >
+                <span
+                  className={cn(
+                    "block font-bold transition-colors duration-700 ease-out",
+                    lightChrome ? "text-navy-900" : "text-brand-white",
+                  )}
+                >
+                  {site.motto}
+                </span>
+                <span
+                  className={cn(
+                    "block transition-colors duration-700 ease-out",
+                    lightChrome ? "text-navy-500" : "text-white/60",
+                  )}
+                >
+                  تابلو تبلیغاتی مازندران
+                </span>
               </span>
             </Link>
 
@@ -82,24 +171,22 @@ export function Header() {
                     <Link
                       href={item.href}
                       className={cn(
-                        "relative inline-block rounded-full px-3.5 py-2 text-[0.95rem] font-medium transition-colors",
-                        isActive(item.href)
-                          ? "bg-navy-600 text-brand-white"
-                          : "text-navy-800 hover:bg-navy-50",
+                        "relative inline-block px-3.5 py-2 text-[0.95rem] font-medium transition-colors duration-700 ease-out after:pointer-events-none after:absolute after:-bottom-0.5 after:left-1/2 after:h-0.5 after:-translate-x-1/2 after:rounded-full after:bg-brand-yellow after:transition-all after:duration-300 after:ease-out after:content-['']",
+                        lightChrome
+                          ? isActive(item.href)
+                            ? "text-navy-600 after:w-3/5"
+                            : "text-navy-800 after:w-0 hover:text-navy-600 hover:after:w-3/5 focus-within:after:w-3/5"
+                          : isActive(item.href)
+                            ? "text-brand-yellow after:w-3/5"
+                            : "text-white/90 after:w-0 hover:text-brand-yellow hover:after:w-3/5 focus-within:after:w-3/5",
                       )}
                     >
                       {item.label}
-                      {!isActive(item.href) ? (
-                        <span
-                          aria-hidden="true"
-                          className="pointer-events-none absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-brand-yellow transition-all duration-300 ease-out group-hover:w-3/5 group-focus-within:w-3/5"
-                        />
-                      ) : null}
                     </Link>
 
                     {item.href === "/services" ? (
                       <div className="invisible absolute top-full right-0 z-50 w-64 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                        <ul className="overflow-hidden rounded-2xl border border-navy-100 bg-brand-white p-2 shadow-2xl shadow-navy-900/10">
+                        <ul className="overflow-hidden rounded-2xl border border-navy-100 bg-white/95 p-2 shadow-2xl shadow-navy-900/10 backdrop-blur-xl">
                           {services.map((service) => (
                             <li key={service.slug}>
                               <Link
@@ -127,7 +214,12 @@ export function Header() {
                 aria-expanded={open}
                 aria-controls="mobile-menu"
                 aria-label={open ? "بستن منو" : "باز کردن منو"}
-                className="inline-flex size-11 items-center justify-center rounded-full border border-navy-200 text-navy-800 transition-colors hover:bg-navy-50 xl:hidden"
+                className={cn(
+                  "inline-flex size-11 items-center justify-center rounded-full transition-colors duration-700 ease-out xl:hidden",
+                  lightChrome
+                    ? "border border-navy-900/10 bg-white/50 text-navy-800 backdrop-blur-md hover:bg-white/80"
+                    : "border border-white/30 bg-white/10 text-brand-white hover:bg-white/20",
+                )}
               >
                 <svg viewBox="0 0 24 24" className="size-6" aria-hidden="true">
                   {open ? (
@@ -155,7 +247,7 @@ export function Header() {
       {open ? (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-18 z-40 overflow-y-auto bg-navy-950/98 pb-32 backdrop-blur-sm md:top-22 xl:hidden"
+          className="fixed inset-0 top-18 z-[100] overflow-y-auto bg-navy-950/98 pb-32 backdrop-blur-sm md:top-22 xl:hidden"
         >
           <nav aria-label="منوی موبایل" className="container-page py-6">
             <SiteSearch variant="mobile" onNavigate={() => setOpen(false)} />
@@ -217,6 +309,23 @@ export function Header() {
           </nav>
         </div>
       ) : null}
+    </>
+  );
+
+  if (inHero) {
+    return (
+      <>
+        {skipLink}
+        <div className="h-18 shrink-0 md:h-22" aria-hidden="true" />
+        {mounted ? createPortal(shell, document.body) : null}
+      </>
+    );
+  }
+
+  return (
+    <>
+      {skipLink}
+      {shell}
     </>
   );
 }
