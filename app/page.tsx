@@ -6,22 +6,20 @@ import { Hero } from "@/components/Hero";
 import { JsonLd } from "@/components/JsonLd";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
-import { MobileCarousel } from "@/components/MobileCarousel";
-import { ServiceCarousel } from "@/components/ServiceCarousel";
+import { CoverFlowCarousel } from "@/components/ui/3-d-coverflow-carousel";
+import { Testimonials } from "@/components/ui/testimonials-columns-1";
 import { Button, Card, Section, SectionHeading } from "@/components/ui";
 import {
   differentiators,
   homeFaq,
   materials,
   processSteps,
-  testimonials,
 } from "@/lib/content";
 import { locations } from "@/lib/locations";
 import { posts } from "@/lib/posts";
 import { getFeaturedProjects } from "@/lib/projects";
 import { pageMetadata } from "@/lib/metadata";
 import { faqJsonLd } from "@/lib/seo";
-import { services } from "@/lib/services";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
@@ -39,21 +37,23 @@ export default function HomePage() {
       <JsonLd data={faqJsonLd(homeFaq)} />
       <Hero />
 
-      <Section id="services">
-        <SectionHeading
-          eyebrow="خدمات ما"
-          title="هر نوع تابلو تبلیغاتی که کسب‌وکار شما لازم دارد"
-          description="از سردر ساده مغازه تا نمای کامل یک مجتمع تجاری؛ طراحی، ساخت و نصب همه در کارگاه خودمان انجام می‌شود."
-        />
+      <div id="services" className="relative bg-brand-white pt-16 md:pt-24">
+        <div className="container-page">
+          <SectionHeading
+            eyebrow="خدمات ما"
+            title="هر نوع تابلو تبلیغاتی که کسب‌وکار شما لازم دارد"
+            description="از سردر ساده مغازه تا نمای کامل یک مجتمع تجاری؛ طراحی، ساخت و نصب همه در کارگاه خودمان انجام می‌شود."
+          />
+        </div>
 
-        <ServiceCarousel services={services} />
+        <CoverFlowCarousel sectionLabel="" autoplay={false} />
 
-        <div className="mt-12 text-center">
-          <Button href="/services" variant="secondary" size="lg">
+        <div className="px-4 pb-16 text-center md:pb-20">
+          <Button href="/services" variant="primary" size="lg">
             مشاهده همه خدمات
           </Button>
         </div>
-      </Section>
+      </div>
 
       <Section tone="muted" id="portfolio">
         <SectionHeading
@@ -174,35 +174,7 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section>
-        <SectionHeading
-          eyebrow="نظر مشتریان"
-          title="آنچه کسب‌وکارهای مازندران درباره ما می‌گویند"
-        />
-
-        <MobileCarousel desktopClassName="sm:grid sm:grid-cols-2 lg:grid-cols-4">
-          {testimonials.map((item) => (
-            <Card
-              key={item.name}
-              className="flex h-full flex-col overflow-hidden"
-            >
-              <span
-                className="text-4xl leading-none text-brand-yellow"
-                aria-hidden="true"
-              >
-                ”
-              </span>
-              <p className="mt-3 line-clamp-5 flex-1 text-sm leading-8 text-navy-700/85">
-                {item.text}
-              </p>
-              <div className="mt-5 border-t border-navy-100 pt-4">
-                <p className="font-bold text-navy-900">{item.name}</p>
-                <p className="text-sm text-navy-600">{item.business}</p>
-              </div>
-            </Card>
-          ))}
-        </MobileCarousel>
-      </Section>
+      <Testimonials />
 
       <Section tone="navy">
         <SectionHeading

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { navigation, site } from "@/lib/site";
 import { services } from "@/lib/services";
 import { SiteSearch } from "./SiteSearch";
@@ -18,14 +17,8 @@ type HeaderProps = {
 export function Header({ variant = "site" }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [veil, setVeil] = useState(0);
-  const [mounted, setMounted] = useState(false);
   const inHero = variant === "hero";
-  const lightChrome = !inHero || veil > 0.42;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const lightChrome = !inHero;
 
   useEffect(() => {
     setOpen(false);
@@ -38,27 +31,6 @@ export function Header({ variant = "site" }: HeaderProps) {
       document.body.style.overflow = "";
     };
   }, [open]);
-
-  useEffect(() => {
-    if (!inHero) return;
-    let ticking = false;
-    const update = () => {
-      const y = window.scrollY;
-      // Ease across ~180px so the white glass fades in gently
-      const raw = Math.min(1, Math.max(0, (y - 12) / 180));
-      const eased = raw * raw * (3 - 2 * raw); // smoothstep
-      setVeil(eased);
-      ticking = false;
-    };
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [inHero]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -82,30 +54,10 @@ export function Header({ variant = "site" }: HeaderProps) {
       <header
         className={cn(
           "z-[100] w-full",
-          inHero && "fixed inset-x-0 top-0 text-brand-white",
+          inHero && "absolute inset-x-0 top-0 text-brand-white",
           !inHero &&
             "sticky top-0 bg-white/80 text-navy-900 shadow-lg shadow-navy-900/10 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-white/70",
-          inHero && lightChrome && "text-navy-900",
         )}
-        style={
-          inHero
-            ? {
-                backgroundColor: `rgba(254, 255, 249, ${0.94 * veil})`,
-                backdropFilter:
-                  veil > 0.02
-                    ? `blur(${18 * veil}px) saturate(${100 + 40 * veil}%)`
-                    : "none",
-                WebkitBackdropFilter:
-                  veil > 0.02
-                    ? `blur(${18 * veil}px) saturate(${100 + 40 * veil}%)`
-                    : "none",
-                boxShadow:
-                  veil > 0.08
-                    ? `0 10px 36px rgba(15, 23, 42, ${0.12 * veil})`
-                    : "none",
-              }
-            : undefined
-        }
       >
         <div className="container-page">
           <div className="flex h-18 items-center justify-between gap-4 md:h-22">
@@ -123,7 +75,7 @@ export function Header({ variant = "site" }: HeaderProps) {
                   priority
                   sizes="48px"
                   className="col-start-1 row-start-1 h-9 w-auto transition-opacity duration-700 ease-out md:h-11"
-                  style={{ opacity: inHero ? 1 - veil : 0 }}
+                  style={{ opacity: inHero ? 1 : 0 }}
                   aria-hidden={lightChrome}
                 />
                 <Image
@@ -134,7 +86,7 @@ export function Header({ variant = "site" }: HeaderProps) {
                   priority
                   sizes="48px"
                   className="col-start-1 row-start-1 h-9 w-auto transition-opacity duration-700 ease-out md:h-11"
-                  style={{ opacity: inHero ? veil : 1 }}
+                  style={{ opacity: inHero ? 0 : 1 }}
                 />
               </span>
               <span
@@ -317,7 +269,7 @@ export function Header({ variant = "site" }: HeaderProps) {
       <>
         {skipLink}
         <div className="h-18 shrink-0 md:h-22" aria-hidden="true" />
-        {mounted ? createPortal(shell, document.body) : null}
+        {shell}
       </>
     );
   }
