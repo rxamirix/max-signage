@@ -406,7 +406,7 @@ export function HeroGemScene() {
       window.removeEventListener("resize", frameCamera);
       window.removeEventListener("pointermove", onPointerMove);
       renderer.dispose();
-      scene.traverse((object) => {
+      scene.traverse((object: THREE.Object3D) => {
         if (object instanceof THREE.Mesh || object instanceof THREE.Points) {
           object.geometry.dispose();
           const materials = Array.isArray(object.material)
