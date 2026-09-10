@@ -33,8 +33,7 @@ export default function MaterialsPage() {
     <>
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
 
-      <PageHero
-        eyebrow="متریال"
+      <PageHero
         title="با چه متریالی تابلوی شما را می‌سازیم"
         crumbs={crumbs}
         description="کیفیت یک تابلو تقریباً به‌طور کامل به متریال و نحوه اجرای آن بستگی دارد. اینجا بدون کلی‌گویی می‌گوییم از چه چیزی استفاده می‌کنیم، چه گریدهایی وجود دارد و چرا این انتخاب‌ها برای اقلیم مازندران اهمیت دارند."
@@ -77,8 +76,7 @@ export default function MaterialsPage() {
 
       <Section tone="dark">
         <SectionHeading
-          tone="dark"
-          eyebrow="نکته مهم"
+          tone="dark"
           title="چرا در مازندران انتخاب متریال حساس‌تر است"
           description="رطوبت بالا، بارندگی زیاد و در مناطق ساحلی هوای نمکی؛ سه عاملی که ضعف متریال و اجرا را خیلی سریع‌تر از سایر استان‌ها آشکار می‌کنند."
         />

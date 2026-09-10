@@ -45,8 +45,7 @@ export default function PortfolioPage() {
     <>
       <JsonLd data={[breadcrumbJsonLd(crumbs), itemList]} />
 
-      <PageHero
-        eyebrow="نمونه کارها"
+      <PageHero
         title="پروژه‌هایی که در مازندران اجرا کرده‌ایم"
         crumbs={crumbs}
         description="هر پروژه با یک مسئله مشخص شروع شده است: سردر قدیمی، نمای آشفته، تابلویی که در شب دیده نمی‌شد. اینجا می‌بینید مسئله چه بود، چه راه‌حلی انتخاب کردیم و نتیجه چه شد."

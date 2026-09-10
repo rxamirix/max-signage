@@ -61,8 +61,7 @@ export default async function BlogPostPage({ params }: Params) {
         ]}
       />
 
-      <PageHero
-        eyebrow={post.category}
+      <PageHero
         title={post.title}
         crumbs={crumbs}
         description={
@@ -172,14 +171,14 @@ export default async function BlogPostPage({ params }: Params) {
       </Section>
 
       <Section tone="muted">
-        <SectionHeading eyebrow="سوالات متداول" title="سوال‌های مرتبط با این مقاله" />
+        <SectionHeading title="سوال‌های مرتبط با این مقاله" />
         <div className="mt-12">
           <Faq items={post.faq} />
         </div>
       </Section>
 
       <Section>
-        <SectionHeading eyebrow="ادامه مطالعه" title="مقالات دیگر" align="start" />
+        <SectionHeading title="مقالات دیگر" align="start" />
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {others.map((item) => (
             <Link

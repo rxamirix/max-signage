@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef } from "react";
 import { testimonials } from "@/lib/content";
+import { cn, SectionHeading } from "@/components/ui";
 
 export type Testimonial = {
   text: string;
@@ -11,60 +11,99 @@ export type Testimonial = {
   role: string;
 };
 
-export const TestimonialsColumn = (props: {
+function TestimonialCard({
+  text,
+  image,
+  name,
+  role,
+}: Testimonial) {
+  return (
+    <article className="w-full max-w-[11.5rem] rounded-2xl border border-navy-100 bg-brand-white p-4 shadow-[0_10px_24px_rgba(20,22,63,0.06)] sm:max-w-xs sm:rounded-3xl sm:p-8">
+      <p className="text-xs leading-6 text-navy-800 sm:text-sm sm:leading-8">{text}</p>
+      <div className="mt-3 flex items-center gap-2 sm:mt-5">
+        <img
+          width={40}
+          height={40}
+          src={image}
+          alt=""
+          className="h-8 w-8 rounded-full sm:h-10 sm:w-10"
+        />
+        <div className="flex min-w-0 flex-col">
+          <p className="truncate text-sm font-medium leading-5 tracking-tight text-navy-900">
+            {name}
+          </p>
+          <p className="truncate text-xs leading-5 tracking-tight text-navy-600 opacity-80 sm:text-[0.95rem]">
+            {role}
+          </p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export function TestimonialsColumn({
+  className,
+  testimonials: items,
+  duration = 18,
+}: {
   className?: string;
   testimonials: Testimonial[];
   duration?: number;
-}) => {
-  const reduceMotion = useReducedMotion();
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const applyMotion = () => {
+      if (motionQuery.matches) {
+        track.style.animationPlayState = "paused";
+      }
+    };
+    applyMotion();
+    motionQuery.addEventListener("change", applyMotion);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (motionQuery.matches) {
+          track.style.animationPlayState = "paused";
+          return;
+        }
+        track.style.animationPlayState = entry.isIntersecting
+          ? "running"
+          : "paused";
+      },
+      { rootMargin: "120px 0px" },
+    );
+    observer.observe(track);
+
+    return () => {
+      motionQuery.removeEventListener("change", applyMotion);
+      observer.disconnect();
+    };
+  }, []);
+
+  const cards = items.map((item) => (
+    <TestimonialCard key={`${item.name}-${item.role}`} {...item} />
+  ));
 
   return (
-    <div className={props.className}>
-      <motion.div
-        animate={reduceMotion ? undefined : { translateY: "-50%" }}
-        transition={{
-          duration: props.duration || 10,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
-        className="flex flex-col gap-6 bg-brand-white pb-6"
+    <div className={cn("min-w-0", className)}>
+      <div
+        ref={trackRef}
+        className="animate-testimonials-scroll flex flex-col gap-6 pb-6 [animation-play-state:paused]"
+        style={{ animationDuration: `${duration}s` }}
       >
-        {[
-          ...new Array(reduceMotion ? 1 : 2).fill(0).map((_, index) => (
-            <React.Fragment key={index}>
-              {props.testimonials.map(({ text, image, name, role }, i) => (
-                <div
-                  className="w-full max-w-xs rounded-3xl border border-navy-100 bg-brand-white p-8 shadow-lg shadow-navy-900/10"
-                  key={i}
-                >
-                  <div className="text-sm leading-8 text-navy-800">{text}</div>
-                  <div className="mt-5 flex items-center gap-2">
-                    <img
-                      width={40}
-                      height={40}
-                      src={image}
-                      alt={name}
-                      className="h-10 w-10 rounded-full"
-                    />
-                    <div className="flex flex-col">
-                      <div className="font-medium leading-5 tracking-tight text-navy-900">
-                        {name}
-                      </div>
-                      <div className="leading-5 tracking-tight text-navy-600 opacity-80">
-                        {role}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </React.Fragment>
-          )),
-        ]}
-      </motion.div>
+        <div className="flex flex-col gap-6">{cards}</div>
+        <div className="flex flex-col gap-6" aria-hidden="true">
+          {cards}
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 const firstColumn = testimonials.slice(0, 3);
 const secondColumn = testimonials.slice(3, 6);
@@ -72,34 +111,23 @@ const thirdColumn = testimonials.slice(6, 9);
 
 export function Testimonials() {
   return (
-    <section className="relative bg-brand-white py-16 md:py-24">
-      <div className="container-page z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="mx-auto flex max-w-[540px] flex-col items-center justify-center"
-        >
-          <h2 className="text-center text-3xl text-navy-900 md:text-4xl lg:text-[2.75rem]">
-            چیزی که درباره ما می‌گویند
-          </h2>
-          <p className="mt-5 text-center text-base text-navy-700/80 md:text-lg">
-            از هایپرمارکت بهشهر تا کافه بابلسر؛ حرف کسانی که تابلوی‌شان را در مکس ساخته‌اند.
-          </p>
-        </motion.div>
+    <section id="testimonials" className="relative bg-brand-white py-16 md:py-24">
+      <div className="container-page">
+        <SectionHeading
+          title="چیزی که درباره ما می‌گویند"
+          description="از هایپرمارکت بهشهر تا کافه بابلسر؛ حرف کسانی که تابلوی‌شان را در مکس ساخته‌اند."
+        />
 
-        <div className="mt-10 flex max-h-[740px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)]">
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+        <div className="mt-10 flex max-h-[740px] justify-center gap-4 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)] sm:gap-6">
+          <TestimonialsColumn testimonials={firstColumn} duration={22} />
           <TestimonialsColumn
             testimonials={secondColumn}
-            className="hidden md:block"
-            duration={19}
+            duration={28}
           />
           <TestimonialsColumn
             testimonials={thirdColumn}
             className="hidden lg:block"
-            duration={17}
+            duration={25}
           />
         </div>
       </div>

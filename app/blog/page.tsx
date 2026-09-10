@@ -44,8 +44,7 @@ export default function BlogPage() {
     <>
       <JsonLd data={[breadcrumbJsonLd(crumbs), blogJsonLd]} />
 
-      <PageHero
-        eyebrow="مقالات"
+      <PageHero
         title="قبل از سفارش تابلو، این‌ها را بدانید"
         crumbs={crumbs}
         description="راهنماهایی که از دل بیست سال تجربه کارگاهی نوشته شده‌اند؛ بدون تبلیغات اضافه، فقط اطلاعاتی که به تصمیم بهتر شما کمک می‌کند."

@@ -20,6 +20,25 @@
   --font-sans: "KookFaNum", "Segoe UI", Tahoma, sans-serif;
 
   --radius-card: 1.25rem;
+  --radius: 0.8rem;
+
+  --color-background: #fefff9;
+  --color-foreground: #14163f;
+  --color-card: #ffffff;
+  --color-card-foreground: #14163f;
+  --color-primary: #2d3192;
+  --color-primary-foreground: #fefff9;
+  --color-secondary: #eff0fb;
+  --color-secondary-foreground: #1d2060;
+  --color-muted: #eff0fb;
+  --color-muted-foreground: #3f47ad;
+  --color-accent: #eff0fb;
+  --color-accent-foreground: #1d2060;
+  --color-destructive: #c81e1e;
+  --color-destructive-foreground: #fefff9;
+  --color-border: #dcdef6;
+  --color-input: #ffffff;
+  --color-ring: #6169c9;
 }
 
 @font-face {
@@ -76,6 +95,14 @@
     /* Instant jumps keep page navigations snappy; smooth scroll felt sticky. */
     scroll-behavior: auto;
     -webkit-text-size-adjust: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   body {
@@ -203,6 +230,31 @@
   animation: orb-float 9s ease-in-out infinite;
 }
 
+@keyframes how-it-works-dash {
+  to {
+    stroke-dashoffset: -140;
+  }
+}
+
+@utility animate-how-it-works-dash {
+  animation: how-it-works-dash 3s linear infinite;
+}
+
+@keyframes testimonials-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+
+@utility animate-testimonials-scroll {
+  animation: testimonials-scroll 18s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
 @keyframes nav-dock {
   from {
     opacity: 0.65;
@@ -212,10 +264,6 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-@utility animate-nav-dock {
-  animation: nav-dock 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @utility sign-glow {
@@ -241,7 +289,9 @@
   .animate-hero-drift,
   .animate-orb-float,
   .animate-light-sweep,
-  .animate-nav-dock {
+  .animate-nav-dock,
+  .animate-testimonials-scroll,
+  .animate-how-it-works-dash {
     animation: none;
   }
 }

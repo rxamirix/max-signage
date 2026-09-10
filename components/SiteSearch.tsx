@@ -33,9 +33,11 @@ function SearchIcon({ className }: { className?: string }) {
 
 export function SiteSearch({
   variant = "desktop",
+  tone = "light",
   onNavigate,
 }: {
   variant?: "desktop" | "mobile";
+  tone?: "light" | "hero";
   onNavigate?: () => void;
 }) {
   const router = useRouter();
@@ -182,24 +184,27 @@ export function SiteSearch({
       >
         <div
           className={cn(
-            "absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full bg-brand-yellow text-navy-900 transition-[width,box-shadow] duration-300 ease-out",
-            expanded
-              ? "w-full gap-2 px-4 shadow-md shadow-navy-900/10"
-              : "w-11 justify-center",
+            "absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full border px-1 shadow-lg backdrop-blur-lg transition-[width] duration-300 ease-out",
+            tone === "light"
+              ? "border-navy-200/80 bg-white/50 text-navy-800"
+              : "border-white/20 bg-white/10 text-brand-white",
+            expanded ? "w-full gap-1" : "w-11 justify-center",
           )}
         >
           <button
             type="button"
             aria-label="جستجو در سایت"
             aria-expanded={expanded}
-            className="grid size-8 shrink-0 place-items-center"
+            className="grid size-8 shrink-0 place-items-center rounded-full"
             onClick={() => {
               setExpanded(true);
               setOpen(true);
               inputRef.current?.focus();
             }}
           >
-            <SearchIcon className="text-navy-900" />
+            <SearchIcon
+              className={tone === "light" ? "text-navy-700" : "text-brand-white"}
+            />
           </button>
           <input
             ref={inputRef}
@@ -221,8 +226,11 @@ export function SiteSearch({
             }}
             placeholder="جستجو..."
             className={cn(
-              "min-w-0 bg-transparent text-sm font-bold text-navy-900 outline-none placeholder:font-medium placeholder:text-navy-700/55",
-              expanded ? "w-full opacity-100" : "w-0 opacity-0",
+              "min-w-0 bg-transparent text-sm font-semibold outline-none",
+              tone === "light"
+                ? "text-navy-800 placeholder:text-navy-500/70"
+                : "text-brand-white placeholder:text-white/50",
+              expanded ? "w-full px-2 opacity-100" : "w-0 px-0 opacity-0",
             )}
             aria-controls={listId}
             aria-autocomplete="list"

@@ -8,7 +8,7 @@ import { PageHero } from "@/components/PageHero";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Section, SectionHeading } from "@/components/ui";
 import { pageMetadata } from "@/lib/metadata";
-import { getProject, projects } from "@/lib/projects";
+import { getProject, getProjectFacts, projects } from "@/lib/projects";
 import { breadcrumbJsonLd, creativeWorkJsonLd } from "@/lib/seo";
 import { getService } from "@/lib/services";
 import { site } from "@/lib/site";
@@ -85,7 +85,6 @@ export default async function ProjectPage({ params }: Params) {
       />
 
       <PageHero
-        eyebrow={`${project.category} • ${project.city}`}
         title={project.title}
         crumbs={crumbs}
         description={project.summary}
@@ -145,34 +144,16 @@ export default async function ProjectPage({ params }: Params) {
               <div className="rounded-card border border-navy-100 bg-navy-50 p-6">
                 <h2 className="text-lg text-navy-900">مشخصات پروژه</h2>
                 <dl className="mt-4 divide-y divide-navy-200/60">
-                  <div className="flex items-start justify-between gap-4 py-3">
-                    <dt className="text-sm text-navy-700/80">کارفرما</dt>
-                    <dd className="text-sm font-bold text-navy-900">
-                      {project.client}
-                    </dd>
-                  </div>
-                  <div className="flex items-start justify-between gap-4 py-3">
-                    <dt className="text-sm text-navy-700/80">شهر</dt>
-                    <dd className="text-sm font-bold text-navy-900">
-                      {project.city}
-                    </dd>
-                  </div>
-                  <div className="flex items-start justify-between gap-4 py-3">
-                    <dt className="text-sm text-navy-700/80">سال اجرا</dt>
-                    <dd className="tabular text-sm font-bold text-navy-900">
-                      {project.year}
-                    </dd>
-                  </div>
-                  {project.specs.map((spec) => (
+                  {getProjectFacts(project).map((fact) => (
                     <div
-                      key={spec.label}
+                      key={fact.label}
                       className="flex items-start justify-between gap-4 py-3"
                     >
                       <dt className="shrink-0 text-sm text-navy-700/80">
-                        {spec.label}
+                        {fact.label}
                       </dt>
-                      <dd className="text-sm font-bold text-navy-900">
-                        {spec.value}
+                      <dd className="text-left text-sm font-bold text-navy-900">
+                        {fact.value}
                       </dd>
                     </div>
                   ))}
@@ -199,7 +180,6 @@ export default async function ProjectPage({ params }: Params) {
       {related.length > 0 ? (
         <Section tone="muted">
           <SectionHeading
-            eyebrow="پروژه‌های مرتبط"
             title="نمونه کارهای مشابه"
             align="start"
           />

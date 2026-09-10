@@ -38,7 +38,6 @@ export default function ServicesPage() {
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
 
       <PageHero
-        eyebrow="خدمات ما"
         title="خدمات تابلوسازی مکس در مازندران"
         crumbs={crumbs}
         description={
@@ -57,7 +56,6 @@ export default function ServicesPage() {
 
       <Section tone="muted">
         <SectionHeading
-          eyebrow="راهنمای انتخاب"
           title="کدام خدمت برای کسب‌وکار شما مناسب است؟"
           description="اگر مطمئن نیستید کدام گزینه را انتخاب کنید، این جدول کوتاه کمک می‌کند نقطه شروع را پیدا کنید."
         />
@@ -130,12 +128,11 @@ export default function ServicesPage() {
       <Section tone="dark">
         <SectionHeading
           tone="dark"
-          eyebrow="فرآیند اجرا"
           title="همه خدمات، یک مسیر مشخص"
-          description="فرقی نمی‌کند کدام خدمت را انتخاب کنید؛ مسیر کار همیشه همین شش مرحله شفاف است."
+          description="فرقی نمی‌کند کدام خدمت را انتخاب کنید؛ مسیر کار همیشه همین پنج مرحله شفاف است."
         />
 
-        <ol className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <ol className="mt-14 grid gap-5 md:grid-cols-2">
           {processSteps.map((step, index) => (
             <li key={step.step}>
               <Reveal delay={index * 60}>

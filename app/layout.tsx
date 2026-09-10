@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { FloatingActions } from "@/components/FloatingActions";
+import { HomeScroll } from "@/components/HomeScroll";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessJsonLd, organizationJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
@@ -89,6 +90,7 @@ export default function RootLayout({
       <body className="antialiased">
         <JsonLd data={[organizationJsonLd(), ...localBusinessJsonLd()]} />
         <Header />
+        <HomeScroll />
         <main id="main">{children}</main>
         <Footer />
         <FloatingActions />

@@ -3,7 +3,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { Faq } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
-import { Reveal } from "@/components/Reveal";
+import { ProcessTimeline } from "@/components/ProcessTimeline";
 import { CheckIcon, Section, SectionHeading } from "@/components/ui";
 import { processSteps } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
@@ -12,7 +12,7 @@ import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "نحوه کار ما | از بازدید رایگان تا نصب و گارانتی – تابلوسازی مکس",
   description:
-    "فرآیند شش مرحله‌ای تابلوسازی مکس: بازدید رایگان، طراحی سه‌بعدی، قرارداد کتبی، ساخت در کارگاه، نصب رایگان و گارانتی. در هر مرحله دقیقاً می‌دانید چه اتفاقی می‌افتد.",
+    "فرآیند پنج مرحله‌ای تابلوسازی مکس: بازدید رایگان، طراحی سه‌بعدی، قرارداد کتبی، ساخت در کارگاه، نصب رایگان و گارانتی. در هر مرحله دقیقاً می‌دانید چه اتفاقی می‌افتد.",
   path: "/process",
   absoluteTitle: true,
   keywords: ["نحوه ساخت تابلو", "مراحل سفارش تابلو", "فرآیند تابلوسازی"],
@@ -57,7 +57,7 @@ export default function ProcessPage() {
     "@type": "HowTo",
     name: "مراحل سفارش و ساخت تابلو تبلیغاتی در تابلوسازی مکس",
     description:
-      "فرآیند شش مرحله‌ای از بازدید رایگان تا تحویل تابلو همراه با گارانتی کتبی.",
+      "فرآیند پنج مرحله‌ای از بازدید رایگان تا تحویل تابلو همراه با گارانتی کتبی.",
     inLanguage: "fa-IR",
     step: processSteps.map((step, index) => ({
       "@type": "HowToStep",
@@ -72,46 +72,20 @@ export default function ProcessPage() {
       <JsonLd data={[breadcrumbJsonLd(crumbs), howTo, faqJsonLd(processFaq)]} />
 
       <PageHero
-        eyebrow="نحوه کار"
         title="از اولین تماس تا تابلوی روشن روی سردر شما"
         crumbs={crumbs}
         description="بیشتر نگرانی مشتریان درباره ابهام است: نمی‌دانند چقدر طول می‌کشد، چه زمانی باید پول بدهند و آیا نتیجه همان چیزی می‌شود که تصور کرده‌اند. این صفحه دقیقاً همین‌ها را روشن می‌کند."
       />
 
       <Section>
-        <ol className="relative mx-auto flex max-w-4xl flex-col gap-8">
-          {processSteps.map((step, index) => (
-            <li key={step.step}>
-              <Reveal delay={index * 60}>
-                <div className="relative grid gap-6 rounded-card border border-navy-100 bg-brand-white p-6 md:grid-cols-[auto_1fr] md:p-8">
-                  <div className="flex items-center gap-4 md:flex-col md:items-center md:gap-3">
-                    <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-navy-600 text-2xl font-extrabold text-brand-white">
-                      {step.step}
-                    </span>
-                    <span className="rounded-full bg-brand-yellow px-3 py-1 text-xs font-bold whitespace-nowrap text-navy-900">
-                      {step.duration}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h2 className="text-xl text-navy-900 md:text-2xl">
-                      {step.title}
-                    </h2>
-                    <p className="mt-3 leading-9 text-navy-700/85">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ol>
+        <div className="mx-auto max-w-2xl">
+          <ProcessTimeline />
+        </div>
       </Section>
 
       <Section tone="navy">
         <SectionHeading
           tone="dark"
-          eyebrow="تعهد ما"
           title="چه چیزی رایگان است و چه چیزی هزینه دارد"
           description="برای اینکه از ابتدا تصویر روشنی داشته باشید، دقیقاً می‌گوییم بابت چه چیزی پول می‌دهید."
         />
@@ -162,7 +136,6 @@ export default function ProcessPage() {
 
       <Section tone="muted">
         <SectionHeading
-          eyebrow="سوالات متداول"
           title="سوال‌های رایج درباره فرآیند کار"
         />
         <div className="mt-12">

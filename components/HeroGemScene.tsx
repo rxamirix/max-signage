@@ -280,6 +280,7 @@ export function HeroGemScene() {
     let curY = 0.22;
     let raf = 0;
     let disposed = false;
+    let visible = true;
 
     const frameCamera = () => {
       const w = Math.max(1, wrap.clientWidth);
@@ -347,6 +348,10 @@ export function HeroGemScene() {
 
     const animate = (now: number) => {
       if (disposed) return;
+      if (!visible && !introActive) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(animate);
 
       if (introActive) {
@@ -395,6 +400,16 @@ export function HeroGemScene() {
     frameCamera();
     const resizeObserver = new ResizeObserver(frameCamera);
     resizeObserver.observe(wrap);
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible && raf === 0 && !disposed) {
+          raf = requestAnimationFrame(animate);
+        }
+      },
+      { rootMargin: "80px 0px" },
+    );
+    visibilityObserver.observe(wrap);
     window.addEventListener("resize", frameCamera);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     raf = requestAnimationFrame(animate);
@@ -403,6 +418,7 @@ export function HeroGemScene() {
       disposed = true;
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
+      visibilityObserver.disconnect();
       window.removeEventListener("resize", frameCamera);
       window.removeEventListener("pointermove", onPointerMove);
       renderer.dispose();

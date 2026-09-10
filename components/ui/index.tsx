@@ -46,37 +46,13 @@ export function Section({
   );
 }
 
-export function Eyebrow({
-  children,
-  tone = "light",
-}: {
-  children: ReactNode;
-  tone?: "light" | "dark";
-}) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium",
-        tone === "light"
-          ? "bg-navy-100 text-navy-700"
-          : "bg-brand-white/10 text-brand-yellow",
-      )}
-    >
-      <span className="size-1.5 rounded-full bg-brand-yellow" />
-      {children}
-    </span>
-  );
-}
-
 export function SectionHeading({
-  eyebrow,
   title,
   description,
   tone = "light",
   align = "center",
   as: Tag = "h2",
 }: {
-  eyebrow?: string;
   title: ReactNode;
   description?: ReactNode;
   tone?: "light" | "dark";
@@ -91,7 +67,6 @@ export function SectionHeading({
         align === "center" && "mx-auto max-w-3xl",
       )}
     >
-      {eyebrow ? <Eyebrow tone={tone}>{eyebrow}</Eyebrow> : null}
       <Tag
         className={cn(
           "text-3xl md:text-4xl lg:text-[2.75rem]",

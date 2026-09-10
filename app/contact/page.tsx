@@ -67,8 +67,7 @@ export default function ContactPage() {
     <>
       <JsonLd data={[breadcrumbJsonLd(crumbs), faqJsonLd(contactFaq)]} />
 
-      <PageHero
-        eyebrow="ارتباط با ما"
+      <PageHero
         title="یک تماس، و کار از همین‌جا شروع می‌شود"
         crumbs={crumbs}
         description="بازدید از محل، طراحی سه‌بعدی و استعلام قیمت کاملاً رایگان است و هیچ تعهدی برای شما ایجاد نمی‌کند."
@@ -95,8 +94,7 @@ export default function ContactPage() {
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <SectionHeading
-              align="start"
-              eyebrow="راه‌های ارتباطی"
+              align="start"
               title="ما را کجا پیدا کنید"
             />
 
@@ -175,8 +173,7 @@ export default function ContactPage() {
       </Section>
 
       <Section tone="muted">
-        <SectionHeading
-          eyebrow="پوشش خدمات"
+        <SectionHeading
           title="در سراسر مازندران در خدمت شما هستیم"
         />
         <div className="mt-10 flex flex-wrap justify-center gap-3">
@@ -193,7 +190,7 @@ export default function ContactPage() {
       </Section>
 
       <Section>
-        <SectionHeading eyebrow="سوالات متداول" title="قبل از تماس، شاید بپرسید" />
+        <SectionHeading title="قبل از تماس، شاید بپرسید" />
         <div className="mt-12">
           <Faq items={contactFaq} />
         </div>

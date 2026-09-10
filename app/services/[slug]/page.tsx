@@ -75,8 +75,7 @@ export default async function ServicePage({ params }: Params) {
         ]}
       />
 
-      <PageHero
-        eyebrow={service.shortTitle}
+      <PageHero
         title={service.title}
         crumbs={crumbs}
         description={service.excerpt}
@@ -172,8 +171,7 @@ export default async function ServicePage({ params }: Params) {
 
       {related.length > 0 ? (
         <Section tone="muted">
-          <SectionHeading
-            eyebrow="نمونه کار"
+          <SectionHeading
             title={`پروژه‌های ${service.shortTitle} ما`}
             align="start"
           />
@@ -186,8 +184,7 @@ export default async function ServicePage({ params }: Params) {
       ) : null}
 
       <Section tone={related.length > 0 ? "light" : "muted"}>
-        <SectionHeading
-          eyebrow="سوالات متداول"
+        <SectionHeading
           title={`سوال‌های رایج درباره ${service.shortTitle}`}
         />
         <div className="mt-12">
@@ -200,8 +197,7 @@ export default async function ServicePage({ params }: Params) {
           <div className="lg:col-span-5">
             <SectionHeading
               tone="dark"
-              align="start"
-              eyebrow="استعلام رایگان"
+              align="start"
               title={`قیمت ${service.shortTitle} برای کسب‌وکار شما`}
               description="فرم را پر کنید تا اطلاعات به‌صورت یک پیام آماده در واتساپ باز شود. در کمترین زمان پاسخ می‌دهیم."
             />
@@ -224,8 +220,7 @@ export default async function ServicePage({ params }: Params) {
       </Section>
 
       <Section tone="muted">
-        <SectionHeading
-          eyebrow="سایر خدمات"
+        <SectionHeading
           title="شاید این خدمات هم به کار شما بیاید"
           align="start"
         />

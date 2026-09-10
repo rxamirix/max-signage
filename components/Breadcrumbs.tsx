@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { homeHrefFromPath } from "@/lib/home-sections";
 import { cn } from "./ui";
 
 export type Crumb = { name: string; url: string };
@@ -10,6 +14,9 @@ export function Breadcrumbs({
   items: Crumb[];
   tone?: "light" | "dark";
 }) {
+  const pathname = usePathname();
+  const homeHref = homeHrefFromPath(pathname);
+
   return (
     <nav aria-label="مسیر صفحه">
       <ol
@@ -30,7 +37,11 @@ export function Breadcrumbs({
                   {item.name}
                 </span>
               ) : (
-                <Link href={item.url} className="transition-colors hover:underline">
+                <Link
+                  href={item.url === "/" ? homeHref : item.url}
+                  scroll={item.url !== "/"}
+                  className="transition-colors hover:underline"
+                >
                   {item.name}
                 </Link>
               )}

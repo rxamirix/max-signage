@@ -79,7 +79,6 @@ export default async function LocationPage({ params }: Params) {
       />
 
       <PageHero
-        eyebrow={`خدمات ${location.city}`}
         title={location.title}
         crumbs={crumbs}
         description={`ساخت، طراحی و نصب انواع تابلو تبلیغاتی در ${location.city} با ${site.experienceYearsFa} سال سابقه؛ چلنیوم، نمای کامپوزیت، حروف برجسته، لایت باکس، تابلو روان و نئون فلکسی.`}
@@ -201,7 +200,6 @@ export default async function LocationPage({ params }: Params) {
       {cityProjects.length > 0 ? (
         <Section tone="muted">
           <SectionHeading
-            eyebrow="نمونه کار"
             title={`پروژه‌های اجراشده ما در ${location.city}`}
             align="start"
           />
@@ -214,7 +212,6 @@ export default async function LocationPage({ params }: Params) {
       ) : (
         <Section tone="muted">
           <SectionHeading
-            eyebrow="نمونه کار"
             title={`نمونه‌کارهای مرتبط با سفارش در ${location.city}`}
             description="برای دیدن پروژه‌های اجراشده در مازندران به گالری نمونه‌کارها سر بزنید."
             align="start"
@@ -230,9 +227,8 @@ export default async function LocationPage({ params }: Params) {
       <Section tone="dark">
         <SectionHeading
           tone="dark"
-          eyebrow="نحوه کار"
           title={`سفارش تابلو در ${location.city} چطور انجام می‌شود`}
-          description="از بازدید رایگان تا نصب و گارانتی، مسیر سفارش در شش مرحله شفاف پیش می‌رود."
+          description="از بازدید رایگان تا نصب و گارانتی، مسیر سفارش در پنج مرحله شفاف پیش می‌رود."
         />
         <div className="mt-10 text-center">
           <Button href="/process" variant="outline" className="text-brand-white">
@@ -243,7 +239,6 @@ export default async function LocationPage({ params }: Params) {
 
       <Section>
         <SectionHeading
-          eyebrow="سوالات متداول"
           title={`سوال‌های رایج مشتریان ${location.city}`}
         />
         <div className="mt-12">
@@ -257,7 +252,6 @@ export default async function LocationPage({ params }: Params) {
             <SectionHeading
               tone="dark"
               align="start"
-              eyebrow="استعلام رایگان"
               title={`قیمت تابلو برای کسب‌وکار شما در ${location.city}`}
               description="فرم را پر کنید تا اطلاعات به‌صورت یک پیام آماده در واتساپ باز شود. بازدید و طراحی رایگان است."
             />

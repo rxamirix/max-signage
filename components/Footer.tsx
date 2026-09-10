@@ -11,7 +11,7 @@ export function Footer() {
   );
 
   return (
-    <footer className="bg-navy-950 text-brand-white">
+    <footer id="footer" className="bg-navy-950 text-brand-white">
       <div className="grid-lines border-b border-brand-white/10">
         <div className="container-page py-14 md:py-16">
           <div className="grid gap-12 lg:grid-cols-12">
@@ -52,7 +52,7 @@ export function Footer() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 sm:gap-10 lg:col-span-5">
+            <div className="hidden grid-cols-2 gap-6 sm:gap-10 md:grid lg:col-span-5">
               <div>
                 <h2 className="mb-4 text-base font-extrabold text-brand-yellow">
                   خدمات ما
@@ -82,10 +82,7 @@ export function Footer() {
                         href={`/${location.slug}`}
                         className="transition-colors hover:text-brand-white"
                       >
-                        <span className="sm:hidden">{location.city}</span>
-                        <span className="hidden sm:inline">
-                          تابلو تبلیغاتی {location.city}
-                        </span>
+                        تابلو تبلیغاتی {location.city}
                       </Link>
                     </li>
                   ))}

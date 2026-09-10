@@ -57,8 +57,7 @@ export default function AboutPage() {
     <>
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
 
-      <PageHero
-        eyebrow="درباره ما"
+      <PageHero
         title={`${site.name}؛ ${site.experienceYearsFa} سال تابلو ساختن در مازندران`}
         crumbs={crumbs}
         description="ما یک کارگاه محلی هستیم، نه یک شرکت واسطه. تابلوی شما در کارگاه خودمان در بهشهر ساخته می‌شود و همان تیمی که آن را می‌سازد، نصبش می‌کند."
@@ -147,8 +146,7 @@ export default function AboutPage() {
       </Section>
 
       <Section tone="muted">
-        <SectionHeading
-          eyebrow="ارزش‌های ما"
+        <SectionHeading
           title="اصولی که سر آن‌ها کوتاه نمی‌آییم"
         />
         <div className="mt-14 grid gap-6 md:grid-cols-2">
@@ -172,8 +170,7 @@ export default function AboutPage() {
 
       <Section tone="dark">
         <SectionHeading
-          tone="dark"
-          eyebrow="چرا مکس"
+          tone="dark"
           title="شش دلیل برای اینکه کار را به ما بسپارید"
         />
         <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">

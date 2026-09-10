@@ -12,7 +12,7 @@ export function ProjectCard({
   return (
     <Link
       href={`/portfolio/${project.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white transition-all duration-300 hover:-translate-y-1 hover:border-navy-300 hover:shadow-2xl hover:shadow-navy-900/10"
+      className="group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white shadow-[0_14px_36px_-10px_rgba(20,22,63,0.22)] transition-transform duration-300 hover:-translate-y-1"
     >
       <div className="relative aspect-square shrink-0 overflow-hidden bg-navy-900 sm:aspect-[3/2]">
         <Image
@@ -30,7 +30,9 @@ export function ProjectCard({
 
       <div className="flex flex-1 flex-col p-3 sm:p-6">
         <div className="flex items-center gap-1.5 text-[0.7rem] text-navy-600 sm:gap-2 sm:text-sm">
-          <span className="font-bold">{project.city}</span>
+          <span className="font-bold">{project.client}</span>
+          <span aria-hidden="true">•</span>
+          <span>{project.city}</span>
           <span aria-hidden="true">•</span>
           <span className="tabular">{project.year}</span>
         </div>

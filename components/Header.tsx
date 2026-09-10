@@ -10,7 +10,7 @@ import { SiteSearch } from "./SiteSearch";
 import { cn, InstagramIcon, WhatsAppIcon } from "./ui";
 
 type HeaderProps = {
-  /** `hero` = embedded inside the homepage hero; `site` = sticky bar on other pages */
+  /** `hero` = overlay nav inside a page hero; layout uses default skip-only */
   variant?: "site" | "hero";
 };
 
@@ -18,7 +18,7 @@ export function Header({ variant = "site" }: HeaderProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const inHero = variant === "hero";
-  const lightChrome = !inHero;
+  const lightChrome = false;
 
   useEffect(() => {
     setOpen(false);
@@ -44,8 +44,8 @@ export function Header({ variant = "site" }: HeaderProps) {
     </a>
   );
 
-  /* Homepage uses the hero-embedded nav — skip the global sticky bar */
-  if (variant === "site" && pathname === "/") {
+  /* Mega menu only lives inside heroes — layout header is skip-link only */
+  if (!inHero) {
     return skipLink;
   }
 
@@ -53,14 +53,12 @@ export function Header({ variant = "site" }: HeaderProps) {
     <>
       <header
         className={cn(
-          "z-[100] w-full",
-          inHero && "absolute inset-x-0 top-0 text-brand-white",
-          !inHero &&
-            "sticky top-0 bg-white/80 text-navy-900 shadow-lg shadow-navy-900/10 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-white/70",
+          "absolute inset-x-0 top-0 z-[110] w-full text-brand-white",
+          open && "bg-navy-950",
         )}
       >
         <div className="container-page">
-          <div className="flex h-18 items-center justify-between gap-4 md:h-22">
+          <div className="flex h-16 items-center justify-between gap-4 md:h-20">
             <Link
               href="/"
               className="flex shrink-0 items-center gap-3"
@@ -75,7 +73,7 @@ export function Header({ variant = "site" }: HeaderProps) {
                   priority
                   sizes="48px"
                   className="col-start-1 row-start-1 h-9 w-auto transition-opacity duration-700 ease-out md:h-11"
-                  style={{ opacity: inHero ? 1 : 0 }}
+                  style={{ opacity: lightChrome ? 0 : 1 }}
                   aria-hidden={lightChrome}
                 />
                 <Image
@@ -86,7 +84,7 @@ export function Header({ variant = "site" }: HeaderProps) {
                   priority
                   sizes="48px"
                   className="col-start-1 row-start-1 h-9 w-auto transition-opacity duration-700 ease-out md:h-11"
-                  style={{ opacity: inHero ? 0 : 1 }}
+                  style={{ opacity: lightChrome ? 1 : 0 }}
                 />
               </span>
               <span
@@ -117,48 +115,87 @@ export function Header({ variant = "site" }: HeaderProps) {
             </Link>
 
             <nav aria-label="منوی اصلی" className="hidden xl:block">
-              <ul className="flex items-center gap-1">
-                {navigation.map((item) => (
-                  <li key={item.href} className="group relative">
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "relative inline-block px-3.5 py-2 text-[0.95rem] font-medium transition-colors duration-700 ease-out after:pointer-events-none after:absolute after:-bottom-0.5 after:left-1/2 after:h-0.5 after:-translate-x-1/2 after:rounded-full after:bg-brand-yellow after:transition-all after:duration-300 after:ease-out after:content-['']",
-                        lightChrome
-                          ? isActive(item.href)
-                            ? "text-navy-600 after:w-3/5"
-                            : "text-navy-800 after:w-0 hover:text-navy-600 hover:after:w-3/5 focus-within:after:w-3/5"
-                          : isActive(item.href)
-                            ? "text-brand-yellow after:w-3/5"
-                            : "text-white/90 after:w-0 hover:text-brand-yellow hover:after:w-3/5 focus-within:after:w-3/5",
-                      )}
-                    >
-                      {item.label}
-                    </Link>
+              <ul
+                className={cn(
+                  "flex items-center gap-1 rounded-full border px-1 py-1 shadow-lg backdrop-blur-lg",
+                  lightChrome
+                    ? "border-navy-200/80 bg-white/50"
+                    : "border-white/20 bg-white/10",
+                )}
+              >
+                {navigation.map((item) => {
+                  const active = isActive(item.href);
+                  return (
+                    <li key={item.href} className="group relative">
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "relative z-10 inline-block cursor-pointer rounded-full px-3.5 py-2 text-[0.9rem] font-semibold transition-colors",
+                          lightChrome
+                            ? active
+                              ? "text-navy-600"
+                              : "text-navy-800/80 hover:text-navy-600"
+                            : active
+                              ? "text-brand-yellow"
+                              : "text-white/80 hover:text-brand-yellow",
+                        )}
+                      >
+                        {item.label}
+                        {active ? (
+                          <span
+                            className={cn(
+                              "absolute inset-0 -z-10 w-full rounded-full",
+                              lightChrome ? "bg-navy-50" : "bg-white/10",
+                            )}
+                          >
+                            <span className="absolute -top-2 left-1/2 h-1 w-8 -translate-x-1/2 rounded-t-full bg-brand-yellow">
+                              <span className="absolute -top-2 -left-2 h-6 w-12 rounded-full bg-brand-yellow/30 blur-md" />
+                              <span className="absolute -top-1 h-6 w-8 rounded-full bg-brand-yellow/30 blur-md" />
+                              <span className="absolute top-0 left-2 h-4 w-4 rounded-full bg-brand-yellow/30 blur-sm" />
+                            </span>
+                          </span>
+                        ) : null}
+                      </Link>
 
-                    {item.href === "/services" ? (
-                      <div className="invisible absolute top-full right-0 z-50 w-64 translate-y-2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-                        <ul className="overflow-hidden rounded-2xl border border-navy-100 bg-white/95 p-2 shadow-2xl shadow-navy-900/10 backdrop-blur-xl">
-                          {services.map((service) => (
-                            <li key={service.slug}>
-                              <Link
-                                href={`/services/${service.slug}`}
-                                className="block rounded-xl px-4 py-2.5 text-sm text-navy-800 transition-colors hover:bg-navy-50 hover:text-navy-600"
-                              >
-                                {service.shortTitle}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
-                  </li>
-                ))}
+                      {item.href === "/services" ? (
+                        <div className="invisible absolute top-full right-0 z-50 w-64 pt-3 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                          <ul
+                            className={cn(
+                              "flex flex-col gap-1 rounded-3xl border p-1.5 shadow-lg backdrop-blur-lg",
+                              lightChrome
+                                ? "border-navy-200/80 bg-white/50"
+                                : "border-white/20 bg-white/10",
+                            )}
+                          >
+                            {services.map((service) => (
+                              <li key={service.slug}>
+                                <Link
+                                  href={`/services/${service.slug}`}
+                                  className={cn(
+                                    "block rounded-full px-4 py-2.5 text-sm font-semibold transition-colors",
+                                    lightChrome
+                                      ? "text-navy-800/80 hover:bg-navy-50 hover:text-navy-600"
+                                      : "text-white/85 hover:bg-white/10 hover:text-brand-yellow",
+                                  )}
+                                >
+                                  {service.shortTitle}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
 
             <div className="flex shrink-0 items-center gap-2">
-              <SiteSearch variant="desktop" />
+              <SiteSearch
+                variant="desktop"
+                tone={lightChrome ? "light" : "hero"}
+              />
 
               <button
                 type="button"
@@ -199,7 +236,7 @@ export function Header({ variant = "site" }: HeaderProps) {
       {open ? (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-18 z-[100] overflow-y-auto bg-navy-950/98 pb-32 backdrop-blur-sm md:top-22 xl:hidden"
+          className="fixed inset-0 z-[105] overflow-y-auto bg-navy-950 pt-16 pb-10 xl:hidden md:pt-20"
         >
           <nav aria-label="منوی موبایل" className="container-page py-6">
             <SiteSearch variant="mobile" onNavigate={() => setOpen(false)} />
@@ -209,6 +246,7 @@ export function Header({ variant = "site" }: HeaderProps) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    onClick={() => setOpen(false)}
                     className={cn(
                       "block rounded-2xl px-5 py-3.5 text-lg font-bold transition-colors",
                       isActive(item.href)
@@ -230,6 +268,7 @@ export function Header({ variant = "site" }: HeaderProps) {
                 <li key={service.slug}>
                   <Link
                     href={`/services/${service.slug}`}
+                    onClick={() => setOpen(false)}
                     className="block rounded-xl border border-brand-white/10 bg-brand-white/5 px-4 py-3 text-sm text-brand-white/90 transition-colors hover:border-brand-yellow/40"
                   >
                     {service.shortTitle}
@@ -263,16 +302,6 @@ export function Header({ variant = "site" }: HeaderProps) {
       ) : null}
     </>
   );
-
-  if (inHero) {
-    return (
-      <>
-        {skipLink}
-        <div className="h-18 shrink-0 md:h-22" aria-hidden="true" />
-        {shell}
-      </>
-    );
-  }
 
   return (
     <>

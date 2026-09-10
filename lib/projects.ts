@@ -2,10 +2,17 @@ export type Project = {
   slug: string;
   title: string;
   client: string;
+  clientType: string;
   city: string;
+  province: string;
   category: string;
   serviceSlug: string;
   year: string;
+  color: string;
+  material: string;
+  letterHeight: string;
+  lighting: string;
+  duration: string;
   summary: string;
   challenge: string;
   solution: string;
@@ -15,25 +22,64 @@ export type Project = {
   featured: boolean;
 };
 
-export const projectCategories = [
-  { id: "all", label: "همه پروژه‌ها" },
-  { id: "chelnium", label: "چلنیوم" },
-  { id: "composite", label: "کامپوزیت" },
-  { id: "3d-letters", label: "حروف برجسته" },
-  { id: "lightbox", label: "لایت باکس" },
-  { id: "led-display", label: "تابلو روان" },
-  { id: "neon-flex", label: "نئون فلکسی" },
-];
+export const projectFilterFields = [
+  { key: "color", label: "رنگ" },
+  { key: "category", label: "نوع" },
+  { key: "city", label: "شهر" },
+  { key: "province", label: "استان" },
+  { key: "clientType", label: "کارفرما" },
+  { key: "year", label: "سال اجرا" },
+  { key: "material", label: "متریال" },
+  { key: "letterHeight", label: "ارتفاع حروف" },
+  { key: "lighting", label: "نورپردازی" },
+  { key: "duration", label: "مدت اجرا" },
+] as const;
+
+export type ProjectFilterKey = (typeof projectFilterFields)[number]["key"];
+
+const factOrder = [
+  { label: "کارفرما", key: "client" },
+  { label: "نوع", key: "category" },
+  { label: "شهر", key: "city" },
+  { label: "استان", key: "province" },
+  { label: "سال اجرا", key: "year" },
+  { label: "رنگ", key: "color" },
+  { label: "متریال", key: "material" },
+  { label: "ارتفاع حروف", key: "letterHeight" },
+  { label: "نورپردازی", key: "lighting" },
+  { label: "مدت اجرا", key: "duration" },
+] as const;
+
+const structuredFactLabels = new Set<string>(factOrder.map((item) => item.label));
+
+export function getProjectFacts(project: Project) {
+  const facts = factOrder
+    .map((item) => ({ label: item.label, value: project[item.key] }))
+    .filter((item) => item.value);
+
+  const extras = project.specs.filter(
+    (spec) => spec.value && !structuredFactLabels.has(spec.label),
+  );
+
+  return [...facts, ...extras];
+}
 
 export const projects: Project[] = [
   {
     slug: "hyper-behshahr",
     title: "سردر هایپرمارکت در بهشهر",
     client: "هایپرمارکت مرکزی",
+    clientType: "هایپرمارکت",
     city: "بهشهر",
+    province: "مازندران",
     category: "چلنیوم",
     serviceSlug: "chelnium",
     year: "۱۴۰۴",
+    color: "زرد",
+    material: "کامپوزیت مشکی مات + چلنیوم زرد",
+    letterHeight: "۹۰ سانتی‌متر",
+    lighting: "LED پرنور",
+    duration: "۶ روز کاری",
     summary:
       "اجرای کامل نمای کامپوزیت به همراه حروف برجسته چلنیوم نورانی برای سردر ۱۴ متری یک هایپرمارکت پرتردد در بهشهر.",
     challenge:
@@ -58,10 +104,17 @@ export const projects: Project[] = [
     slug: "gold-gallery-sari",
     title: "گالری طلا با حروف استیل طلایی در ساری",
     client: "گالری طلا و جواهر",
+    clientType: "گالری طلا و جواهر",
     city: "ساری",
+    province: "مازندران",
     category: "حروف برجسته",
     serviceSlug: "3d-letters",
     year: "۱۴۰۴",
+    color: "طلایی",
+    material: "استیل ۳۰۴ با پوشش نانو طلایی",
+    letterHeight: "۴۵ سانتی‌متر",
+    lighting: "هالو با نور گرم",
+    duration: "۹ روز کاری",
     summary:
       "حروف برجسته استیل با پوشش نانو طلایی و نورپردازی هالو، روی نمای سنگ، برای یک گالری طلا در مرکز ساری.",
     challenge:
@@ -86,10 +139,17 @@ export const projects: Project[] = [
     slug: "pharmacy-neka",
     title: "داروخانه شبانه‌روزی در نکا",
     client: "داروخانه دکتر رضایی",
+    clientType: "داروخانه",
     city: "نکا",
+    province: "مازندران",
     category: "لایت باکس",
     serviceSlug: "lightbox",
     year: "۱۴۰۵",
+    color: "سفید",
+    material: "لایت باکس فریم‌لس بک‌لایت",
+    letterHeight: "",
+    lighting: "لایت باکس + صلیب نورانی",
+    duration: "۵ روز کاری",
     summary:
       "لایت باکس فریم‌لس ضدآب به همراه صلیب نورانی داروخانه و تابلو روان اطلاع‌رسانی برای یک داروخانه شبانه‌روزی.",
     challenge:
@@ -114,10 +174,17 @@ export const projects: Project[] = [
     slug: "cafe-babolsar",
     title: "کافه ساحلی با نئون فلکسی در بابلسر",
     client: "کافه دریا",
+    clientType: "کافه",
     city: "بابلسر",
+    province: "مازندران",
     category: "نئون فلکسی",
     serviceSlug: "neon-flex",
     year: "۱۴۰۴",
+    color: "صورتی و آبی یخی",
+    material: "نئون فلکسی سیلیکونی ضدآب",
+    letterHeight: "",
+    lighting: "نئون فلکسی",
+    duration: "۳ روز کاری",
     summary:
       "اجرای لوگوی نئون فلکسی و نورپردازی دکوراتیو داخلی و بیرونی برای یک کافه ساحلی در بابلسر.",
     challenge:
@@ -142,10 +209,17 @@ export const projects: Project[] = [
     slug: "commercial-complex-ghaemshahr",
     title: "نمای کامپوزیت مجتمع تجاری در قائم‌شهر",
     client: "مجتمع تجاری آرین",
+    clientType: "مجتمع تجاری",
     city: "قائم‌شهر",
+    province: "مازندران",
     category: "کامپوزیت",
     serviceSlug: "composite",
     year: "۱۴۰۵",
+    color: "خاکستری و سفید",
+    material: "کامپوزیت PVDF خاکستری و سفید",
+    letterHeight: "",
+    lighting: "نورپردازی مخفی خطی",
+    duration: "۱۸ روز کاری",
     summary:
       "بازسازی کامل نمای ۲۴۰ مترمربعی یک مجتمع تجاری با ورق کامپوزیت PVDF و نورپردازی مخفی خطی.",
     challenge:
@@ -170,10 +244,17 @@ export const projects: Project[] = [
     slug: "exchange-amol",
     title: "صرافی با تابلو روان فول‌کالر در آمل",
     client: "صرافی مرکزی",
+    clientType: "صرافی",
     city: "آمل",
+    province: "مازندران",
     category: "تابلو روان",
     serviceSlug: "led-display",
     year: "۱۴۰۵",
+    color: "فول‌کالر",
+    material: "نمایشگر LED فول‌کالر",
+    letterHeight: "",
+    lighting: "نمایشگر LED با روشنایی بالا",
+    duration: "۴ روز کاری",
     summary:
       "نصب نمایشگر LED فول‌کالر برای نمایش لحظه‌ای نرخ ارز به همراه حروف برجسته چلنیوم برای نام صرافی.",
     challenge:
@@ -198,10 +279,17 @@ export const projects: Project[] = [
     slug: "restaurant-behshahr",
     title: "رستوران سنتی با ترکیب چوب و چلنیوم در بهشهر",
     client: "رستوران سنتی گلستان",
+    clientType: "رستوران",
     city: "بهشهر",
+    province: "مازندران",
     category: "چلنیوم",
     serviceSlug: "chelnium",
     year: "۱۴۰۴",
+    color: "برنزی",
+    material: "ترموود + چلنیوم برنزی",
+    letterHeight: "",
+    lighting: "نور گرم ۳۰۰۰ کلوین",
+    duration: "۷ روز کاری",
     summary:
       "طراحی سردر با ترکیب چوب ترموود و حروف چلنیوم نور گرم، متناسب با هویت سنتی رستوران.",
     challenge:
@@ -226,10 +314,17 @@ export const projects: Project[] = [
     slug: "clinic-sari",
     title: "کلینیک تخصصی با تابلو استیل در ساری",
     client: "کلینیک تخصصی پارس",
+    clientType: "کلینیک",
     city: "ساری",
+    province: "مازندران",
     category: "حروف برجسته",
     serviceSlug: "3d-letters",
     year: "۱۴۰۵",
+    color: "نقره‌ای",
+    material: "استیل نقره‌ای مات و پلکسی",
+    letterHeight: "",
+    lighting: "هالو سفید",
+    duration: "۱۲ روز کاری",
     summary:
       "تابلو ورودی با حروف استیل نقره‌ای مات و مجموعه تابلوهای راهنمای داخلی هماهنگ برای یک کلینیک تخصصی.",
     challenge:
