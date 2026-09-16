@@ -1,12 +1,14 @@
-import { trustBadges } from "@/lib/site";
+import { trustBadges as defaultTrustBadges } from "@/lib/site";
 import { Button, CheckIcon } from "./ui";
 
 export function CtaSection({
   title = "تابلوی سردر شما، اولین حرفی است که کسب‌وکارتان می‌زند",
   description = "بازدید از محل، طراحی سه‌بعدی روی عکس مغازه شما و استعلام قیمت کاملاً رایگان است. کافی است یک تماس بگیرید.",
+  trustBadges = defaultTrustBadges as unknown as string[],
 }: {
   title?: string;
   description?: string;
+  trustBadges?: string[];
 }) {
   return (
     <section id="cta" className="bg-brand-white py-16 md:py-20">

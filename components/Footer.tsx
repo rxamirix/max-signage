@@ -1,14 +1,39 @@
 import Image from "next/image";
 import Link from "next/link";
-import { locations } from "@/lib/locations";
-import { services } from "@/lib/services";
-import { branches, site } from "@/lib/site";
+import {
+  locations as locationsSeed,
+  type Location,
+} from "@/lib/locations";
+import { services as servicesSeed, type Service } from "@/lib/services";
+import {
+  branches as branchesSeed,
+  site as siteSeed,
+} from "@/lib/site";
+import type { SiteSettings } from "@/lib/content-store";
 import { ClockIcon, InstagramIcon, PinIcon, WhatsAppIcon } from "./ui";
 
-export function Footer() {
+type FooterProps = {
+  site?: SiteSettings;
+  services?: Service[];
+  locations?: Location[];
+};
+
+export function Footer({
+  site = {
+    ...siteSeed,
+    founders: [...siteSeed.founders],
+    branches: [...branchesSeed],
+    stats: [],
+    trustBadges: [],
+    navigation: [],
+  },
+  services = servicesSeed,
+  locations = locationsSeed,
+}: FooterProps) {
   const year = new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(
     new Date(),
   );
+  const branches = site.branches?.length ? site.branches : branchesSeed;
 
   return (
     <footer id="footer" className="bg-navy-950 text-brand-white">

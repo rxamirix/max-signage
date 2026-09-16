@@ -25,8 +25,7 @@ export function homeSectionFromPath(pathname: string): HomeSectionId | null {
   if (pathname.startsWith("/services")) return "services";
   if (pathname.startsWith("/portfolio")) return "portfolio";
   if (pathname.startsWith("/materials")) return "materials";
-  if (pathname.startsWith("/process")) return "process";
-  if (pathname.startsWith("/about")) return "why-max";
+  if (pathname.startsWith("/about")) return null;
   if (pathname.startsWith("/blog")) return "blog";
   if (pathname.startsWith("/contact")) return "cta";
   return null;

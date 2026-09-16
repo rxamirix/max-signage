@@ -1,25 +1,45 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { site } from "@/lib/site";
 import { MaxWordmark } from "./MaxWordmark";
 
 export function HeroCopy() {
   return (
-    <main className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-5 pb-20 select-none sm:px-6 sm:pb-24 md:pb-16">
-      <div className="pointer-events-auto flex w-full max-w-4xl flex-col items-center pt-12 text-center sm:pt-14 md:translate-y-8 md:pt-16 lg:translate-y-10 lg:pt-20">
-        <h1 className="animate-fade-up mb-5 text-brand-white sm:mb-7 md:mb-10 [animation-delay:120ms]">
+    <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-5 select-none sm:px-6">
+      <div className="pointer-events-auto flex w-full max-w-4xl flex-col items-center gap-5 text-center sm:gap-6 md:translate-y-[18vh] md:gap-8">
+        <motion.p
+          className="text-2xl font-extrabold tracking-wide text-brand-yellow sm:text-3xl md:text-4xl"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.25, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        >
+          تابلوسازی مکث
+        </motion.p>
+
+        <motion.h1
+          className="text-brand-white"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        >
           <MaxWordmark
-            className="mx-auto h-auto w-[min(82vw,20rem)] text-brand-white sm:w-[min(78vw,28rem)] md:w-[min(82vw,50rem)] lg:w-[min(70vw,56rem)]"
+            className="mx-auto h-auto w-[min(82vw,20rem)] text-brand-white sm:w-[min(78vw,28rem)] md:w-[min(80.8vw,49.2rem)] lg:w-[min(68.9vw,55.1rem)]"
             forSeeClassName="fill-brand-yellow"
           />
           <span className="sr-only">
-            {site.mottoEn} — {site.motto}. {site.name}. {site.brandPromise}
+            {site.motto} — {site.name}. {site.brandPromise}
           </span>
-        </h1>
+        </motion.h1>
 
-        <a
+        <motion.a
           href="/contact#quote"
-          className="animate-fade-up group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-brand-yellow px-7 py-3 text-[0.95rem] font-bold text-navy-950 shadow-[0_14px_40px_rgba(234,234,53,0.32)] transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-[0.98] sm:gap-3 sm:px-8 sm:py-3.5 sm:text-base md:px-10 md:py-4 md:text-lg [animation-delay:280ms]"
+          className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-brand-yellow px-7 py-3 text-[0.95rem] font-bold text-navy-950 shadow-[0_14px_40px_rgba(234,234,53,0.32)] sm:gap-3 sm:px-8 sm:py-3.5 sm:text-base md:px-10 md:py-4 md:text-lg"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.85, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ scale: 1.03, y: -2 }}
+          whileTap={{ scale: 0.98 }}
         >
           <span
             aria-hidden="true"
@@ -44,8 +64,8 @@ export function HeroCopy() {
               fill="none"
             />
           </svg>
-        </a>
+        </motion.a>
       </div>
-    </main>
+    </div>
   );
 }

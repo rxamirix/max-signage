@@ -1,10 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { FloatingActions } from "@/components/FloatingActions";
-import { HomeScroll } from "@/components/HomeScroll";
-import { JsonLd } from "@/components/JsonLd";
-import { localBusinessJsonLd, organizationJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -29,14 +23,11 @@ export const metadata: Metadata = {
     "تابلو روان",
     "لایت باکس",
     "نئون فلکسی",
-    "تابلوسازی مکس",
+    "تابلوسازی مکث",
   ],
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
   publisher: site.name,
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: site.locale,
@@ -87,14 +78,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="antialiased">
-        <JsonLd data={[organizationJsonLd(), ...localBusinessJsonLd()]} />
-        <Header />
-        <HomeScroll />
-        <main id="main">{children}</main>
-        <Footer />
-        <FloatingActions />
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

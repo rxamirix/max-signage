@@ -30,8 +30,8 @@ export const searchIndex: SearchItem[] = [
   {
     href: "/",
     title: site.name,
-    description: "صفحه اصلی تابلوسازی مکس در مازندران",
-    keywords: `${site.name} ${site.shortName} ${site.nameEn} مکس تابلو تبلیغاتی مازندران max`,
+    description: "صفحه اصلی تابلوسازی مکث در مازندران",
+    keywords: `${site.name} ${site.shortName} ${site.nameEn} مکث تابلو تبلیغاتی مازندران max`,
   },
   ...navigation
     .filter((item) => item.href !== "/")
@@ -39,7 +39,7 @@ export const searchIndex: SearchItem[] = [
       href: item.href,
       title: item.label,
       description: "صفحات اصلی سایت",
-      keywords: `${item.label} ${site.shortName} مکس`,
+      keywords: `${item.label} ${site.shortName} مکث`,
     })),
   ...services.map((service) => ({
     href: `/services/${service.slug}`,

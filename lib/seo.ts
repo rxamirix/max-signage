@@ -9,7 +9,7 @@ export function organizationJsonLd() {
     "@type": "Organization",
     "@id": `${site.url}/#organization`,
     name: site.name,
-    alternateName: [site.nameEn, "تابلو سازی مکس", "MAX"],
+    alternateName: [site.nameEn, "تابلو سازی مکث", "MAX"],
     slogan: site.motto,
     url: site.url,
     logo: {

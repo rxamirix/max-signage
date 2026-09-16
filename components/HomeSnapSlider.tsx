@@ -16,6 +16,65 @@ type HomeSnapSliderProps = {
   ariaLabel?: string;
 };
 
+function MaxScrollControls({
+  canPrev,
+  canNext,
+  onPrev,
+  onNext,
+}: {
+  canPrev: boolean;
+  canNext: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  return (
+    <div className="mt-1 flex items-center justify-center gap-4 px-4 md:mt-2">
+      <button
+        type="button"
+        aria-label="اسلاید قبلی"
+        disabled={!canPrev}
+        onClick={onPrev}
+        className="inline-flex size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35"
+      >
+        <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
+          <path
+            d="M8 4l6 6-6 6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
+      <span
+        aria-hidden="true"
+        className="h-1.5 w-1.5 rounded-full bg-brand-yellow shadow-[0_0_12px_rgba(234,234,53,0.7)]"
+      />
+
+      <button
+        type="button"
+        aria-label="اسلاید بعدی"
+        disabled={!canNext}
+        onClick={onNext}
+        className="inline-flex size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35"
+      >
+        <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
+          <path
+            d="M12 4 6 10l6 6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
 export function HomeSnapSlider({
   children,
   slideClassName = "w-[min(62vw,15rem)] sm:w-[min(48vw,18rem)] lg:w-[min(26vw,20rem)]",
@@ -62,7 +121,7 @@ export function HomeSnapSlider({
         ref={scrollerRef}
         role="region"
         aria-label={ariaLabel}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 py-8 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-4 sm:px-6 md:py-10 [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 py-6 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-4 sm:px-6 md:py-8 [&::-webkit-scrollbar]:hidden"
       >
         {children.map((child, index) => (
           <div
@@ -77,44 +136,12 @@ export function HomeSnapSlider({
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-3 px-4 md:pointer-events-none md:absolute md:inset-y-0 md:inset-x-0 md:mt-0 md:justify-between md:px-1">
-        <button
-          type="button"
-          aria-label="اسلاید قبلی"
-          disabled={!canPrev}
-          onClick={() => scrollByDir(-1)}
-          className="pointer-events-auto inline-flex size-10 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-sm transition enabled:hover:bg-navy-50 disabled:opacity-35"
-        >
-          <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
-            <path
-              d="M8 4l6 6-6 6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="اسلاید بعدی"
-          disabled={!canNext}
-          onClick={() => scrollByDir(1)}
-          className="pointer-events-auto inline-flex size-10 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-sm transition enabled:hover:bg-navy-50 disabled:opacity-35"
-        >
-          <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
-            <path
-              d="M12 4 6 10l6 6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
+      <MaxScrollControls
+        canPrev={canPrev}
+        canNext={canNext}
+        onPrev={() => scrollByDir(-1)}
+        onNext={() => scrollByDir(1)}
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { CarouselItem } from "@/components/ui/3-d-coverflow-carousel";
 
 const CoverFlowCarousel = dynamic(
   () =>
@@ -18,6 +19,8 @@ const CoverFlowCarousel = dynamic(
   },
 );
 
-export function HomeCoverFlow() {
-  return <CoverFlowCarousel sectionLabel="" autoplay={false} />;
+export function HomeCoverFlow({ items }: { items: CarouselItem[] }) {
+  return (
+    <CoverFlowCarousel sectionLabel="" autoplay={false} items={items} />
+  );
 }

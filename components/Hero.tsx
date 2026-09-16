@@ -1,6 +1,19 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { Header } from "./Header";
 import { HeroCopy } from "./HeroCopy";
-import ShaderShowcase from "@/components/ui/hero";
+
+const VolumetricStudio = dynamic(
+  () =>
+    import("@/components/ui/volumetric-studio").then(
+      (mod) => mod.VolumetricStudio,
+    ),
+  {
+    ssr: false,
+    loading: () => <div className="min-h-[72svh] w-full bg-black md:min-h-svh" />,
+  },
+);
 
 export function WaveDivider({
   fill = "#fefff9",
@@ -34,12 +47,11 @@ export function WaveDivider({
 
 export function Hero() {
   return (
-    <section id="hero" className="relative overflow-hidden bg-navy-950">
-      <ShaderShowcase>
+    <section id="hero" className="relative overflow-hidden bg-black">
+      <VolumetricStudio className="min-h-[72svh] md:min-h-svh">
         <HeroCopy />
-      </ShaderShowcase>
+      </VolumetricStudio>
       <WaveDivider fill="#fefff9" />
-      {/* Header above the wave so the mobile menu never shows cream edges through it */}
       <div className="absolute inset-x-0 top-0 z-50">
         <Header variant="hero" />
       </div>

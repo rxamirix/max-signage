@@ -154,22 +154,41 @@ function FieldSearch({
   );
 }
 
-export function PortfolioGrid({ projects }: { projects: Project[] }) {
+export function PortfolioGrid({
+  projects,
+  cityOptions,
+}: {
+  projects: Project[];
+  cityOptions?: string[];
+}) {
   const [filters, setFilters] =
     useState<Record<ProjectFilterKey, string>>(emptyFilters);
   const [drafts, setDrafts] =
     useState<Record<ProjectFilterKey, string>>(emptyFilters);
   const [open, setOpen] = useState(false);
 
+  const cityExtra = cityOptions ?? locations.map((location) => location.city);
+
   const options = useMemo(() => {
+    const extras: Partial<Record<ProjectFilterKey, string[]>> = {
+      ...extraOptions,
+      city: cityExtra,
+    };
     return projectFilterFields.reduce(
       (result, field) => {
-        result[field.key] = uniqueOptions(projects, field.key);
+        result[field.key] = [
+          ...new Set(
+            [
+              ...projects.map((project) => project[field.key]),
+              ...(extras[field.key] ?? []),
+            ].filter(Boolean),
+          ),
+        ].sort((a, b) => a.localeCompare(b, "fa"));
         return result;
       },
       {} as Record<ProjectFilterKey, string[]>,
     );
-  }, [projects]);
+  }, [projects, cityExtra]);
 
   const activeCount = projectFilterFields.filter((field) => filters[field.key]).length;
 

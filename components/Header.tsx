@@ -197,6 +197,18 @@ export function Header({ variant = "site" }: HeaderProps) {
                 tone={lightChrome ? "light" : "hero"}
               />
 
+              <Link
+                href="/login"
+                className={cn(
+                  "inline-flex h-11 items-center justify-center rounded-full px-4 text-sm font-bold transition-colors duration-700 ease-out",
+                  lightChrome
+                    ? "border border-navy-900/10 bg-white/50 text-navy-800 backdrop-blur-md hover:bg-white/80"
+                    : "border border-white/30 bg-white/10 text-brand-white hover:bg-white/20",
+                )}
+              >
+                ورود
+              </Link>
+
               <button
                 type="button"
                 onClick={() => setOpen((value) => !value)}
@@ -240,6 +252,19 @@ export function Header({ variant = "site" }: HeaderProps) {
         >
           <nav aria-label="منوی موبایل" className="container-page py-6">
             <SiteSearch variant="mobile" onNavigate={() => setOpen(false)} />
+
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className={cn(
+                "mb-4 block rounded-2xl px-5 py-3.5 text-center text-lg font-bold transition-colors",
+                pathname === "/login"
+                  ? "bg-brand-yellow text-navy-900"
+                  : "border border-brand-yellow/40 bg-brand-yellow/10 text-brand-yellow hover:bg-brand-yellow hover:text-navy-900",
+              )}
+            >
+              ورود
+            </Link>
 
             <ul className="flex flex-col gap-1.5">
               {navigation.map((item) => (

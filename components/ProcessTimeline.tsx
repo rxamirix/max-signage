@@ -2,7 +2,8 @@
 
 import { Award, Briefcase, Check, FileText, MapPin } from "lucide-react";
 import { Timeline, type TimelineItem } from "@/components/ui/timeline";
-import { processSteps } from "@/lib/content";
+import { processSteps as defaultSteps } from "@/lib/content";
+import type { ProcessStep } from "@/lib/content-store";
 
 const icons = [
   <MapPin key="visit" className="h-3 w-3" />,
@@ -17,11 +18,13 @@ const statuses = ["completed", "completed", "active", "pending", "pending"] as c
 export function ProcessTimeline({
   className,
   variant = "spacious",
+  steps = defaultSteps as ProcessStep[],
 }: {
   className?: string;
   variant?: "default" | "compact" | "spacious";
+  steps?: ProcessStep[];
 }) {
-  const items: TimelineItem[] = processSteps.map((step, index) => ({
+  const items: TimelineItem[] = steps.map((step, index) => ({
     id: step.step,
     title: step.title,
     description: step.description,

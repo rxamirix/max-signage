@@ -1,33 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Service } from "@/lib/services";
-
-const images: Record<string, { src: string; alt: string }> = {
-  chelnium: {
-    src: "/images/services/chelnium.jpg",
-    alt: "نمونه تابلو چلنیوم نورانی روی سردر فروشگاه",
-  },
-  composite: {
-    src: "/images/services/composite-facade.jpg",
-    alt: "نمای ساختمان با ورق و پنل کامپوزیت",
-  },
-  "3d-letters": {
-    src: "/images/services/3d-letters.jpg",
-    alt: "حروف برجسته نورانی سه‌بعدی روی نما",
-  },
-  lightbox: {
-    src: "/images/services/lightbox-sign.jpg",
-    alt: "لایت‌باکس نورانی روی سردر فروشگاه",
-  },
-  "led-display": {
-    src: "/images/services/led-billboard.jpg",
-    alt: "نمایشگر و بیلبورد دیجیتال LED",
-  },
-  "neon-flex": {
-    src: "/images/services/neon-flex.jpg",
-    alt: "تابلو نئون فلکسی روشن روی سردر",
-  },
-};
+import { serviceImage } from "@/lib/service-images";
 
 export function ServiceCard({
   service,
@@ -37,7 +11,7 @@ export function ServiceCard({
   tone?: "light" | "dark";
 }) {
   const dark = tone === "dark";
-  const image = images[service.slug];
+  const src = serviceImage(service);
 
   return (
     <Link
@@ -48,34 +22,34 @@ export function ServiceCard({
           : "group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white p-4 transition-all duration-300 hover:border-navy-300 sm:p-5 md:p-7 sm:hover:-translate-y-1 sm:hover:shadow-2xl sm:hover:shadow-navy-900/10"
       }
     >
+      {src ? (
+        <div
+          className={
+            dark
+              ? "relative mb-4 aspect-[16/10] overflow-hidden rounded-xl border border-brand-white/10 bg-navy-900"
+              : "relative mb-4 aspect-[16/10] overflow-hidden rounded-xl border border-navy-100 bg-navy-50"
+          }
+        >
+          <Image
+            src={src}
+            alt={service.shortTitle}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition-transform duration-500 sm:group-hover:scale-105"
+          />
+        </div>
+      ) : null}
+
       <div className="flex min-w-0 items-start gap-3 sm:gap-4">
         <h3
           className={
             dark
-              ? "line-clamp-2 min-w-0 flex-1 text-lg leading-8 text-brand-white sm:min-h-[3.5rem] sm:text-xl"
-              : "line-clamp-2 min-w-0 flex-1 text-lg leading-8 text-navy-900 transition-colors group-hover:text-navy-600 sm:min-h-[3.5rem] sm:text-xl"
+              ? "line-clamp-2 min-w-0 flex-1 text-lg leading-8 text-brand-white sm:text-xl"
+              : "line-clamp-2 min-w-0 flex-1 text-lg leading-8 text-navy-900 transition-colors group-hover:text-navy-600 sm:text-xl"
           }
         >
           {service.shortTitle}
         </h3>
-
-        {image ? (
-          <div
-            className={
-              dark
-                ? "relative size-16 shrink-0 overflow-hidden rounded-xl border border-brand-white/10 bg-navy-900 sm:size-24 md:size-28"
-                : "relative size-16 shrink-0 overflow-hidden rounded-xl border border-navy-100 bg-navy-50 sm:size-24 md:size-28"
-            }
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="(max-width: 640px) 64px, 112px"
-              className="object-cover transition-transform duration-500 sm:group-hover:scale-105"
-            />
-          </div>
-        ) : null}
       </div>
 
       <p

@@ -105,17 +105,21 @@ export function TestimonialsColumn({
   );
 }
 
-const firstColumn = testimonials.slice(0, 3);
-const secondColumn = testimonials.slice(3, 6);
-const thirdColumn = testimonials.slice(6, 9);
+export function Testimonials({
+  items = testimonials,
+}: {
+  items?: Testimonial[];
+}) {
+  const firstColumn = items.slice(0, 3);
+  const secondColumn = items.slice(3, 6);
+  const thirdColumn = items.slice(6, 9);
 
-export function Testimonials() {
   return (
     <section id="testimonials" className="relative bg-brand-white py-16 md:py-24">
       <div className="container-page">
         <SectionHeading
           title="چیزی که درباره ما می‌گویند"
-          description="از هایپرمارکت بهشهر تا کافه بابلسر؛ حرف کسانی که تابلوی‌شان را در مکس ساخته‌اند."
+          description="از هایپرمارکت بهشهر تا کافه بابلسر؛ حرف کسانی که تابلوی‌شان را در مکث ساخته‌اند."
         />
 
         <div className="mt-10 flex max-h-[740px] justify-center gap-4 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)] sm:gap-6">
@@ -126,7 +130,7 @@ export function Testimonials() {
           />
           <TestimonialsColumn
             testimonials={thirdColumn}
-            className="hidden lg:block"
+            className="hidden md:block"
             duration={25}
           />
         </div>

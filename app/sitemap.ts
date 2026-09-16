@@ -1,23 +1,32 @@
 import type { MetadataRoute } from "next";
-import { locations } from "@/lib/locations";
-import { posts } from "@/lib/posts";
-import { projects } from "@/lib/projects";
-import { services } from "@/lib/services";
-import { site } from "@/lib/site";
+import {
+  getLocations,
+  getPosts,
+  getProjects,
+  getServices,
+  getSiteSettings,
+} from "@/lib/content-store";
 
 type Frequency = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
 /** Stable content revision date — bump when site content meaningfully changes. */
 const CONTENT_UPDATED = new Date("2026-08-10");
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [site, services, locations, projects, posts] = await Promise.all([
+    getSiteSettings(),
+    getServices(),
+    getLocations(),
+    getProjects(),
+    getPosts(),
+  ]);
+
   const routes: { url: string; changeFrequency: Frequency; priority: number }[] =
     [
       { url: "/", changeFrequency: "weekly", priority: 1 },
       { url: "/services", changeFrequency: "monthly", priority: 0.9 },
       { url: "/portfolio", changeFrequency: "weekly", priority: 0.9 },
       { url: "/materials", changeFrequency: "monthly", priority: 0.7 },
-      { url: "/process", changeFrequency: "monthly", priority: 0.7 },
       { url: "/about", changeFrequency: "yearly", priority: 0.6 },
       { url: "/blog", changeFrequency: "weekly", priority: 0.7 },
       { url: "/contact", changeFrequency: "yearly", priority: 0.9 },
