@@ -82,6 +82,7 @@ export function HomeSnapSlider({
   ariaLabel = "اسلایدر",
 }: HomeSnapSliderProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef({ x: 0, y: 0, moved: false });
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
 
@@ -122,6 +123,24 @@ export function HomeSnapSlider({
         role="region"
         aria-label={ariaLabel}
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 py-6 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-4 sm:px-6 md:py-8 [&::-webkit-scrollbar]:hidden"
+        onPointerDown={(event) => {
+          dragRef.current = {
+            x: event.clientX,
+            y: event.clientY,
+            moved: false,
+          };
+        }}
+        onPointerMove={(event) => {
+          const dx = Math.abs(event.clientX - dragRef.current.x);
+          const dy = Math.abs(event.clientY - dragRef.current.y);
+          if (dx > 10 || dy > 10) dragRef.current.moved = true;
+        }}
+        onClickCapture={(event) => {
+          if (!dragRef.current.moved) return;
+          event.preventDefault();
+          event.stopPropagation();
+          dragRef.current.moved = false;
+        }}
       >
         {children.map((child, index) => (
           <div

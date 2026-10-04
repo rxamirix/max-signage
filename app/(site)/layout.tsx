@@ -1,31 +1,47 @@
+import { Suspense } from "react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { FloatingActions } from "@/components/FloatingActions";
 import { HomeScroll } from "@/components/HomeScroll";
 import { JsonLd } from "@/components/JsonLd";
+import { PageLoader } from "@/components/PageLoader";
+import { RouteLoader } from "@/components/RouteLoader";
 import { localBusinessJsonLd, organizationJsonLd } from "@/lib/seo";
 import {
-  getLocations,
+  getFeaturedProjects,
   getServices,
   getSiteSettings,
 } from "@/lib/content-store";
 
-export default async function SiteLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const [site, services, locations] = await Promise.all([
+async function SiteMain({ children }: { children: React.ReactNode }) {
+  const [site, services, recentProjects] = await Promise.all([
     getSiteSettings(),
     getServices(),
-    getLocations(),
+    getFeaturedProjects(6),
   ]);
 
+  return (
+    <>
+      <main id="main">{children}</main>
+      <Footer site={site} services={services} recentProjects={recentProjects} />
+    </>
+  );
+}
+
+export default function SiteLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <JsonLd data={[organizationJsonLd(), ...localBusinessJsonLd()]} />
       <Header />
       <HomeScroll />
-      <main id="main">{children}</main>
-      <Footer site={site} services={services} locations={locations} />
+      <Suspense fallback={<PageLoader />}>
+        <SiteMain>{children}</SiteMain>
+      </Suspense>
+      <Suspense fallback={null}>
+        <RouteLoader />
+      </Suspense>
       <FloatingActions />
     </>
   );

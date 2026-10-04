@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { upsertUser } from "@/lib/content-store";
 import { isPhoneVerified, isValidMobile, normalizePhone } from "@/lib/otp";
+import {
+  createUserToken,
+  setUserSessionCookie,
+} from "@/lib/user-auth";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -33,5 +37,8 @@ export async function POST(request: Request) {
   }
 
   const { user, isNew } = await upsertUser({ name, phone, source });
+  const token = await createUserToken({ phone: user.phone, name: user.name });
+  await setUserSessionCookie(token);
+
   return NextResponse.json({ ok: true, user, isNew });
 }

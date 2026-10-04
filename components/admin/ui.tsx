@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAdminHints } from "@/components/admin/AdminHintsContext";
 
 export function AdminPageHeader({
   title,
@@ -12,14 +13,16 @@ export function AdminPageHeader({
   description?: string;
   actions?: React.ReactNode;
 }) {
+  const { showHints } = useAdminHints();
+
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-      <div>
-        <h1 className="text-2xl font-extrabold text-navy-950 md:text-3xl">
+    <div className="mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-start sm:justify-between">
+      <div className="min-w-0">
+        <h1 className="text-xl font-extrabold text-navy-950 md:text-2xl">
           {title}
         </h1>
-        {description ? (
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-navy-600">
+        {description && showHints ? (
+          <p className="mt-1.5 max-w-2xl text-sm leading-7 text-navy-500">
             {description}
           </p>
         ) : null}
@@ -39,7 +42,7 @@ export function AdminCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-navy-100 bg-white p-5 shadow-sm shadow-navy-950/5",
+        "rounded-2xl border border-navy-100 bg-white p-4 shadow-sm shadow-navy-950/5 md:p-5",
         className,
       )}
     >
@@ -88,6 +91,8 @@ export function AdminInput({
   label?: string;
   hint?: string;
 }) {
+  const { showHints } = useAdminHints();
+
   return (
     <label className="block">
       {label ? (
@@ -95,8 +100,10 @@ export function AdminInput({
           {label}
         </span>
       ) : null}
-      {hint ? (
-        <span className="mb-1.5 block text-xs text-navy-500">{hint}</span>
+      {hint && showHints ? (
+        <span className="mb-1.5 block text-xs leading-5 text-navy-500">
+          {hint}
+        </span>
       ) : null}
       <input
         className={cn(
@@ -118,6 +125,8 @@ export function AdminTextarea({
   label?: string;
   hint?: string;
 }) {
+  const { showHints } = useAdminHints();
+
   return (
     <label className="block">
       {label ? (
@@ -125,8 +134,10 @@ export function AdminTextarea({
           {label}
         </span>
       ) : null}
-      {hint ? (
-        <span className="mb-1.5 block text-xs text-navy-500">{hint}</span>
+      {hint && showHints ? (
+        <span className="mb-1.5 block text-xs leading-5 text-navy-500">
+          {hint}
+        </span>
       ) : null}
       <textarea
         className={cn(

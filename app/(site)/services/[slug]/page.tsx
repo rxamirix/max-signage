@@ -8,6 +8,10 @@ import { PageHero } from "@/components/PageHero";
 import { ProjectCard } from "@/components/ProjectCard";
 import { QuoteForm } from "@/components/QuoteForm";
 import { Reveal } from "@/components/Reveal";
+import {
+  HeroTitleWithStories,
+  MediaGallery,
+} from "@/components/StoryPlayer";
 import { Button, Card, CheckIcon, PhoneText, Section, SectionHeading } from "@/components/ui";
 import {
   getLocations,
@@ -18,6 +22,8 @@ import {
 } from "@/lib/content-store";
 import { pageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/seo";
+import { normalizeVideos } from "@/lib/story-video";
+import { serviceImage } from "@/lib/service-images";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -65,6 +71,8 @@ export default async function ServicePage({ params }: Params) {
 
   const related = projects.filter((project) => project.serviceSlug === service.slug);
   const others = services.filter((item) => item.slug !== service.slug);
+  const videos = normalizeVideos(service.videos);
+  const coverImage = serviceImage(service);
 
   const crumbs = [
     { name: "صفحه اصلی", url: "/" },
@@ -89,6 +97,7 @@ export default async function ServicePage({ params }: Params) {
 
       <PageHero
         title={service.title}
+        titleNode={<HeroTitleWithStories title={service.title} videos={videos} />}
         crumbs={crumbs}
         description={service.excerpt}
       >
@@ -105,7 +114,18 @@ export default async function ServicePage({ params }: Params) {
       <Section>
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-8">
-            <div className="flex flex-col gap-6 text-base leading-9 text-navy-800 md:text-lg">
+            <div className="overflow-hidden rounded-card border border-navy-100">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={coverImage}
+                alt={service.shortTitle}
+                className="aspect-[16/10] w-full object-cover"
+              />
+            </div>
+
+            <MediaGallery images={[]} videos={videos} title={service.shortTitle} />
+
+            <div className="mt-12 flex flex-col gap-6 text-base leading-9 text-navy-800 md:text-lg">
               {service.intro.map((paragraph) => (
                 <p key={paragraph.slice(0, 24)}>{paragraph}</p>
               ))}
@@ -226,7 +246,7 @@ export default async function ServicePage({ params }: Params) {
           </div>
 
           <div className="rounded-card bg-brand-white p-6 md:p-8 lg:col-span-7">
-            <QuoteForm />
+            <QuoteForm defaultService={service.shortTitle} />
           </div>
         </div>
       </Section>

@@ -279,6 +279,82 @@
   background-size: 56px 56px;
 }
 
+@keyframes brand-blink-yellow {
+  0%,
+  49.9% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes brand-blink-navy {
+  0%,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@utility animate-brand-blink-yellow {
+  animation: brand-blink-yellow 0.9s steps(1, end) infinite;
+}
+
+@utility animate-brand-blink-navy {
+  animation: brand-blink-navy 0.9s steps(1, end) infinite;
+}
+
+@keyframes luma-loader {
+  0% {
+    inset: 0 35px 35px 0;
+  }
+  12.5% {
+    inset: 0 35px 0 0;
+  }
+  25% {
+    inset: 35px 35px 0 0;
+  }
+  37.5% {
+    inset: 35px 0 0 0;
+  }
+  50% {
+    inset: 35px 0 0 35px;
+  }
+  62.5% {
+    inset: 0 0 0 35px;
+  }
+  75% {
+    inset: 0 0 35px 35px;
+  }
+  87.5% {
+    inset: 0 0 35px 0;
+  }
+  100% {
+    inset: 0 35px 35px 0;
+  }
+}
+
+.luma-spin-ring {
+  animation: luma-loader 2.5s infinite;
+  box-shadow:
+    inset 0 0 0 3px #eaea35,
+    0 0 12px rgba(234, 234, 53, 0.75),
+    0 0 28px rgba(45, 49, 146, 0.45);
+}
+
+.luma-spin-ring-delay {
+  animation-delay: -1.25s;
+  box-shadow:
+    inset 0 0 0 3px #2d3192,
+    0 0 12px rgba(45, 49, 146, 0.7),
+    0 0 28px rgba(234, 234, 53, 0.4);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -291,7 +367,75 @@
   .animate-light-sweep,
   .animate-nav-dock,
   .animate-testimonials-scroll,
-  .animate-how-it-works-dash {
+  .animate-how-it-works-dash,
+  .animate-brand-blink-yellow,
+  .animate-brand-blink-navy {
     animation: none;
   }
+
+  .animate-brand-blink-yellow {
+    opacity: 1;
+  }
+
+  .animate-brand-blink-navy {
+    opacity: 0;
+  }
+
+  .luma-spin-ring,
+  .luma-spin-ring-delay {
+    animation: none;
+    inset: 8px;
+  }
 }
+
+/* Admin panel: thin scrollbar on the left (RTL scrollport) */
+.admin-shell {
+  --admin-scroll-thumb: rgba(45, 49, 146, 0.28);
+  --admin-scroll-thumb-hover: rgba(45, 49, 146, 0.45);
+}
+
+.admin-scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-scroll-thumb) transparent;
+}
+
+.admin-scroll--main {
+  /* Force scrollbar to the physical left edge */
+  direction: rtl;
+}
+
+.admin-scroll--main > .admin-scroll-inner {
+  direction: rtl;
+  min-height: 100%;
+}
+
+.admin-scroll--nav {
+  direction: rtl;
+}
+
+.admin-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-scroll::-webkit-scrollbar-thumb {
+  background: var(--admin-scroll-thumb);
+  border-radius: 999px;
+}
+
+.admin-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-scroll-thumb-hover);
+}
+
+.admin-scroll::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+

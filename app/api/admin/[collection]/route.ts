@@ -14,6 +14,7 @@ type CollectionName =
   | "site"
   | "leads"
   | "users"
+  | "jobs"
   | "media";
 
 const ALLOWED = new Set<CollectionName>([
@@ -29,6 +30,7 @@ const ALLOWED = new Set<CollectionName>([
   "site",
   "leads",
   "users",
+  "jobs",
   "media",
 ]);
 

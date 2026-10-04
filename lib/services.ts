@@ -1,9 +1,13 @@
+import type { StoryVideo } from "@/lib/story-video";
+
 export type Service = {
   slug: string;
   title: string;
   shortTitle: string;
   excerpt: string;
   image?: string;
+  /** Story / gallery videos uploaded from admin */
+  videos?: StoryVideo[];
   metaTitle: string;
   metaDescription: string;
   keywords: string[];

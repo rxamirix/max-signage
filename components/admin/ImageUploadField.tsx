@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AdminButton } from "@/components/admin/ui";
+import { useAdminHints } from "@/components/admin/AdminHintsContext";
 
 export async function uploadAdminImage(file: File): Promise<string> {
   const form = new FormData();
@@ -29,6 +30,7 @@ export function ImageUploadField({
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { showHints } = useAdminHints();
 
   async function onFile(file: File | null) {
     if (!file) return;
@@ -48,7 +50,9 @@ export function ImageUploadField({
   return (
     <div className="rounded-2xl border border-navy-100 bg-navy-50/40 p-4">
       <p className="text-sm font-extrabold text-navy-900">{label}</p>
-      {hint ? <p className="mt-1 text-xs leading-6 text-navy-500">{hint}</p> : null}
+      {hint && showHints ? (
+        <p className="mt-1 text-xs leading-6 text-navy-500">{hint}</p>
+      ) : null}
 
       <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start">
         <div className="relative h-36 w-full overflow-hidden rounded-xl bg-navy-900/10 sm:w-48">

@@ -3,6 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Project } from "@/lib/projects";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { VideosField } from "@/components/admin/VideosField";
+import { AdminEditorModal } from "@/components/admin/AdminEditorModal";
+import { useAdminHints } from "@/components/admin/AdminHintsContext";
 import {
   AdminButton,
   AdminCard,
@@ -38,6 +41,7 @@ const emptyProject = (): Project => ({
   result: "",
   specs: [],
   gallery: [],
+  videos: [],
   featured: false,
 });
 
@@ -53,6 +57,7 @@ function slugify(input: string) {
 
 export default function AdminProjectsPage() {
   const { toast, showSuccess, showError } = useAdminToast();
+  const { showHints } = useAdminHints();
   const [items, setItems] = useState<Project[]>([]);
   const [services, setServices] = useState<{ slug: string; shortTitle: string }[]>(
     [],
@@ -198,6 +203,7 @@ export default function AdminProjectsPage() {
       ...draft,
       slug,
       gallery: draft.gallery.filter((g) => g.src),
+      videos: (draft.videos || []).filter((v) => v.src),
     };
 
     const next = [...items];
@@ -248,322 +254,72 @@ export default function AdminProjectsPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map(({ item, index }) => (
-            <AdminCard
-              key={item.slug}
-              className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div className="flex min-w-0 items-center gap-3">
-                <div className="h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">
-                  {item.gallery[0]?.src ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={item.gallery[0].src}
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  ) : null}
+            <AdminCard key={item.slug} className="!p-4 md:!p-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="h-16 w-20 shrink-0 overflow-hidden rounded-xl bg-navy-100">
+                    {item.gallery[0]?.src ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={item.gallery[0].src}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate font-extrabold text-navy-950">
+                      {item.title}
+                    </p>
+                    <p className="mt-1 truncate text-xs text-navy-500">
+                      {[item.city, item.client].filter(Boolean).join(" · ") || "—"}
+                      {item.gallery.length
+                        ? ` · ${item.gallery.length.toLocaleString("fa-IR")} عکس`
+                        : ""}
+                      {item.featured ? " · ویژه" : ""}
+                    </p>
+                    {item.summary ? (
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-navy-400">
+                        {item.summary}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="truncate font-extrabold text-navy-950">{item.title}</p>
-                  <p className="mt-1 text-xs text-navy-500">
-                    {item.city} · {item.client} · {item.gallery.length} عکس
-                    {item.featured ? " · ویژه" : ""}
-                  </p>
+                <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
+                  <AdminButton variant="secondary" onClick={() => openEdit(index)}>
+                    ویرایش
+                  </AdminButton>
+                  <AdminButton variant="danger" onClick={() => removeAt(index)}>
+                    حذف
+                  </AdminButton>
                 </div>
-              </div>
-              <div className="flex gap-2">
-                <AdminButton variant="secondary" onClick={() => openEdit(index)}>
-                  ویرایش
-                </AdminButton>
-                <AdminButton variant="danger" onClick={() => removeAt(index)}>
-                  حذف
-                </AdminButton>
               </div>
             </AdminCard>
           ))}
           {!filtered.length ? (
             <AdminCard>
-              <p className="text-sm text-navy-500">موردی یافت نشد.</p>
+              <p className="text-sm text-navy-500">
+                {items.length
+                  ? "نتیجه‌ای با این جستجو پیدا نشد."
+                  : "هنوز نمونه کاری ثبت نشده."}
+              </p>
             </AdminCard>
           ) : null}
         </div>
       )}
 
       {draft && editingIndex !== null ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-3 sm:items-center sm:p-4">
-          <div className="max-h-[92svh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-brand-white p-5 shadow-2xl md:p-7">
-            <h2 className="mb-5 text-xl font-extrabold text-navy-950">
-              {editingIndex === -1 ? "افزودن نمونه کار" : "ویرایش نمونه کار"}
-            </h2>
-
-            <div className="space-y-6">
-              <section className="space-y-3">
-                <h3 className="text-sm font-extrabold text-navy-800">عکس‌ها</h3>
-                <ImageUploadField
-                  label="عکس اصلی"
-                  hint="این عکس روی کارت نمونه کار و اول گالری صفحه جزئیات نشان داده می‌شود."
-                  value={mainImage.src}
-                  alt={mainImage.alt}
-                  onChange={(url) => setMainImage(url)}
-                  onAltChange={updateMainAlt}
-                />
-
-                <div className="rounded-2xl border border-navy-100 p-4">
-                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-extrabold text-navy-900">
-                        عکس‌های فرعی (گالری)
-                      </p>
-                      <p className="mt-1 text-xs text-navy-500">
-                        چند عکس اضافه برای صفحه جزئیات پروژه.
-                      </p>
-                    </div>
-                    <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-navy-200 bg-white px-3 py-2 text-sm font-bold text-navy-800 hover:bg-navy-50">
-                      + افزودن عکس فرعی
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          try {
-                            const form = new FormData();
-                            form.append("file", file);
-                            const res = await fetch("/api/admin/media", {
-                              method: "POST",
-                              body: form,
-                            });
-                            const data = await res.json();
-                            if (!res.ok) throw new Error(data.error || "آپلود ناموفق");
-                            addSecondary(
-                              data.data.url,
-                              draft.title || "عکس فرعی پروژه",
-                            );
-                            showSuccess("عکس فرعی اضافه شد");
-                          } catch (err) {
-                            showError(
-                              err instanceof Error ? err.message : "خطا در آپلود",
-                            );
-                          } finally {
-                            e.target.value = "";
-                          }
-                        }}
-                      />
-                    </label>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {secondaryImages.map((img, i) => (
-                      <div
-                        key={`${img.src}-${i}`}
-                        className="rounded-xl border border-navy-100 bg-navy-50/50 p-3"
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={img.src}
-                          alt=""
-                          className="mb-2 h-28 w-full rounded-lg object-cover"
-                        />
-                        <input
-                          className="mb-2 w-full rounded-lg border border-navy-200 px-2 py-1.5 text-xs"
-                          value={img.alt}
-                          onChange={(e) => setSecondary(i, { alt: e.target.value })}
-                          placeholder="توضیح عکس"
-                        />
-                        <AdminButton
-                          variant="danger"
-                          className="w-full"
-                          onClick={() => removeSecondary(i)}
-                        >
-                          حذف این عکس
-                        </AdminButton>
-                      </div>
-                    ))}
-                    {!secondaryImages.length ? (
-                      <p className="text-xs text-navy-500 sm:col-span-2">
-                        هنوز عکس فرعی اضافه نشده.
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-              </section>
-
-              <section className="grid gap-3 sm:grid-cols-2">
-                <AdminInput
-                  label="عنوان پروژه"
-                  value={draft.title}
-                  onChange={(e) => {
-                    const title = e.target.value;
-                    setDraft((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            title,
-                            slug:
-                              editingIndex === -1 && !prev.slug
-                                ? slugify(title)
-                                : prev.slug,
-                          }
-                        : prev,
-                    );
-                  }}
-                />
-                <AdminInput
-                  label="شناسه لینک (انگلیسی)"
-                  value={draft.slug}
-                  onChange={(e) => setField("slug", slugify(e.target.value) || e.target.value)}
-                  dir="ltr"
-                />
-                <AdminInput
-                  label="کارفرما"
-                  value={draft.client}
-                  onChange={(e) => setField("client", e.target.value)}
-                />
-                <AdminInput
-                  label="نوع کارفرما"
-                  value={draft.clientType}
-                  onChange={(e) => setField("clientType", e.target.value)}
-                />
-                <AdminInput
-                  label="شهر"
-                  value={draft.city}
-                  onChange={(e) => setField("city", e.target.value)}
-                />
-                <AdminInput
-                  label="استان"
-                  value={draft.province}
-                  onChange={(e) => setField("province", e.target.value)}
-                />
-                <AdminInput
-                  label="دسته / نوع تابلو"
-                  value={draft.category}
-                  onChange={(e) => setField("category", e.target.value)}
-                />
-                <AdminSelect
-                  label="خدمت مرتبط"
-                  value={draft.serviceSlug}
-                  onChange={(e) => setField("serviceSlug", e.target.value)}
-                >
-                  {services.map((s) => (
-                    <option key={s.slug} value={s.slug}>
-                      {s.shortTitle}
-                    </option>
-                  ))}
-                </AdminSelect>
-                <AdminInput
-                  label="سال اجرا"
-                  value={draft.year}
-                  onChange={(e) => setField("year", e.target.value)}
-                />
-                <AdminInput
-                  label="رنگ"
-                  value={draft.color}
-                  onChange={(e) => setField("color", e.target.value)}
-                />
-                <AdminInput
-                  label="متریال"
-                  value={draft.material}
-                  onChange={(e) => setField("material", e.target.value)}
-                />
-                <AdminInput
-                  label="ارتفاع حروف"
-                  value={draft.letterHeight}
-                  onChange={(e) => setField("letterHeight", e.target.value)}
-                />
-                <AdminInput
-                  label="نورپردازی"
-                  value={draft.lighting}
-                  onChange={(e) => setField("lighting", e.target.value)}
-                />
-                <AdminInput
-                  label="مدت اجرا"
-                  value={draft.duration}
-                  onChange={(e) => setField("duration", e.target.value)}
-                />
-              </section>
-
-              <section className="grid gap-3">
-                <AdminTextarea
-                  label="خلاصه"
-                  value={draft.summary}
-                  onChange={(e) => setField("summary", e.target.value)}
-                />
-                <AdminTextarea
-                  label="چالش"
-                  value={draft.challenge}
-                  onChange={(e) => setField("challenge", e.target.value)}
-                />
-                <AdminTextarea
-                  label="راه‌حل"
-                  value={draft.solution}
-                  onChange={(e) => setField("solution", e.target.value)}
-                />
-                <AdminTextarea
-                  label="نتیجه"
-                  value={draft.result}
-                  onChange={(e) => setField("result", e.target.value)}
-                />
-                <label className="flex items-center gap-2 text-sm font-bold text-navy-800">
-                  <input
-                    type="checkbox"
-                    checked={draft.featured}
-                    onChange={(e) => setField("featured", e.target.checked)}
-                  />
-                  نمایش به‌عنوان نمونه کار ویژه در صفحه اصلی
-                </label>
-              </section>
-
-              <section className="rounded-2xl border border-navy-100 p-4">
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  <p className="text-sm font-extrabold text-navy-900">
-                    مشخصات فنی (اختیاری)
-                  </p>
-                  <AdminButton
-                    variant="secondary"
-                    onClick={() =>
-                      setField("specs", [...draft.specs, { label: "", value: "" }])
-                    }
-                  >
-                    + ردیف
-                  </AdminButton>
-                </div>
-                <div className="space-y-2">
-                  {draft.specs.map((spec, i) => (
-                    <div key={i} className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
-                      <input
-                        className="rounded-xl border border-navy-200 px-3 py-2 text-sm"
-                        placeholder="عنوان (مثلاً ابعاد)"
-                        value={spec.label}
-                        onChange={(e) => setSpec(i, { label: e.target.value })}
-                      />
-                      <input
-                        className="rounded-xl border border-navy-200 px-3 py-2 text-sm"
-                        placeholder="مقدار"
-                        value={spec.value}
-                        onChange={(e) => setSpec(i, { value: e.target.value })}
-                      />
-                      <AdminButton
-                        variant="danger"
-                        onClick={() =>
-                          setField(
-                            "specs",
-                            draft.specs.filter((_, idx) => idx !== i),
-                          )
-                        }
-                      >
-                        حذف
-                      </AdminButton>
-                    </div>
-                  ))}
-                  {!draft.specs.length ? (
-                    <p className="text-xs text-navy-500">ردیفی اضافه نشده.</p>
-                  ) : null}
-                </div>
-              </section>
-            </div>
-
-            <div className="mt-6 flex flex-wrap justify-end gap-2">
+        <AdminEditorModal
+          wide
+          title={
+            editingIndex === -1 ? "افزودن نمونه کار" : "ویرایش نمونه کار"
+          }
+          onClose={() => {
+            setEditingIndex(null);
+            setDraft(null);
+          }}
+          footer={
+            <>
               <AdminButton
                 variant="secondary"
                 onClick={() => {
@@ -576,9 +332,286 @@ export default function AdminProjectsPage() {
               <AdminButton onClick={saveDraft} disabled={saving}>
                 {saving ? "در حال ذخیره…" : "ذخیره پروژه"}
               </AdminButton>
-            </div>
+            </>
+          }
+        >
+          <div className="space-y-6">
+            <section className="space-y-3">
+              <h3 className="text-sm font-extrabold text-navy-800">عکس‌ها</h3>
+              <ImageUploadField
+                label="عکس اصلی"
+                hint="این عکس روی کارت نمونه کار و اول گالری صفحه جزئیات نشان داده می‌شود."
+                value={mainImage.src}
+                alt={mainImage.alt}
+                onChange={(url) => setMainImage(url)}
+                onAltChange={updateMainAlt}
+              />
+
+              <div className="rounded-2xl border border-navy-100 p-4">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-extrabold text-navy-900">
+                      عکس‌های فرعی (گالری)
+                    </p>
+                    {showHints ? (
+                      <p className="mt-1 text-xs text-navy-500">
+                        چند عکس اضافه برای صفحه جزئیات پروژه.
+                      </p>
+                    ) : null}
+                  </div>
+                  <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-navy-200 bg-white px-3 py-2 text-sm font-bold text-navy-800 hover:bg-navy-50">
+                    + افزودن عکس فرعی
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        try {
+                          const form = new FormData();
+                          form.append("file", file);
+                          const res = await fetch("/api/admin/media", {
+                            method: "POST",
+                            body: form,
+                          });
+                          const data = await res.json();
+                          if (!res.ok) throw new Error(data.error || "آپلود ناموفق");
+                          addSecondary(
+                            data.data.url,
+                            draft.title || "عکس فرعی پروژه",
+                          );
+                          showSuccess("عکس فرعی اضافه شد");
+                        } catch (err) {
+                          showError(
+                            err instanceof Error ? err.message : "خطا در آپلود",
+                          );
+                        } finally {
+                          e.target.value = "";
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {secondaryImages.map((img, i) => (
+                    <div
+                      key={`${img.src}-${i}`}
+                      className="rounded-xl border border-navy-100 bg-navy-50/50 p-3"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.src}
+                        alt=""
+                        className="mb-2 h-28 w-full rounded-lg object-cover"
+                      />
+                      <input
+                        className="mb-2 w-full rounded-lg border border-navy-200 px-2 py-1.5 text-xs"
+                        value={img.alt}
+                        onChange={(e) => setSecondary(i, { alt: e.target.value })}
+                        placeholder="توضیح عکس"
+                      />
+                      <AdminButton
+                        variant="danger"
+                        className="w-full"
+                        onClick={() => removeSecondary(i)}
+                      >
+                        حذف این عکس
+                      </AdminButton>
+                    </div>
+                  ))}
+                  {!secondaryImages.length ? (
+                    <p className="text-xs text-navy-500 sm:col-span-2">
+                      هنوز عکس فرعی اضافه نشده.
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-3">
+              <h3 className="text-sm font-extrabold text-navy-800">ویدیوها</h3>
+              <VideosField
+                value={draft.videos || []}
+                onChange={(videos) => setField("videos", videos)}
+              />
+            </section>
+
+            <section className="grid gap-3 sm:grid-cols-2">
+              <AdminInput
+                label="عنوان پروژه"
+                value={draft.title}
+                onChange={(e) => {
+                  const title = e.target.value;
+                  setDraft((prev) =>
+                    prev
+                      ? {
+                          ...prev,
+                          title,
+                          slug:
+                            editingIndex === -1 && !prev.slug
+                              ? slugify(title)
+                              : prev.slug,
+                        }
+                      : prev,
+                  );
+                }}
+              />
+              <AdminInput
+                label="شناسه لینک (انگلیسی)"
+                value={draft.slug}
+                onChange={(e) => setField("slug", slugify(e.target.value) || e.target.value)}
+                dir="ltr"
+              />
+              <AdminInput
+                label="کارفرما"
+                value={draft.client}
+                onChange={(e) => setField("client", e.target.value)}
+              />
+              <AdminInput
+                label="نوع کارفرما"
+                value={draft.clientType}
+                onChange={(e) => setField("clientType", e.target.value)}
+              />
+              <AdminInput
+                label="شهر"
+                value={draft.city}
+                onChange={(e) => setField("city", e.target.value)}
+              />
+              <AdminInput
+                label="استان"
+                value={draft.province}
+                onChange={(e) => setField("province", e.target.value)}
+              />
+              <AdminInput
+                label="دسته / نوع تابلو"
+                value={draft.category}
+                onChange={(e) => setField("category", e.target.value)}
+              />
+              <AdminSelect
+                label="خدمت مرتبط"
+                value={draft.serviceSlug}
+                onChange={(e) => setField("serviceSlug", e.target.value)}
+              >
+                {services.map((s) => (
+                  <option key={s.slug} value={s.slug}>
+                    {s.shortTitle}
+                  </option>
+                ))}
+              </AdminSelect>
+              <AdminInput
+                label="سال اجرا"
+                value={draft.year}
+                onChange={(e) => setField("year", e.target.value)}
+              />
+              <AdminInput
+                label="رنگ"
+                value={draft.color}
+                onChange={(e) => setField("color", e.target.value)}
+              />
+              <AdminInput
+                label="متریال"
+                value={draft.material}
+                onChange={(e) => setField("material", e.target.value)}
+              />
+              <AdminInput
+                label="ارتفاع حروف"
+                value={draft.letterHeight}
+                onChange={(e) => setField("letterHeight", e.target.value)}
+              />
+              <AdminInput
+                label="نورپردازی"
+                value={draft.lighting}
+                onChange={(e) => setField("lighting", e.target.value)}
+              />
+              <AdminInput
+                label="مدت اجرا"
+                value={draft.duration}
+                onChange={(e) => setField("duration", e.target.value)}
+              />
+            </section>
+
+            <section className="grid gap-3">
+              <AdminTextarea
+                label="خلاصه"
+                value={draft.summary}
+                onChange={(e) => setField("summary", e.target.value)}
+              />
+              <AdminTextarea
+                label="چالش"
+                value={draft.challenge}
+                onChange={(e) => setField("challenge", e.target.value)}
+              />
+              <AdminTextarea
+                label="راه‌حل"
+                value={draft.solution}
+                onChange={(e) => setField("solution", e.target.value)}
+              />
+              <AdminTextarea
+                label="نتیجه"
+                value={draft.result}
+                onChange={(e) => setField("result", e.target.value)}
+              />
+              <label className="flex items-center gap-2 text-sm font-bold text-navy-800">
+                <input
+                  type="checkbox"
+                  checked={draft.featured}
+                  onChange={(e) => setField("featured", e.target.checked)}
+                />
+                نمایش به‌عنوان نمونه کار ویژه در صفحه اصلی
+              </label>
+            </section>
+
+            <section className="rounded-2xl border border-navy-100 p-4">
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <p className="text-sm font-extrabold text-navy-900">
+                  مشخصات فنی (اختیاری)
+                </p>
+                <AdminButton
+                  variant="secondary"
+                  onClick={() =>
+                    setField("specs", [...draft.specs, { label: "", value: "" }])
+                  }
+                >
+                  + ردیف
+                </AdminButton>
+              </div>
+              <div className="space-y-2">
+                {draft.specs.map((spec, i) => (
+                  <div key={i} className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+                    <input
+                      className="rounded-xl border border-navy-200 px-3 py-2 text-sm"
+                      placeholder="عنوان (مثلاً ابعاد)"
+                      value={spec.label}
+                      onChange={(e) => setSpec(i, { label: e.target.value })}
+                    />
+                    <input
+                      className="rounded-xl border border-navy-200 px-3 py-2 text-sm"
+                      placeholder="مقدار"
+                      value={spec.value}
+                      onChange={(e) => setSpec(i, { value: e.target.value })}
+                    />
+                    <AdminButton
+                      variant="danger"
+                      onClick={() =>
+                        setField(
+                          "specs",
+                          draft.specs.filter((_, idx) => idx !== i),
+                        )
+                      }
+                    >
+                      حذف
+                    </AdminButton>
+                  </div>
+                ))}
+                {!draft.specs.length ? (
+                  <p className="text-xs text-navy-500">ردیفی اضافه نشده.</p>
+                ) : null}
+              </div>
+            </section>
           </div>
-        </div>
+        </AdminEditorModal>
       ) : null}
     </div>
   );

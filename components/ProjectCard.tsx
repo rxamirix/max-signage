@@ -9,15 +9,20 @@ export function ProjectCard({
   project: Project;
   priority?: boolean;
 }) {
+  const cover = project.gallery?.[0];
+  const imageSrc = cover?.src || "/images/services/chelnium.jpg";
+  const imageAlt = cover?.alt || project.title;
+
   return (
     <Link
       href={`/portfolio/${project.slug}`}
+      prefetch
       className="group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white shadow-[0_14px_36px_-10px_rgba(20,22,63,0.22)] transition-transform duration-300 hover:-translate-y-1"
     >
       <div className="relative aspect-square shrink-0 overflow-hidden bg-navy-900 sm:aspect-[3/2]">
         <Image
-          src={project.gallery[0].src}
-          alt={project.gallery[0].alt}
+          src={imageSrc}
+          alt={imageAlt}
           fill
           priority={priority}
           sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 25vw"

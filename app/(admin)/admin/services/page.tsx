@@ -20,6 +20,7 @@ export default function AdminServicesPage() {
         shortTitle: "",
         excerpt: "",
         image: "",
+        videos: [],
         metaTitle: "",
         metaDescription: "",
         keywords: [],
@@ -35,6 +36,12 @@ export default function AdminServicesPage() {
           label: "عکس خدمت",
           type: "image",
           hint: "این عکس در صفحه خدمات و اسلایدر صفحه اصلی نمایش داده می‌شود.",
+        },
+        {
+          key: "videos",
+          label: "ویدیوهای خدمت",
+          type: "videos",
+          hint: "کنار عنوان هیرو پخش استوری می‌شوند و در گالری صفحه هم دیده می‌شوند.",
         },
         {
           key: "slug",

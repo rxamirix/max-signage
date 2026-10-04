@@ -87,29 +87,30 @@ export default function AdminUsersPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map((user) => (
-            <AdminCard key={user.id}>
+            <AdminCard key={user.id} className="!p-4 md:!p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <p className="font-extrabold text-navy-950">{user.name}</p>
-                  <p className="mt-1 text-sm text-navy-700" dir="ltr">
+                <div className="min-w-0">
+                  <p className="truncate font-extrabold text-navy-950">
+                    {user.name}
+                  </p>
+                  <p className="mt-1 text-sm font-bold text-navy-700" dir="ltr">
                     {user.phone}
                   </p>
-                  <p className="mt-2 text-sm text-navy-600">
+                  <p className="mt-2 truncate text-sm text-navy-600">
                     {sourceLabel[user.source] || "—"} ·{" "}
                     {(user.loginCount || 1).toLocaleString("fa-IR")} بار ورود
                   </p>
-                  <p className="mt-2 text-xs text-navy-400">
-                    ثبت‌نام:{" "}
-                    {new Date(user.createdAt).toLocaleString("fa-IR")}
-                    {" · "}
+                  <p className="mt-2 text-xs leading-5 text-navy-400">
+                    ثبت‌نام: {new Date(user.createdAt).toLocaleString("fa-IR")}
+                    <span className="mx-1 text-navy-200">|</span>
                     آخرین ورود:{" "}
                     {new Date(user.lastLoginAt).toLocaleString("fa-IR")}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
                   <a
                     href={`tel:${user.phone}`}
-                    className="inline-flex items-center justify-center rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-bold text-navy-800"
+                    className="inline-flex items-center justify-center rounded-xl border border-navy-200 bg-brand-white px-4 py-2.5 text-sm font-bold text-navy-800 hover:bg-navy-50"
                   >
                     تماس
                   </a>
@@ -117,11 +118,14 @@ export default function AdminUsersPage() {
                     href={`https://wa.me/98${user.phone.replace(/^0/, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-bold text-white"
+                    className="inline-flex items-center justify-center rounded-xl bg-[#25D366] px-4 py-2.5 text-sm font-bold text-white hover:brightness-95"
                   >
                     واتساپ
                   </a>
-                  <AdminButton variant="danger" onClick={() => remove(user.id)}>
+                  <AdminButton
+                    variant="danger"
+                    onClick={() => remove(user.id)}
+                  >
                     حذف
                   </AdminButton>
                 </div>
@@ -130,8 +134,10 @@ export default function AdminUsersPage() {
           ))}
           {!filtered.length ? (
             <AdminCard>
-              <p className="text-sm text-navy-500">
-                {users.length ? "نتیجه‌ای یافت نشد." : "هنوز کاربری ثبت نشده."}
+              <p className="py-6 text-center text-sm text-navy-500">
+                {users.length
+                  ? "نتیجه‌ای با این جستجو پیدا نشد."
+                  : "هنوز کاربری ثبت نشده."}
               </p>
             </AdminCard>
           ) : null}

@@ -34,10 +34,13 @@ function SearchIcon({ className }: { className?: string }) {
 export function SiteSearch({
   variant = "desktop",
   tone = "light",
+  glass = false,
   onNavigate,
 }: {
   variant?: "desktop" | "mobile";
   tone?: "light" | "hero";
+  /** Liquid-glass chrome (header mega menu) */
+  glass?: boolean;
   onNavigate?: () => void;
 }) {
   const router = useRouter();
@@ -184,18 +187,57 @@ export function SiteSearch({
       >
         <div
           className={cn(
-            "absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full border px-1 shadow-lg backdrop-blur-lg transition-[width] duration-300 ease-out",
-            tone === "light"
-              ? "border-navy-200/80 bg-white/50 text-navy-800"
-              : "border-white/20 bg-white/10 text-brand-white",
+            "absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full px-1 transition-[width] duration-300 ease-out",
+            glass
+              ? tone === "light"
+                ? "text-navy-800"
+                : "text-brand-white"
+              : cn(
+                  "border shadow-lg backdrop-blur-lg",
+                  tone === "light"
+                    ? "border-navy-200/80 bg-white/50 text-navy-800"
+                    : "border-white/20 bg-white/10 text-brand-white",
+                ),
             expanded ? "w-full gap-1" : "w-11 justify-center",
           )}
+          style={
+            glass
+              ? {
+                  boxShadow:
+                    "0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)",
+                }
+              : undefined
+          }
         >
+          {glass ? (
+            <>
+              <div
+                className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-full"
+                style={{
+                  backdropFilter: "blur(3px)",
+                  WebkitBackdropFilter: "blur(3px)",
+                  filter: "url(#glass-distortion)",
+                  isolation: "isolate",
+                }}
+              />
+              <div
+                className="pointer-events-none absolute inset-0 z-10 rounded-full"
+                style={{ background: "rgba(255, 255, 255, 0.25)" }}
+              />
+              <div
+                className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-full"
+                style={{
+                  boxShadow:
+                    "inset 0 0 0 0.5px rgba(255, 255, 255, 0.55), inset 1px 1px 0 0 rgba(255, 255, 255, 0.35), inset -1px -1px 0 0 rgba(255, 255, 255, 0.2)",
+                }}
+              />
+            </>
+          ) : null}
           <button
             type="button"
             aria-label="جستجو در سایت"
             aria-expanded={expanded}
-            className="grid size-8 shrink-0 place-items-center rounded-full"
+            className="relative z-30 grid size-8 shrink-0 place-items-center rounded-full"
             onClick={() => {
               setExpanded(true);
               setOpen(true);
@@ -226,7 +268,7 @@ export function SiteSearch({
             }}
             placeholder="جستجو..."
             className={cn(
-              "min-w-0 bg-transparent text-sm font-semibold outline-none",
+              "relative z-30 min-w-0 bg-transparent text-sm font-semibold outline-none",
               tone === "light"
                 ? "text-navy-800 placeholder:text-navy-500/70"
                 : "text-brand-white placeholder:text-white/50",

@@ -19,6 +19,8 @@ import {
   navigation as navigationSeed,
   type Branch,
 } from "@/lib/site";
+import type { Job } from "@/lib/jobs";
+import { DEFAULT_JOB_STAGES } from "@/lib/jobs";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -102,6 +104,7 @@ type Collections = {
   site: SiteSettings;
   leads: Lead[];
   users: User[];
+  jobs: Job[];
   media: MediaItem[];
 };
 
@@ -125,6 +128,7 @@ const SEEDS: { [K in keyof Collections]: Collections[K] } = {
   },
   leads: [],
   users: [],
+  jobs: [],
   media: [],
 };
 
@@ -222,8 +226,55 @@ export async function getLeads() {
 export async function getUsers() {
   return readCollection("users");
 }
+export async function getJobs() {
+  return readCollection("jobs");
+}
+export async function getJobsByPhone(phone: string) {
+  return (await getJobs()).filter((j) => j.userPhone === phone);
+}
 export async function getMedia() {
   return readCollection("media");
+}
+
+export async function ensureDemoJob(phone: string, name: string) {
+  const jobs = await getJobs();
+  const existing = jobs.find((j) => j.userPhone === phone);
+  if (existing) return existing;
+
+  const now = new Date().toISOString();
+
+  const job: Job = {
+    id: `job-demo-${Date.now()}`,
+    userPhone: phone,
+    userName: name,
+    title: "تابلو چلنیوم",
+    purpose: "طلافروشی",
+    currentStage: 2,
+    stages: [...DEFAULT_JOB_STAGES],
+    warrantyMonths: 24,
+    warrantyStartedAt: null,
+    note: "پروژه آزمایشی — رهگیری، طراحی و گارانتی.",
+    design: {
+      imageUrl: "/images/services/3d-letters.jpg",
+      note: "رندر سه‌بعدی حروف برجسته طلایی روی زمینه مشکی مات برای سردر طلافروشی.",
+    },
+    contract: {
+      size: "۴٫۵ × ۰٫۹ متر",
+      material: "چلنیوم طلایی + کامپوزیت مشکی",
+      color: "طلایی براق",
+      lighting: "LED پرنور داخل حروف",
+      price: "۴۸٬۰۰۰٬۰۰۰ تومان",
+      deposit: "۲۰٬۰۰۰٬۰۰۰ تومان",
+      contractDate: "۱۴۰۴/۰۶/۲۰",
+      contractCode: "MAX-1404-218",
+      pdfUrl: "/uploads/demo-contract.pdf",
+    },
+    createdAt: now,
+    updatedAt: now,
+  };
+  jobs.unshift(job);
+  await writeCollection("jobs", jobs);
+  return job;
 }
 
 export async function upsertUser(input: {
@@ -264,7 +315,7 @@ export async function upsertUser(input: {
 }
 
 export async function getDashboardStats() {
-  const [projects, posts, services, locations, leads, materials, users] =
+  const [projects, posts, services, locations, leads, materials, users, jobs] =
     await Promise.all([
       getProjects(),
       getPosts(),
@@ -273,6 +324,7 @@ export async function getDashboardStats() {
       getLeads(),
       getMaterials(),
       getUsers(),
+      getJobs(),
     ]);
   return {
     projects: projects.length,
@@ -282,6 +334,7 @@ export async function getDashboardStats() {
     leads: leads.length,
     materials: materials.length,
     users: users.length,
+    jobs: jobs.length,
     unreadLeads: leads.length,
   };
 }

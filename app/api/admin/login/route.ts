@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import {
   createAdminToken,
-  getAdminCredentials,
   setAdminSessionCookie,
+  verifyAdminLogin,
 } from "@/lib/admin-auth";
 
 const attempts = new Map<string, { count: number; resetAt: number }>();
@@ -33,9 +33,9 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const username = String(body?.username || "");
   const password = String(body?.password || "");
-  const creds = getAdminCredentials();
 
-  if (username !== creds.username || password !== creds.password) {
+  const ok = await verifyAdminLogin(username, password);
+  if (!ok) {
     return NextResponse.json(
       { error: "نام کاربری یا رمز عبور اشتباه است" },
       { status: 401 },

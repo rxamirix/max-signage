@@ -1,21 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  locations as locationsSeed,
-  type Location,
-} from "@/lib/locations";
 import { services as servicesSeed, type Service } from "@/lib/services";
 import {
   branches as branchesSeed,
   site as siteSeed,
 } from "@/lib/site";
-import type { SiteSettings } from "@/lib/content-store";
+import type { Project, SiteSettings } from "@/lib/content-store";
 import { ClockIcon, InstagramIcon, PinIcon, WhatsAppIcon } from "./ui";
 
 type FooterProps = {
   site?: SiteSettings;
   services?: Service[];
-  locations?: Location[];
+  recentProjects?: Project[];
 };
 
 export function Footer({
@@ -28,12 +24,13 @@ export function Footer({
     navigation: [],
   },
   services = servicesSeed,
-  locations = locationsSeed,
+  recentProjects = [],
 }: FooterProps) {
   const year = new Intl.DateTimeFormat("fa-IR", { year: "numeric" }).format(
     new Date(),
   );
   const branches = site.branches?.length ? site.branches : branchesSeed;
+  const projects = recentProjects.slice(0, 6);
 
   return (
     <footer id="footer" className="bg-navy-950 text-brand-white">
@@ -51,8 +48,8 @@ export function Footer({
               />
               <p className="mt-5 max-w-sm leading-8 text-brand-white/70">
                 {site.name} با ۲۰ سال سابقه، تولید و نصب انواع تابلو تبلیغاتی
-                چلنیوم، نمای کامپوزیت، حروف برجسته، لایت باکس و تابلو روان در
-                سراسر استان مازندران.
+                چلنیوم، نمای کامپوزیت، حروف برجسته و لایت باکس در سراسر استان
+                مازندران.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -98,26 +95,34 @@ export function Footer({
 
               <div>
                 <h2 className="mb-4 text-base font-extrabold text-brand-yellow">
-                  شهرهای تحت پوشش
+                  پروژه‌های اخیر
                 </h2>
                 <ul className="space-y-2.5 text-sm text-brand-white/70">
-                  {locations.map((location) => (
-                    <li key={location.slug}>
+                  {projects.map((project) => (
+                    <li key={project.slug}>
                       <Link
-                        href={`/${location.slug}`}
+                        href={`/portfolio/${project.slug}`}
                         className="transition-colors hover:text-brand-white"
                       >
-                        تابلو تبلیغاتی {location.city}
+                        {project.title}
                       </Link>
                     </li>
                   ))}
+                  <li>
+                    <Link
+                      href="/portfolio"
+                      className="font-bold text-brand-yellow transition-colors hover:text-brand-white"
+                    >
+                      مشاهده همه نمونه کارها
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
 
             <div className="lg:col-span-3">
               <h2 className="mb-4 text-base font-extrabold text-brand-yellow">
-                شعب ما
+                شعب‌های حضوری ما
               </h2>
               <ul className="space-y-5">
                 {branches.map((branch) => (

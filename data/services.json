@@ -83,7 +83,14 @@
         "answer": "بله. تابلوهای چلنیوم به‌صورت حرف‌به‌حرف ساخته می‌شوند و در صورت آسیب یک حرف یا خرابی ماژول، همان قسمت بدون نیاز به تعویض کل تابلو قابل ترمیم است."
       }
     ],
-    "image": "/images/services/chelnium.jpg"
+    "image": "/images/services/chelnium.jpg",
+    "videos": [
+      {
+        "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "poster": "/images/services/chelnium.jpg",
+        "alt": "ویدیو نمونه چلنیوم"
+      }
+    ]
   },
   {
     "slug": "composite",

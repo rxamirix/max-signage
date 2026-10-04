@@ -1,3 +1,5 @@
+import type { StoryVideo } from "@/lib/story-video";
+
 export type Project = {
   slug: string;
   title: string;
@@ -19,6 +21,8 @@ export type Project = {
   result: string;
   specs: { label: string; value: string }[];
   gallery: { src: string; alt: string }[];
+  /** Story / gallery videos uploaded from admin */
+  videos?: StoryVideo[];
   featured: boolean;
 };
 

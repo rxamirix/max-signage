@@ -268,7 +268,7 @@ export default async function LocationPage({ params }: Params) {
             />
           </div>
           <div className="rounded-card bg-brand-white p-6 md:p-8 lg:col-span-7">
-            <QuoteForm />
+            <QuoteForm defaultCity={location.city} />
           </div>
         </div>
       </Section>

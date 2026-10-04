@@ -4,11 +4,14 @@ import { Header } from "./Header";
 
 export function PageHero({
   title,
+  titleNode,
   description,
   crumbs,
   children,
 }: {
   title: string;
+  /** Optional custom title row (e.g. title + story play) */
+  titleNode?: ReactNode;
   description?: ReactNode;
   crumbs: Crumb[];
   children?: ReactNode;
@@ -31,9 +34,11 @@ export function PageHero({
         <Breadcrumbs items={crumbs} tone="dark" />
 
         <div className="mt-12 max-w-3xl md:mt-16">
-          <h1 className="text-3xl leading-tight text-brand-white md:text-5xl">
-            {title}
-          </h1>
+          {titleNode ?? (
+            <h1 className="text-3xl leading-tight text-brand-white md:text-5xl">
+              {title}
+            </h1>
+          )}
           {description ? (
             <div className="mt-5 text-base leading-9 text-white/70 md:text-lg">
               {description}

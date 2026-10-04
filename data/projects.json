@@ -242,7 +242,19 @@
         "alt": "قاب‌های استاندارد تابلو واحدهای تجاری روی نمای کامپوزیت"
       }
     ],
-    "featured": false
+    "featured": false,
+    "videos": [
+      {
+        "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        "poster": "/images/services/composite-facade.jpg",
+        "alt": "ویدیو نمونه استوری"
+      },
+      {
+        "src": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        "poster": "/images/services/composite-facade.jpg",
+        "alt": "ویدیو نمونه دوم"
+      }
+    ]
   },
   {
     "slug": "exchange-amol",

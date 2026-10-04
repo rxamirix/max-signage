@@ -6,6 +6,10 @@ import { CtaSection } from "@/components/CtaSection";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { ProjectCard } from "@/components/ProjectCard";
+import {
+  HeroTitleWithStories,
+  MediaGallery,
+} from "@/components/StoryPlayer";
 import { Section, SectionHeading } from "@/components/ui";
 import {
   getProject,
@@ -16,10 +20,11 @@ import {
 import { pageMetadata } from "@/lib/metadata";
 import { getProjectFacts } from "@/lib/projects";
 import { breadcrumbJsonLd, creativeWorkJsonLd } from "@/lib/seo";
+import { normalizeVideos } from "@/lib/story-video";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -59,6 +64,12 @@ export default async function ProjectPage({ params }: Params) {
   ]);
   if (!project) notFound();
 
+  const cover = project.gallery?.[0];
+  const coverSrc = cover?.src || "/images/services/chelnium.jpg";
+  const coverAlt = cover?.alt || project.title;
+  const videos = normalizeVideos(project.videos);
+  const galleryImages = project.gallery?.slice(1) ?? [];
+
   const service = await getService(project.serviceSlug);
   const related = projects
     .filter((item) => item.slug !== project.slug)
@@ -89,7 +100,7 @@ export default async function ProjectPage({ params }: Params) {
             name: project.title,
             description: project.summary,
             url: `${site.url}/portfolio/${project.slug}`,
-            image: project.gallery[0].src,
+            image: coverSrc,
             city: project.city,
           }),
         ]}
@@ -97,6 +108,7 @@ export default async function ProjectPage({ params }: Params) {
 
       <PageHero
         title={project.title}
+        titleNode={<HeroTitleWithStories title={project.title} videos={videos} />}
         crumbs={crumbs}
         description={project.summary}
       />
@@ -106,8 +118,8 @@ export default async function ProjectPage({ params }: Params) {
           <div className="lg:col-span-8">
             <div className="overflow-hidden rounded-card border border-navy-100">
               <Image
-                src={project.gallery[0].src}
-                alt={project.gallery[0].alt}
+                src={coverSrc}
+                alt={coverAlt}
                 width={1200}
                 height={800}
                 priority
@@ -129,25 +141,11 @@ export default async function ProjectPage({ params }: Params) {
               ))}
             </div>
 
-            {project.gallery.length > 1 ? (
-              <div className="mt-12 grid gap-5 sm:grid-cols-2">
-                {project.gallery.slice(1).map((image) => (
-                  <div
-                    key={image.src}
-                    className="overflow-hidden rounded-card border border-navy-100"
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={1200}
-                      height={800}
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                      className="w-full"
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : null}
+            <MediaGallery
+              images={galleryImages}
+              videos={videos}
+              title={project.title}
+            />
           </div>
 
           <aside className="lg:col-span-4">

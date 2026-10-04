@@ -118,11 +118,7 @@ export default async function ContactPage() {
                     <ClockIcon className="size-5 text-navy-600" />
                     {site.workingHours}
                   </p>
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    <Button href={`tel:${site.phone}`} external>
-                      <PhoneIcon className="size-4" />
-                      <PhoneText />
-                    </Button>
+                  <div className="mt-5">
                     <Button href={branch.mapUrl} variant="outline" external>
                       مسیریابی
                     </Button>

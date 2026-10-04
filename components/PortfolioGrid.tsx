@@ -237,20 +237,43 @@ export function PortfolioGrid({
     setDrafts(emptyFilters);
   };
 
+  const clearOne = (key: ProjectFilterKey) => {
+    apply(key, "");
+  };
+
+  const activeFilters = projectFilterFields.filter((field) => filters[field.key]);
+
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between gap-3">
-        <p className="text-sm text-navy-700">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="shrink-0 text-sm text-navy-700">
           {filtered.length.toLocaleString("fa-IR")} پروژه
         </p>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          {activeFilters.map((field) => (
+            <span
+              key={field.key}
+              className="inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-brand-white py-1 pr-3 pl-1 text-sm font-bold text-navy-800 shadow-sm"
+            >
+              <span className="text-navy-500">{field.label}:</span>
+              <span>{filters[field.key]}</span>
+              <button
+                type="button"
+                onClick={() => clearOne(field.key)}
+                aria-label={`حذف فیلتر ${field.label}`}
+                className="grid size-6 place-items-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
+              >
+                <X className="size-3.5" strokeWidth={3} aria-hidden="true" />
+              </button>
+            </span>
+          ))}
           {activeCount > 0 ? (
             <button
               type="button"
               onClick={clearAll}
               className="text-sm font-bold text-navy-600 hover:text-navy-800"
             >
-              پاک کردن
+              پاک کردن همه
             </button>
           ) : null}
           <button
@@ -259,7 +282,7 @@ export function PortfolioGrid({
             className="inline-flex items-center gap-2 rounded-full bg-navy-600 px-5 py-2.5 text-sm font-bold text-brand-white shadow-lg shadow-navy-600/20 transition-colors hover:bg-navy-700"
           >
             <Filter className="size-4" aria-hidden="true" />
-            فیلتر
+            جستجوی پیشرفته
             {activeCount > 0 ? (
               <span className="grid min-w-5 place-items-center rounded-full bg-brand-yellow px-1.5 text-xs text-navy-900">
                 {activeCount.toLocaleString("fa-IR")}
@@ -273,7 +296,7 @@ export function PortfolioGrid({
         <div className="fixed inset-0 z-[120] flex items-end justify-center md:items-center">
           <button
             type="button"
-            aria-label="بستن فیلتر"
+            aria-label="بستن جستجوی پیشرفته"
             className="absolute inset-0 bg-navy-950/55"
             onClick={() => setOpen(false)}
           />
@@ -288,7 +311,7 @@ export function PortfolioGrid({
                 id="portfolio-filter-title"
                 className="text-lg font-bold text-navy-900"
               >
-                فیلتر پروژه‌ها
+                جستجوی پیشرفته
               </h2>
               <button
                 type="button"
@@ -440,7 +463,7 @@ export function PortfolioGrid({
         </div>
       ) : (
         <p className="py-16 text-center text-navy-700/70">
-          با این فیلترها پروژه‌ای پیدا نشد. فیلتر را عوض کنید یا پاک کنید.
+          با این شرایط پروژه‌ای پیدا نشد. جستجو را عوض کنید یا پاک کنید.
         </p>
       )}
     </div>

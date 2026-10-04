@@ -8,6 +8,9 @@ import {
   SpecsEditor,
 } from "@/components/admin/form-helpers";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { VideosField } from "@/components/admin/VideosField";
+import { AdminEditorModal } from "@/components/admin/AdminEditorModal";
+import type { StoryVideo } from "@/lib/story-video";
 import {
   AdminButton,
   AdminCard,
@@ -22,7 +25,7 @@ type Field =
   | {
       key: string;
       label: string;
-      type?: "text" | "textarea" | "checkbox" | "number" | "lines" | "image";
+      type?: "text" | "textarea" | "checkbox" | "number" | "lines" | "image" | "videos";
       hint?: string;
       dir?: "ltr" | "rtl";
     }
@@ -175,41 +178,89 @@ export function ArrayCollectionPage({
           {filtered.map(({ item, index }) => (
             <AdminCard
               key={`${String(item[idKey])}-${index}`}
-              className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+              className="!p-4 md:!p-5"
             >
-              <div>
-                <p className="font-extrabold text-navy-950">{getItemTitle(item)}</p>
-                {idKey !== "question" && idKey !== "title" && idKey !== "name" ? (
-                  <p className="mt-1 text-xs text-navy-500" dir="ltr">
-                    {idLabel}: {String(item[idKey] || "—")}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <p className="truncate font-extrabold text-navy-950">
+                    {getItemTitle(item)}
                   </p>
-                ) : null}
-              </div>
-              <div className="flex gap-2">
-                <AdminButton variant="secondary" onClick={() => openEdit(index)}>
-                  ویرایش
-                </AdminButton>
-                <AdminButton variant="danger" onClick={() => removeAt(index)}>
-                  حذف
-                </AdminButton>
+                  {idKey !== "question" &&
+                  idKey !== "title" &&
+                  idKey !== "name" ? (
+                    <p className="mt-1 truncate text-xs text-navy-500" dir="ltr">
+                      {idLabel}: {String(item[idKey] || "—")}
+                    </p>
+                  ) : null}
+                  {typeof item.summary === "string" && item.summary ? (
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-navy-400">
+                      {item.summary}
+                    </p>
+                  ) : typeof item.excerpt === "string" && item.excerpt ? (
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-navy-400">
+                      {item.excerpt}
+                    </p>
+                  ) : typeof item.description === "string" &&
+                    item.description ? (
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-navy-400">
+                      {item.description}
+                    </p>
+                  ) : typeof item.answer === "string" && item.answer ? (
+                    <p className="mt-1 line-clamp-2 text-xs leading-5 text-navy-400">
+                      {item.answer}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
+                  <AdminButton variant="secondary" onClick={() => openEdit(index)}>
+                    ویرایش
+                  </AdminButton>
+                  <AdminButton variant="danger" onClick={() => removeAt(index)}>
+                    حذف
+                  </AdminButton>
+                </div>
               </div>
             </AdminCard>
           ))}
           {!filtered.length ? (
             <AdminCard>
-              <p className="text-sm text-navy-500">موردی یافت نشد.</p>
+              <p className="py-6 text-center text-sm leading-7 text-navy-500">
+                {items.length
+                  ? `نتیجه‌ای در ${itemLabel}ها پیدا نشد.`
+                  : `هنوز ${itemLabel}ی ثبت نشده.`}
+              </p>
             </AdminCard>
           ) : null}
         </div>
       )}
 
       {draft && editingIndex !== null ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 sm:items-center">
-          <div className="max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-brand-white p-5 shadow-2xl md:p-7">
-            <h2 className="mb-4 text-xl font-extrabold text-navy-950">
-              {editingIndex === -1 ? `افزودن ${itemLabel}` : `ویرایش ${itemLabel}`}
-            </h2>
-            <div className="grid gap-4">
+        <AdminEditorModal
+          title={
+            editingIndex === -1 ? `افزودن ${itemLabel}` : `ویرایش ${itemLabel}`
+          }
+          onClose={() => {
+            setEditingIndex(null);
+            setDraft(null);
+          }}
+          footer={
+            <>
+              <AdminButton
+                variant="secondary"
+                onClick={() => {
+                  setEditingIndex(null);
+                  setDraft(null);
+                }}
+              >
+                انصراف
+              </AdminButton>
+              <AdminButton onClick={saveDraft} disabled={saving}>
+                {saving ? "در حال ذخیره…" : "ذخیره"}
+              </AdminButton>
+            </>
+          }
+        >
+          <div className="grid gap-4">
               {fields.map((field) => {
                 if (field.type === "checkbox") {
                   return (
@@ -234,6 +285,21 @@ export function ArrayCollectionPage({
                       hint={field.hint}
                       value={String(draft[field.key] ?? "")}
                       onChange={(url) => setField(field.key, url)}
+                    />
+                  );
+                }
+                if (field.type === "videos") {
+                  return (
+                    <VideosField
+                      key={field.key}
+                      label={field.label}
+                      hint={field.hint}
+                      value={
+                        Array.isArray(draft[field.key])
+                          ? (draft[field.key] as StoryVideo[])
+                          : []
+                      }
+                      onChange={(next) => setField(field.key, next)}
                     />
                   );
                 }
@@ -332,23 +398,8 @@ export function ArrayCollectionPage({
                   />
                 );
               })}
-            </div>
-            <div className="mt-6 flex flex-wrap justify-end gap-2">
-              <AdminButton
-                variant="secondary"
-                onClick={() => {
-                  setEditingIndex(null);
-                  setDraft(null);
-                }}
-              >
-                انصراف
-              </AdminButton>
-              <AdminButton onClick={saveDraft} disabled={saving}>
-                {saving ? "در حال ذخیره…" : "ذخیره"}
-              </AdminButton>
-            </div>
           </div>
-        </div>
+        </AdminEditorModal>
       ) : null}
     </div>
   );

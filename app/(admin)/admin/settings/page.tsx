@@ -64,21 +64,18 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div>
+    <div className="pb-24">
       {toast}
       <AdminPageHeader
         title="تنظیمات سایت"
         description="اطلاعات تماس، شعب، آمار، نشان‌های اعتماد و منو — بدون کد."
-        actions={
-          <AdminButton onClick={save} disabled={saving}>
-            {saving ? "در حال ذخیره…" : "ذخیره تنظیمات"}
-          </AdminButton>
-        }
       />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <AdminCard className="space-y-3">
-          <h2 className="font-extrabold text-navy-950">هویت برند</h2>
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">
+            هویت برند
+          </h2>
           <AdminInput
             label="نام فارسی"
             value={site.name}
@@ -140,7 +137,9 @@ export default function AdminSettingsPage() {
         </AdminCard>
 
         <AdminCard className="space-y-3">
-          <h2 className="font-extrabold text-navy-950">تماس</h2>
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">
+            تماس
+          </h2>
           <AdminInput
             label="شماره تلفن (برای تماس)"
             value={site.phone}
@@ -151,6 +150,8 @@ export default function AdminSettingsPage() {
             label="نمایش تلفن در سایت"
             value={site.phoneDisplay}
             onChange={(e) => set("phoneDisplay", e.target.value)}
+            dir="ltr"
+            hint="همان شماره‌ای که روی سایت دیده می‌شود — با فاصله هم بنویسید، مثلاً ۰۹۱۱ ۲۵۸ ۸۸۴۶"
           />
           <AdminInput
             label="تلفن بین‌المللی"
@@ -196,7 +197,7 @@ export default function AdminSettingsPage() {
         </AdminCard>
 
         <AdminCard className="space-y-4 lg:col-span-2">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 border-b border-navy-100 pb-2">
             <h2 className="font-extrabold text-navy-950">شعب</h2>
             <AdminButton
               variant="secondary"
@@ -303,7 +304,7 @@ export default function AdminSettingsPage() {
         </AdminCard>
 
         <AdminCard className="space-y-4">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 border-b border-navy-100 pb-2">
             <h2 className="font-extrabold text-navy-950">آمار صفحه اصلی</h2>
             <AdminButton
               variant="secondary"
@@ -362,6 +363,9 @@ export default function AdminSettingsPage() {
         </AdminCard>
 
         <AdminCard className="space-y-3">
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">
+            اعتماد و نشان‌ها
+          </h2>
           <LinesEditor
             label="نشان‌های اعتماد"
             hint="مثلاً طراحی رایگان — هر مورد در یک خط."
@@ -371,7 +375,7 @@ export default function AdminSettingsPage() {
         </AdminCard>
 
         <AdminCard className="space-y-4 lg:col-span-2">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 border-b border-navy-100 pb-2">
             <h2 className="font-extrabold text-navy-950">منوی سایت</h2>
             <AdminButton
               variant="secondary"
@@ -420,6 +424,17 @@ export default function AdminSettingsPage() {
             </div>
           ))}
         </AdminCard>
+      </div>
+
+      <div className="fixed bottom-0 end-0 start-0 z-40 border-t border-navy-100 bg-navy-50/90 backdrop-blur-sm md:start-[15.5rem]">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 md:px-6">
+          <p className="hidden text-xs font-bold text-navy-500 sm:block">
+            تغییرات تا ذخیره شدن اعمال نمی‌شوند.
+          </p>
+          <AdminButton onClick={save} disabled={saving} className="ms-auto">
+            {saving ? "در حال ذخیره…" : "ذخیره تنظیمات"}
+          </AdminButton>
+        </div>
       </div>
     </div>
   );

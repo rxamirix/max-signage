@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { Lead } from "@/lib/content-store";
 import { getLeads, writeCollection } from "@/lib/content-store";
-import { isPhoneVerified, normalizePhone } from "@/lib/otp";
+import { normalizePhone } from "@/lib/otp";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -12,12 +12,10 @@ export async function POST(request: Request) {
   const name = String(body.name || "").trim().slice(0, 80);
   const phone = normalizePhone(body.phone);
   if (name.length < 2 || !/^09\d{9}$/.test(phone)) {
-    return NextResponse.json({ error: "Invalid lead" }, { status: 400 });
-  }
-
-  const verified = await isPhoneVerified(phone);
-  if (!verified) {
-    return NextResponse.json({ error: "شماره تأیید نشده" }, { status: 403 });
+    return NextResponse.json(
+      { error: "نام و شماره موبایل معتبر نیست" },
+      { status: 400 },
+    );
   }
 
   const lead: Lead = {

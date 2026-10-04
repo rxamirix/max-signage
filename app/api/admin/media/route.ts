@@ -4,6 +4,23 @@ import path from "path";
 import type { MediaItem } from "@/lib/content-store";
 import { getMedia, writeCollection } from "@/lib/content-store";
 
+const IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/svg+xml",
+];
+
+const VIDEO_TYPES = [
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-m4v",
+];
+
+const PDF_TYPES = ["application/pdf"];
+
 export async function GET() {
   const media = await getMedia();
   return NextResponse.json({ data: media });
@@ -15,19 +32,36 @@ export async function POST(request: Request) {
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "فایل ارسال نشد" }, { status: 400 });
   }
-  if (file.size > 8 * 1024 * 1024) {
-    return NextResponse.json({ error: "حداکثر حجم ۸ مگابایت" }, { status: 400 });
+
+  const isVideo = VIDEO_TYPES.includes(file.type) || file.type.startsWith("video/");
+  const isImage = IMAGE_TYPES.includes(file.type);
+  const isPdf =
+    PDF_TYPES.includes(file.type) ||
+    file.name.toLowerCase().endsWith(".pdf");
+
+  if (!isImage && !isVideo && !isPdf) {
+    return NextResponse.json(
+      { error: "فرمت مجاز نیست (عکس، ویدیو یا PDF)" },
+      { status: 400 },
+    );
   }
 
-  const allowed = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/gif",
-    "image/svg+xml",
-  ];
-  if (!allowed.includes(file.type)) {
-    return NextResponse.json({ error: "فرمت تصویر مجاز نیست" }, { status: 400 });
+  const maxBytes = isVideo
+    ? 80 * 1024 * 1024
+    : isPdf
+      ? 20 * 1024 * 1024
+      : 8 * 1024 * 1024;
+  if (file.size > maxBytes) {
+    return NextResponse.json(
+      {
+        error: isVideo
+          ? "حداکثر حجم ویدیو ۸۰ مگابایت"
+          : isPdf
+            ? "حداکثر حجم PDF ۲۰ مگابایت"
+            : "حداکثر حجم عکس ۸ مگابایت",
+      },
+      { status: 400 },
+    );
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
