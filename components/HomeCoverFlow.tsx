@@ -12,7 +12,7 @@ const CoverFlowCarousel = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="mx-auto h-[min(72vw,30rem)] w-full max-w-6xl bg-navy-50/50"
+        className="mx-auto h-[min(72vw,30rem)] w-full max-w-6xl bg-transparent"
         aria-hidden="true"
       />
     ),

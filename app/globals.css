@@ -170,6 +170,17 @@
 .home-portfolio-section {
   background: radial-gradient(ellipse at 8% 12%, rgb(234 234 53 / .045), transparent 40%), radial-gradient(ellipse at 95% 55%, rgb(90 79 240 / .07), transparent 42%), linear-gradient(180deg, #f8f8fa, #fff);
 }
+@media (max-width: 767px) {
+  #hero, #hero .max-hero, #hero .cv-panel, #services, #services .home-coverflow {
+    background-color: #fff;
+  }
+  #hero .max-hero :is(.cv-grid, .cv-glints, .cv-pulses) {
+    mask-image: linear-gradient(to bottom, transparent 84px, #000 180px, #000 58%, transparent 97%);
+  }
+  .home-portfolio-section {
+    background: linear-gradient(180deg, #fff 0, #fff 24px, #f8f8fa 150px, #fff 100%);
+  }
+}
 .home-difference-section {
   background: radial-gradient(ellipse at 80% 0%, rgb(90 79 240 / .20), transparent 48%), radial-gradient(ellipse at 8% 100%, rgb(234 234 53 / .10), transparent 45%), #23232b;
 }
