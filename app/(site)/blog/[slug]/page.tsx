@@ -195,12 +195,12 @@ export default async function BlogPostPage({ params }: Params) {
 
       <Section>
         <SectionHeading title="مقالات دیگر" align="start" />
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="interior-pair-grid mt-8 grid grid-cols-2 gap-3 sm:gap-6">
           {others.map((item) => (
             <Link
               key={item.slug}
               href={`/blog/${item.slug}`}
-              className="group rounded-card border border-navy-100 p-6 transition-all hover:-translate-y-1 hover:border-navy-300 hover:shadow-xl hover:shadow-navy-900/5"
+              className="group rounded-card border border-navy-100 p-6 transition-all hover:border-navy-300 hover:shadow-xl hover:shadow-navy-900/5"
             >
               <span className="text-xs font-bold text-navy-600">
                 {item.category}

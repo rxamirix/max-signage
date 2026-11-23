@@ -129,7 +129,8 @@ export function ArrayCollectionPage({
         showError("این شناسه تکراری است");
         return;
       }
-      next.unshift(draft);
+      if (collection === "process") next.push(draft);
+      else next.unshift(draft);
     } else if (editingIndex !== null) {
       next[editingIndex] = draft;
     }

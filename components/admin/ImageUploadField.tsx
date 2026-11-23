@@ -17,6 +17,7 @@ export function ImageUploadField({
   label,
   hint,
   value,
+  previewFallback,
   alt,
   onChange,
   onAltChange,
@@ -24,6 +25,7 @@ export function ImageUploadField({
   label: string;
   hint?: string;
   value: string;
+  previewFallback?: string;
   alt?: string;
   onChange: (url: string) => void;
   onAltChange?: (alt: string) => void;
@@ -56,9 +58,9 @@ export function ImageUploadField({
 
       <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start">
         <div className="relative h-36 w-full overflow-hidden rounded-xl bg-navy-900/10 sm:w-48">
-          {value ? (
+          {value || previewFallback ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={value} alt={alt || ""} className="h-full w-full object-cover" />
+            <img src={value || previewFallback} alt={alt || ""} className={`h-full w-full ${previewFallback ? "object-contain" : "object-cover"}`} />
           ) : (
             <div className="grid h-full place-items-center text-xs text-navy-400">
               هنوز عکسی نیست

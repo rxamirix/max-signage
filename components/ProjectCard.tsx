@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpLeft, MapPin } from "lucide-react";
 import type { Project } from "@/lib/projects";
 
 export function ProjectCard({
@@ -17,48 +18,38 @@ export function ProjectCard({
     <Link
       href={`/portfolio/${project.slug}`}
       prefetch
-      className="group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white shadow-[0_14px_36px_-10px_rgba(20,22,63,0.22)] transition-transform duration-300 hover:-translate-y-1"
+      className="portfolio-project-card group flex h-full flex-col rounded-[25px] border border-[#e9e6de] bg-white p-2.5 sm:p-3"
     >
-      <div className="relative aspect-square shrink-0 overflow-hidden bg-navy-900 sm:aspect-[3/2]">
+      <div className="project-cover relative aspect-[5/4] shrink-0 overflow-hidden rounded-[18px] bg-navy-50 sm:aspect-[4/3]">
         <Image
           src={imageSrc}
           alt={imageAlt}
           fill
           priority={priority}
-          sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 640px) 76vw, (max-width: 1200px) 45vw, 30vw"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
         />
-        <span className="absolute top-2 right-2 rounded-full bg-brand-yellow px-2 py-0.5 text-[0.65rem] font-bold text-navy-900 sm:top-4 sm:right-4 sm:px-3 sm:py-1 sm:text-xs">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-950/35 via-transparent to-transparent" />
+        <span className="project-category absolute top-3 right-3 rounded-full border border-white/80 bg-white/95 px-3 py-1 text-[0.7rem] font-bold text-navy-700 shadow-sm backdrop-blur-md sm:text-xs">
           {project.category}
         </span>
+        <span className="project-city absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-navy-950/55 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-md"><MapPin className="size-3.5" aria-hidden="true" />{project.city}</span>
       </div>
 
-      <div className="flex flex-1 flex-col p-3 sm:p-6">
-        <div className="flex items-center gap-1.5 text-[0.7rem] text-navy-600 sm:gap-2 sm:text-sm">
-          <span className="font-bold">{project.client}</span>
-          <span aria-hidden="true">•</span>
-          <span>{project.city}</span>
-          <span aria-hidden="true">•</span>
-          <span className="tabular">{project.year}</span>
+      <div className="project-copy flex flex-1 flex-col px-2 py-3 sm:px-3 sm:py-4">
+        <div className="project-meta flex items-center justify-between gap-2 text-[0.7rem] text-[#69676b] sm:text-xs">
+          <span className="truncate font-semibold">{project.client}</span>
+          <span className="shrink-0 rounded-full bg-[#f5f3ee] px-2 py-0.5 tabular text-[#625d4f]">{project.year}</span>
         </div>
-        <h3 className="mt-1.5 line-clamp-2 text-sm text-navy-900 transition-colors group-hover:text-navy-600 sm:mt-2 sm:min-h-[3.25rem] sm:text-lg md:text-xl">
+        <h3 className="mt-2 line-clamp-2 min-h-[2.9rem] text-base leading-relaxed text-[#272630] transition-colors group-hover:text-navy-600 sm:min-h-[3.3rem] sm:text-lg">
           {project.title}
         </h3>
-        <p className="mt-1.5 hidden line-clamp-3 flex-1 text-sm leading-7 text-navy-700/75 sm:mt-3 sm:block">
+        <p className="project-summary mt-1.5 line-clamp-2 flex-1 text-xs leading-6 text-[#66646a] sm:text-sm sm:leading-7">
           {project.summary}
         </p>
-        <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-navy-600 sm:mt-4 sm:gap-2 sm:text-sm">
-          مشاهده بیشتر
-          <svg viewBox="0 0 20 20" className="size-3.5 sm:size-4" aria-hidden="true">
-            <path
-              d="M12 4 6 10l6 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-          </svg>
+        <span className="project-action mt-4 flex items-center justify-between border-t border-[#eae8e1] pt-3 text-xs font-bold text-navy-600 sm:text-sm">
+          بررسی پروژه
+          <span className="grid size-9 place-items-center rounded-full bg-navy-50 text-navy-600 transition-all duration-300 group-hover:bg-brand-yellow group-hover:text-[#32300e]"><ArrowUpLeft className="size-4 transition-transform group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" /></span>
         </span>
       </div>
     </Link>

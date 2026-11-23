@@ -26,6 +26,8 @@ const navGroups: {
       { href: "/admin/services", label: "خدمات" },
       { href: "/admin/locations", label: "شهرها" },
       { href: "/admin/materials", label: "متریال" },
+      { href: "/admin/process", label: "مراحل سفارش" },
+      { href: "/admin/differentiators", label: "مزیت‌های مکث" },
       { href: "/admin/testimonials", label: "نظرات" },
       { href: "/admin/faq", label: "سوالات متداول" },
       { href: "/admin/settings", label: "تنظیمات سایت" },

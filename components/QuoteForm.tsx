@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { services } from "@/lib/services";
+import { services as defaultServices } from "@/lib/services";
 import { locations } from "@/lib/locations";
-import { site } from "@/lib/site";
+import { site as defaultSite } from "@/lib/site";
+import { useSiteContent } from "./SiteContentProvider";
 import { cn, WhatsAppIcon } from "./ui";
 
 const inputClass =
@@ -18,6 +19,9 @@ export function QuoteForm({
   defaultService?: string;
   defaultCity?: string;
 }) {
+  const content = useSiteContent();
+  const site = content?.site ?? defaultSite;
+  const services = content?.services ?? defaultServices;
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState(defaultCity ?? "");
@@ -185,7 +189,7 @@ export function QuoteForm({
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-4 text-lg font-extrabold text-white transition-transform hover:-translate-y-0.5"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-4 text-lg font-extrabold text-white hover:bg-[#1fbd5a]"
         >
           <WhatsAppIcon />
           ارسال درخواست در واتساپ

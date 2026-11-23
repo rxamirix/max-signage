@@ -50,7 +50,7 @@ export function StoryPlayButton({
       className={cn(
         "relative shrink-0 rounded-full p-[2.5px]",
         "bg-[conic-gradient(from_210deg,#f58529,#dd2a7b,#8134af,#515bd4,#eaea35,#f58529)]",
-        "transition-transform hover:scale-105 active:scale-95",
+        "transition-colors hover:brightness-110 active:brightness-95",
         className,
       )}
     >

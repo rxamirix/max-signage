@@ -1,16 +1,16 @@
 import { branches, site } from "./site";
 import { services } from "./services";
+import type { SiteSettings } from "./content-store";
 
-const sameAs = [site.instagram];
-
-export function organizationJsonLd() {
+export function organizationJsonLd(settings?: SiteSettings) {
+  const current = settings ?? site;
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${site.url}/#organization`,
-    name: site.name,
-    alternateName: [site.nameEn, "تابلو سازی مکث", "MAX"],
-    slogan: site.motto,
+    name: current.name,
+    alternateName: [current.nameEn, "تابلو سازی مکث", "MAX"],
+    slogan: current.motto,
     url: site.url,
     logo: {
       "@type": "ImageObject",
@@ -24,11 +24,11 @@ export function organizationJsonLd() {
       width: 1200,
       height: 630,
     },
-    description: site.description,
-    telephone: site.phoneIntl,
-    email: site.email,
+    description: current.description,
+    telephone: current.phoneIntl,
+    email: current.email,
     foundingDate: "2006",
-    sameAs,
+    sameAs: [current.instagram],
     areaServed: {
       "@type": "State",
       name: "مازندران",
@@ -36,22 +36,23 @@ export function organizationJsonLd() {
   };
 }
 
-export function localBusinessJsonLd() {
+export function localBusinessJsonLd(settings?: SiteSettings) {
+  const current = settings ?? site;
   const branchPages: Record<string, string> = {
     behshahr: `${site.url}/tablo-tabligati-behshahr`,
     neka: `${site.url}/tablo-tabligati-neka`,
   };
 
-  return branches.map((branch) => ({
+  return (settings?.branches ?? branches).map((branch) => ({
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "ProfessionalService"],
     "@id": `${site.url}/#${branch.id}`,
-    name: `${site.name} - ${branch.title}`,
+    name: `${current.name} - ${branch.title}`,
     parentOrganization: { "@id": `${site.url}/#organization` },
-    description: site.description,
+    description: current.description,
     url: branchPages[branch.id] ?? site.url,
-    telephone: site.phoneIntl,
-    email: site.email,
+    telephone: current.phoneIntl,
+    email: current.email,
     image: {
       "@type": "ImageObject",
       url: `${site.url}/og-image.png`,
@@ -97,7 +98,7 @@ export function localBusinessJsonLd() {
       { "@type": "City", name: "آمل" },
       { "@type": "City", name: "بابل" },
     ],
-    sameAs,
+    sameAs: [current.instagram],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "خدمات تابلوسازی",

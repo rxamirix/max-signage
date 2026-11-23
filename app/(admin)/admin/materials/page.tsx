@@ -17,10 +17,12 @@ export default function AdminMaterialsPage() {
         description: "",
         properties: [],
         grades: "",
+        image: "",
       })}
       fields={[
         { key: "name", label: "نام" },
         { key: "category", label: "دسته" },
+        { key: "image", label: "تصویر متریال", type: "image" },
         { key: "description", label: "توضیح", type: "textarea" },
         {
           key: "properties",

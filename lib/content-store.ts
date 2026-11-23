@@ -21,11 +21,13 @@ import {
 } from "@/lib/site";
 import type { Job } from "@/lib/jobs";
 import { DEFAULT_JOB_STAGES } from "@/lib/jobs";
+import { DEFAULT_SERVICE_IMAGES } from "@/lib/service-images";
+import { defaultHomeSections, defaultHeroContent, defaultProcessImages, defaultPageHeroes, defaultPageDetails, type HomeSections, type HeroContent, type PageHeroes, type PageDetails } from "@/lib/home-content";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
-export type Material = (typeof materialsSeed)[number];
-export type ProcessStep = (typeof processSeed)[number];
+export type Material = (typeof materialsSeed)[number] & { image?: string };
+export type ProcessStep = (typeof processSeed)[number] & { image?: string };
 export type Differentiator = (typeof differentiatorsSeed)[number];
 export type Testimonial = (typeof testimonialsSeed)[number];
 export type FaqItem = (typeof homeFaqSeed)[number];
@@ -60,6 +62,13 @@ export type SiteSettings = {
   stats: StatItem[];
   trustBadges: string[];
   navigation: NavItem[];
+  homeSections?: HomeSections;
+  heroContent?: HeroContent;
+  aboutImage?: string;
+  pageHeroes?: PageHeroes;
+  pageDetails?: PageDetails;
+  brandImages?: { hero: string; light: string; dark: string; footer: string };
+  footerDescription?: string;
 };
 
 export type Lead = {
@@ -160,7 +169,18 @@ export async function readCollection<K extends keyof Collections>(
 ): Promise<Collections[K]> {
   await ensureSeeded();
   const raw = await fs.readFile(filePath(name), "utf8");
-  return JSON.parse(raw) as Collections[K];
+  const parsed = JSON.parse(raw) as Collections[K];
+  if (name === "site") {
+    const current = parsed as SiteSettings;
+    return { ...current, homeSections: { ...defaultHomeSections, ...current.homeSections }, heroContent: { ...defaultHeroContent, ...current.heroContent }, pageHeroes: { ...defaultPageHeroes, ...current.pageHeroes }, pageDetails: { ...defaultPageDetails, ...current.pageDetails }, aboutImage: current.aboutImage ?? "/images/services/chelnium.jpg" } as Collections[K];
+  }
+  if (name === "process") {
+    return (parsed as ProcessStep[]).map((step, index) => ({ ...step, image: step.image ?? defaultProcessImages[index % defaultProcessImages.length] })) as Collections[K];
+  }
+  if (name === "services") {
+    return (parsed as Service[]).map((service) => ({ ...service, image: service.image || DEFAULT_SERVICE_IMAGES[service.slug] || "" })) as Collections[K];
+  }
+  return parsed;
 }
 
 export async function writeCollection<K extends keyof Collections>(
@@ -315,7 +335,7 @@ export async function upsertUser(input: {
 }
 
 export async function getDashboardStats() {
-  const [projects, posts, services, locations, leads, materials, users, jobs] =
+  const [projects, posts, services, locations, leads, materials, users, jobs, process, differentiators, testimonials, faq] =
     await Promise.all([
       getProjects(),
       getPosts(),
@@ -325,6 +345,10 @@ export async function getDashboardStats() {
       getMaterials(),
       getUsers(),
       getJobs(),
+      getProcessSteps(),
+      getDifferentiators(),
+      getTestimonials(),
+      getFaq(),
     ]);
   return {
     projects: projects.length,
@@ -335,6 +359,10 @@ export async function getDashboardStats() {
     materials: materials.length,
     users: users.length,
     jobs: jobs.length,
+    process: process.length,
+    differentiators: differentiators.length,
+    testimonials: testimonials.length,
+    faq: faq.length,
     unreadLeads: leads.length,
   };
 }

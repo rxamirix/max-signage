@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LoginForm, LoginPageShell } from "@/components/LoginForm";
 import { pageMetadata } from "@/lib/metadata";
+import { getSiteSettings } from "@/lib/content-store";
 
 export const metadata: Metadata = pageMetadata({
   title: "ورود | تأیید شماره موبایل — تابلوسازی مکث",
@@ -10,9 +11,10 @@ export const metadata: Metadata = pageMetadata({
   absoluteTitle: true,
 });
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const site = await getSiteSettings();
   return (
-    <LoginPageShell>
+    <LoginPageShell logo={site.brandImages?.light || "/logo-mark-navy.png"}>
       <LoginForm />
     </LoginPageShell>
   );

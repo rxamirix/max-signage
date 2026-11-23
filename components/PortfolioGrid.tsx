@@ -367,7 +367,7 @@ export function PortfolioGrid({
                           </span>
                         </button>
                         {shown.map((option) => {
-                          const tones = colorSwatches[option] ?? ["#2d3192"];
+                          const tones = colorSwatches[option] ?? ["#5a4ff0"];
                           const selected = filters.color === option;
                           return (
                             <button

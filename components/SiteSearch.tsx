@@ -34,13 +34,10 @@ function SearchIcon({ className }: { className?: string }) {
 export function SiteSearch({
   variant = "desktop",
   tone = "light",
-  glass = false,
   onNavigate,
 }: {
   variant?: "desktop" | "mobile";
   tone?: "light" | "hero";
-  /** Liquid-glass chrome (header mega menu) */
-  glass?: boolean;
   onNavigate?: () => void;
 }) {
   const router = useRouter();
@@ -76,11 +73,12 @@ export function SiteSearch({
     const update = () => {
       const rect = rootRef.current?.getBoundingClientRect();
       if (!rect) return;
+      const width = Math.min(Math.max(rect.width, 288), window.innerWidth - 24);
       setPanelStyle({
         position: "fixed",
         top: rect.bottom + 8,
-        left: rect.left,
-        width: Math.max(rect.width, 288),
+        left: Math.max(12, Math.min(rect.right - width, window.innerWidth - width - 12)),
+        width,
         zIndex: 200,
       });
     };
@@ -134,12 +132,12 @@ export function SiteSearch({
 
   if (variant === "mobile") {
     return (
-      <div className="relative mb-6" ref={rootRef}>
+      <div className="relative mb-4" ref={rootRef}>
         <label className="sr-only" htmlFor="mobile-site-search">
           جستجو در سایت
         </label>
-        <div className="flex items-center gap-3 rounded-2xl border border-brand-white/15 bg-brand-white/5 px-4 py-3">
-          <SearchIcon className="text-brand-yellow" />
+        <div className={cn("flex items-center gap-3 rounded-2xl border px-4 py-3", tone === "light" ? "border-[#e8e7ed] bg-[#f7f7fa]" : "border-brand-white/15 bg-brand-white/5")}>
+          <SearchIcon className={tone === "light" ? "text-navy-600" : "text-brand-yellow"} />
           <input
             id="mobile-site-search"
             ref={inputRef}
@@ -151,7 +149,7 @@ export function SiteSearch({
             }}
             onFocus={() => setOpen(true)}
             placeholder="جستجو در خدمات، شهرها و مقالات..."
-            className="w-full bg-transparent text-brand-white outline-none placeholder:text-brand-white/40"
+            className={cn("w-full bg-transparent text-sm outline-none", tone === "light" ? "text-[#282731] placeholder:text-[#9895a3]" : "text-brand-white placeholder:text-brand-white/40")}
             autoComplete="off"
             maxLength={200}
             enterKeyHint="search"
@@ -164,7 +162,7 @@ export function SiteSearch({
               results={results}
               query={query}
               onSelect={goTo}
-              tone="dark"
+              tone={tone === "light" ? "light" : "dark"}
             />
           </div>
         ) : null}
@@ -187,52 +185,12 @@ export function SiteSearch({
       >
         <div
           className={cn(
-            "absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full px-1 transition-[width] duration-300 ease-out",
-            glass
-              ? tone === "light"
-                ? "text-navy-800"
-                : "text-brand-white"
-              : cn(
-                  "border shadow-lg backdrop-blur-lg",
-                  tone === "light"
-                    ? "border-navy-200/80 bg-white/50 text-navy-800"
-                    : "border-white/20 bg-white/10 text-brand-white",
-                ),
+            "header-chrome absolute inset-y-0 left-0 flex items-center overflow-hidden rounded-full px-1 transition-[width] duration-300 ease-out",
+            tone === "light" ? "text-navy-800" : "text-brand-white",
             expanded ? "w-full gap-1" : "w-11 justify-center",
           )}
-          style={
-            glass
-              ? {
-                  boxShadow:
-                    "0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)",
-                }
-              : undefined
-          }
+          data-tone={tone === "light" ? "light" : "hero"}
         >
-          {glass ? (
-            <>
-              <div
-                className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-full"
-                style={{
-                  backdropFilter: "blur(3px)",
-                  WebkitBackdropFilter: "blur(3px)",
-                  filter: "url(#glass-distortion)",
-                  isolation: "isolate",
-                }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 z-10 rounded-full"
-                style={{ background: "rgba(255, 255, 255, 0.25)" }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-full"
-                style={{
-                  boxShadow:
-                    "inset 0 0 0 0.5px rgba(255, 255, 255, 0.55), inset 1px 1px 0 0 rgba(255, 255, 255, 0.35), inset -1px -1px 0 0 rgba(255, 255, 255, 0.2)",
-                }}
-              />
-            </>
-          ) : null}
           <button
             type="button"
             aria-label="جستجو در سایت"
@@ -316,9 +274,9 @@ function ResultsPanel({
       id={id}
       role="listbox"
       className={cn(
-        "max-h-80 w-full overflow-y-auto rounded-2xl border p-2 shadow-2xl",
+        "max-h-80 w-full overflow-y-auto rounded-[24px] border p-2 shadow-[0_24px_65px_-16px_rgba(38,30,114,.28)] backdrop-blur-xl",
         tone === "light"
-          ? "border-navy-100 bg-brand-white shadow-navy-900/15"
+          ? "border-navy-100 bg-white/95"
           : "border-brand-white/10 bg-navy-900 shadow-black/40",
       )}
     >

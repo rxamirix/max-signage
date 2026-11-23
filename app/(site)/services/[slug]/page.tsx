@@ -103,7 +103,7 @@ export default async function ServicePage({ params }: Params) {
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button href={`tel:${site.phone}`} external>
-            <PhoneText />
+            <PhoneText value={site.phoneDisplay} />
           </Button>
           <Button href="#quote" variant="outline" className="text-brand-white">
             استعلام قیمت این خدمت
@@ -134,7 +134,7 @@ export default async function ServicePage({ params }: Params) {
             <h2 className="mt-14 text-2xl text-navy-900 md:text-3xl">
               ویژگی‌های اجرای {service.shortTitle} در مکث
             </h2>
-            <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            <div className="interior-pair-grid mt-8 grid grid-cols-2 gap-3 sm:gap-5">
               {service.features.map((feature, index) => (
                 <Reveal key={feature.title} delay={index * 60}>
                   <Card className="h-full">
@@ -193,7 +193,7 @@ export default async function ServicePage({ params }: Params) {
                   کاملاً رایگان است.
                 </p>
                 <Button href={`tel:${site.phone}`} className="mt-5 w-full" external>
-                  <PhoneText />
+                  <PhoneText value={site.phoneDisplay} />
                 </Button>
               </div>
             </div>
@@ -207,7 +207,7 @@ export default async function ServicePage({ params }: Params) {
             title={`پروژه‌های ${service.shortTitle} ما`}
             align="start"
           />
-          <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <div className="interior-pair-grid mt-10 grid grid-cols-2 gap-3 sm:gap-7 lg:grid-cols-3">
             {related.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}

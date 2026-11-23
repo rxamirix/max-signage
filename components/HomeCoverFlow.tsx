@@ -21,6 +21,6 @@ const CoverFlowCarousel = dynamic(
 
 export function HomeCoverFlow({ items }: { items: CarouselItem[] }) {
   return (
-    <CoverFlowCarousel sectionLabel="" autoplay={false} items={items} />
+    <CoverFlowCarousel sectionLabel="" autoplay={false} items={items} className="home-coverflow" />
   );
 }

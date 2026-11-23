@@ -1,19 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { Header } from "./Header";
-import { HeroCopy } from "./HeroCopy";
-
-const VolumetricStudio = dynamic(
-  () =>
-    import("@/components/ui/volumetric-studio").then(
-      (mod) => mod.VolumetricStudio,
-    ),
-  {
-    ssr: false,
-    loading: () => <div className="min-h-[72svh] w-full bg-black md:min-h-svh" />,
-  },
-);
+import { Provably } from "@/components/ui/provably";
+import type { SiteSettings } from "@/lib/content-store";
+import { defaultHeroContent } from "@/lib/home-content";
 
 export function WaveDivider({
   fill = "#fefff9",
@@ -45,15 +35,41 @@ export function WaveDivider({
   );
 }
 
-export function Hero() {
+export function Hero({ settings: site }: { settings: SiteSettings }) {
+  const { branches, trustBadges } = site;
+  const content = site.heroContent ?? defaultHeroContent;
   return (
-    <section id="hero" className="relative overflow-hidden bg-black">
-      <VolumetricStudio className="min-h-[72svh] md:min-h-svh">
-        <HeroCopy />
-      </VolumetricStudio>
-      <WaveDivider fill="#fefff9" />
+    <section id="hero" className="relative bg-white">
+      <Provably
+        className="max-hero"
+        copy={{
+          eyebrow: "",
+          lines: ["تابلو تبلیغاتی", "در مازندران"],
+          lastWord: site.motto,
+          showWordmark: true,
+          wordmarkImage: site.brandImages?.hero,
+          showToggle: false,
+          subtext: content.subtext || `${site.brandPromise}؛ طراحی و اجرای تابلوهای تبلیغاتی، با ${site.experienceYearsFa} سال تجربه.`,
+        }}
+        links={{
+          explore: { label: content.primaryLabel, href: "/contact#quote" },
+          howItWorks: { label: content.secondaryLabel, href: "/portfolio" },
+        }}
+        toggle={{ label: "تغییر رنگ هیرو بین آبی و خاکستری", hint: { pointer: "کلیک کنید", touch: "لمس کنید" } }}
+        stats={{ value: branches.length, suffix: " شعبه", word: content.branchLabel, states: { off: "", on: "" }, note: branches.map(branch => branch.city).join(" • "), mapLinks: branches.map(branch => ({ label: `نقشه ${branch.title}`, href: branch.mapUrl })) }}
+        credentials={content.cards.map((card, index) => ({ ...card, accent: ["#5a4ff0", "#4639d4", "#6d60f4"][index % 3], icon: (["pen", "chart", "type"] as const)[index % 3] }))}
+        certificate={{
+          kicker: content.cardLabel, type: "جزئیات طراحی", sampleLabel: "اصول طراحی", demoNote: "این کارت اصول طراحی تابلوسازی مکث را معرفی می‌کند.",
+          recipientLabel: "تمرکز ما", recipientNote: "تابلوسازی مکث", status: { on: "روشن", off: "خاموش" },
+          statusDetail: { on: "نمایش رنگی", off: "نمایش اولیه" }, hover: "", share: { idle: "کپی لینک", done: "کپی شد", locked: "ابتدا روشن کنید" },
+          tilt: { rest: 9, verified: 4, hover: 0 },
+        }}
+        statusBadge={{ off: "MAX", on: "MAX", tail: "SIGNAGE", stampTilt: -6, hint: content.warrantyTitle, back: { title: content.warrantyTitle, text: content.warrantyText, action: "بازگشت" } }}
+        trust={{ label: "", logos: [], badges: trustBadges }}
+        autoplay={{ initialVerified: true, toggleEvery: 0, verifyAfter: 0, cycleAfter: 4.2, cycleEvery: 4 }}
+      />
       <div className="absolute inset-x-0 top-0 z-50">
-        <Header variant="hero" />
+        <Header variant="hero" lightHero />
       </div>
     </section>
   );

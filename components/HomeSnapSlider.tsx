@@ -21,11 +21,13 @@ function MaxScrollControls({
   canNext,
   onPrev,
   onNext,
+  progress,
 }: {
   canPrev: boolean;
   canNext: boolean;
   onPrev: () => void;
   onNext: () => void;
+  progress: number;
 }) {
   return (
     <div className="mt-1 flex items-center justify-center gap-4 px-4 md:mt-2">
@@ -48,10 +50,9 @@ function MaxScrollControls({
         </svg>
       </button>
 
-      <span
-        aria-hidden="true"
-        className="h-1.5 w-1.5 rounded-full bg-brand-yellow shadow-[0_0_12px_rgba(234,234,53,0.7)]"
-      />
+      <span aria-hidden="true" className="h-1.5 w-24 overflow-hidden rounded-full bg-navy-100 sm:w-36">
+        <span className="block h-full origin-right rounded-full bg-gradient-to-l from-navy-600 to-navy-400 transition-transform duration-300" style={{ transform: `scaleX(${Math.max(.12, progress)})` }} />
+      </span>
 
       <button
         type="button"
@@ -82,9 +83,10 @@ export function HomeSnapSlider({
   ariaLabel = "اسلایدر",
 }: HomeSnapSliderProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef({ x: 0, y: 0, moved: false });
+  const dragRef = useRef({ x: 0, y: 0, moved: false, active: false });
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   const update = useCallback(() => {
     const el = scrollerRef.current;
@@ -93,6 +95,7 @@ export function HomeSnapSlider({
     const pos = Math.abs(el.scrollLeft);
     setCanPrev(pos > 8);
     setCanNext(pos < max - 8);
+    setProgress(max > 0 ? Math.max(0, Math.min(1, pos / max)) : 1);
   }, []);
 
   useEffect(() => {
@@ -110,7 +113,9 @@ export function HomeSnapSlider({
   const scrollByDir = (dir: 1 | -1) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const amount = Math.min(el.clientWidth * 0.75, 280);
+    const firstSlide = el.firstElementChild?.getBoundingClientRect();
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    const amount = firstSlide ? firstSlide.width + gap : el.clientWidth * .75;
     const rtl = getComputedStyle(el).direction === "rtl";
     const delta = (rtl ? -dir : dir) * amount;
     el.scrollBy({ left: delta, behavior: "smooth" });
@@ -122,19 +127,25 @@ export function HomeSnapSlider({
         ref={scrollerRef}
         role="region"
         aria-label={ariaLabel}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 py-6 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-4 sm:px-6 md:py-8 [&::-webkit-scrollbar]:hidden"
+        className="home-snap-track flex snap-x snap-mandatory gap-2.5 overflow-x-auto overscroll-x-contain px-2 pt-5 pb-7 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-5 sm:px-7 sm:pt-7 sm:pb-10 md:pt-9 md:pb-12 [&::-webkit-scrollbar]:hidden"
+        style={{ maskImage: `linear-gradient(to right, ${canNext ? 'transparent' : '#000'}, #000 var(--snap-fade, 22px), #000 calc(100% - var(--snap-fade, 22px)), ${canPrev ? 'transparent' : '#000'})` }}
         onPointerDown={(event) => {
           dragRef.current = {
             x: event.clientX,
             y: event.clientY,
             moved: false,
+            active: true,
           };
         }}
         onPointerMove={(event) => {
+          if (!dragRef.current.active) return;
           const dx = Math.abs(event.clientX - dragRef.current.x);
           const dy = Math.abs(event.clientY - dragRef.current.y);
           if (dx > 10 || dy > 10) dragRef.current.moved = true;
         }}
+        onPointerUp={() => { dragRef.current.active = false; }}
+        onPointerCancel={() => { dragRef.current.active = false; }}
+        onPointerLeave={() => { dragRef.current.active = false; }}
         onClickCapture={(event) => {
           if (!dragRef.current.moved) return;
           event.preventDefault();
@@ -146,7 +157,7 @@ export function HomeSnapSlider({
           <div
             key={index}
             className={cn(
-              "snap-center shrink-0 [scroll-margin-inline:1.25rem]",
+              "home-snap-slide snap-center shrink-0 [scroll-margin-inline:1.25rem]",
               slideClassName,
             )}
           >
@@ -160,6 +171,7 @@ export function HomeSnapSlider({
         canNext={canNext}
         onPrev={() => scrollByDir(-1)}
         onNext={() => scrollByDir(1)}
+        progress={progress}
       />
     </div>
   );

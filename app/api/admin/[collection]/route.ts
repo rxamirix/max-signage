@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { readCollection, writeCollection } from "@/lib/content-store";
 
 type CollectionName =
@@ -59,5 +60,8 @@ export async function PUT(
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
   await writeCollection(collection as CollectionName, body.data);
+  if (["projects", "posts", "services", "locations", "materials", "process", "differentiators", "testimonials", "faq", "site"].includes(collection)) {
+    revalidatePath("/", "layout");
+  }
   return NextResponse.json({ ok: true });
 }

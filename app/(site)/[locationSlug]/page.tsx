@@ -97,7 +97,7 @@ export default async function LocationPage({ params }: Params) {
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button href={`tel:${site.phone}`} external>
             <PhoneIcon className="size-4" />
-            <PhoneText />
+            <PhoneText value={site.phoneDisplay} />
           </Button>
           <Button href="#quote" variant="outline" className="text-brand-white">
             استعلام قیمت رایگان
@@ -129,7 +129,7 @@ export default async function LocationPage({ params }: Params) {
             <h2 className="mt-14 text-2xl text-navy-900 md:text-3xl">
               خدمات ما در {location.city}
             </h2>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="interior-pair-grid mt-8 grid grid-cols-2 gap-3">
               {services.map((service) => (
                 <Link
                   key={service.slug}
@@ -175,7 +175,7 @@ export default async function LocationPage({ params }: Params) {
                   {site.workingHours}
                 </p>
                 <Button href={`tel:${site.phone}`} className="mt-5 w-full" external>
-                  <PhoneText />
+                  <PhoneText value={site.phoneDisplay} />
                 </Button>
                 <Button
                   href={branch.mapUrl}
@@ -214,7 +214,7 @@ export default async function LocationPage({ params }: Params) {
             title={`پروژه‌های اجراشده ما در ${location.city}`}
             align="start"
           />
-          <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <div className="interior-pair-grid mt-10 grid grid-cols-2 gap-3 sm:gap-7 lg:grid-cols-3">
             {cityProjects.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}

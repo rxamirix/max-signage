@@ -18,8 +18,8 @@ export function ServiceCard({
       href={`/services/${service.slug}`}
       className={
         dark
-          ? "group flex h-full flex-col overflow-hidden rounded-card border border-brand-white/10 bg-brand-white/5 p-4 transition-colors duration-300 hover:border-brand-yellow/50 hover:bg-brand-white/10 sm:p-5 md:p-7 sm:hover:-translate-y-1 sm:hover:shadow-none"
-          : "group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white p-4 transition-all duration-300 hover:border-navy-300 sm:p-5 md:p-7 sm:hover:-translate-y-1 sm:hover:shadow-2xl sm:hover:shadow-navy-900/10"
+          ? "service-list-card group flex h-full flex-col overflow-hidden rounded-card border border-brand-white/10 bg-brand-white/5 p-4 transition-colors duration-300 hover:border-brand-yellow/50 hover:bg-brand-white/10 sm:p-5 md:p-7 sm:hover:shadow-none"
+          : "service-list-card group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white p-4 transition-all duration-300 hover:border-navy-300 sm:p-5 md:p-7 sm:hover:shadow-2xl sm:hover:shadow-navy-900/10"
       }
     >
       {src ? (

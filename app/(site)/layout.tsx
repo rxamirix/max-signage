@@ -6,6 +6,7 @@ import { HomeScroll } from "@/components/HomeScroll";
 import { JsonLd } from "@/components/JsonLd";
 import { PageLoader } from "@/components/PageLoader";
 import { RouteLoader } from "@/components/RouteLoader";
+import { SiteContentProvider } from "@/components/SiteContentProvider";
 import { localBusinessJsonLd, organizationJsonLd } from "@/lib/seo";
 import {
   getFeaturedProjects,
@@ -21,10 +22,12 @@ async function SiteMain({ children }: { children: React.ReactNode }) {
   ]);
 
   return (
-    <>
+    <SiteContentProvider site={site} services={services}>
+      <JsonLd data={[organizationJsonLd(site), ...localBusinessJsonLd(site)]} />
+      <Header />
       <main id="main">{children}</main>
       <Footer site={site} services={services} recentProjects={recentProjects} />
-    </>
+    </SiteContentProvider>
   );
 }
 
@@ -33,8 +36,6 @@ export default function SiteLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <JsonLd data={[organizationJsonLd(), ...localBusinessJsonLd()]} />
-      <Header />
       <HomeScroll />
       <Suspense fallback={<PageLoader />}>
         <SiteMain>{children}</SiteMain>

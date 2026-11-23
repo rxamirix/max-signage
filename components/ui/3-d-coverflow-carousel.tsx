@@ -144,7 +144,7 @@ export function CoverFlowCarousel({
         ) : null}
 
         <div
-          className="relative mb-4 flex h-[380px] w-full items-center justify-center sm:mb-5 sm:h-[450px]"
+          className="coverflow-stage relative mb-4 flex h-[380px] w-full items-center justify-center sm:mb-5 sm:h-[450px]"
           style={{ perspective: "1400px" }}
         >
           {items.map((item, idx) => {
@@ -239,7 +239,7 @@ export function CoverFlowCarousel({
                   height: "var(--cf-h)",
                   borderRadius: "16px",
                   overflow: "hidden",
-                  backgroundColor: "#14163f",
+                  backgroundColor: "#261e72",
                   border: "1px solid rgba(255,255,255,0.14)",
                   transform,
                   opacity,

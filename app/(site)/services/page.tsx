@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowUpLeft, Building2, Gem, ImageIcon, Monitor, Store, Wallet } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
@@ -6,6 +8,7 @@ import { Reveal } from "@/components/Reveal";
 import { ServiceCard } from "@/components/ServiceCard";
 import { Section, SectionHeading } from "@/components/ui";
 import { getServices, getSiteSettings } from "@/lib/content-store";
+import { defaultPageDetails } from "@/lib/home-content";
 import { pageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
@@ -63,74 +66,18 @@ export default async function ServicesPage() {
         </div>
       </Section>
 
-      <Section tone="muted">
+      <Section tone="light" className="interior-soft-section">
         <SectionHeading
-          title="کدام خدمت برای کسب‌وکار شما مناسب است؟"
-          description="اگر مطمئن نیستید کدام گزینه را انتخاب کنید، این جدول کوتاه کمک می‌کند نقطه شروع را پیدا کنید."
+          title={(site.pageDetails ?? defaultPageDetails).serviceGuideTitle}
+          description={(site.pageDetails ?? defaultPageDetails).serviceGuideDescription}
         />
 
-        <div className="mt-12 overflow-x-auto">
-          <table className="w-full min-w-[42rem] border-collapse overflow-hidden rounded-2xl bg-brand-white text-start">
-            <caption className="sr-only">
-              مقایسه خدمات تابلوسازی مکث بر اساس نوع کسب‌وکار
-            </caption>
-            <thead>
-              <tr className="bg-navy-600 text-brand-white">
-                <th scope="col" className="px-5 py-4 text-start font-bold">
-                  اگر شما ...
-                </th>
-                <th scope="col" className="px-5 py-4 text-start font-bold">
-                  پیشنهاد ما
-                </th>
-                <th scope="col" className="px-5 py-4 text-start font-bold">
-                  چرا
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              {[
-                [
-                  "یک مغازه یا فروشگاه معمولی دارید",
-                  "کامپوزیت + چلنیوم",
-                  "بهترین نسبت کیفیت به هزینه با بیشترین خوانایی در شب",
-                ],
-                [
-                  "برند لوکس، طلافروشی یا هتل دارید",
-                  "حروف برجسته استیل با نور هالو",
-                  "ظاهر مجلل و ماندگاری بسیار بالا",
-                ],
-                [
-                  "قیمت یا پیام متغیر نمایش می‌دهید",
-                  "تابلو روان یا نمایشگر LED",
-                  "به‌روزرسانی لحظه‌ای بدون هزینه چاپ مجدد",
-                ],
-                [
-                  "منو یا تصویر رنگی نمایش می‌دهید",
-                  "لایت باکس فریم‌لس",
-                  "کل سطح روشن می‌شود و تعویض طرح آسان است",
-                ],
-                [
-                  "بودجه محدودی دارید",
-                  "نئون فلکسی روی تابلوی فعلی",
-                  "کمترین هزینه با بیشترین تأثیر روی دیده‌شدن",
-                ],
-                [
-                  "نمای ساختمان یا مجتمع را بازسازی می‌کنید",
-                  "نمای کامپوزیت",
-                  "یکدست کردن نما و رفع مشکل نفوذ رطوبت",
-                ],
-              ].map((row) => (
-                <tr
-                  key={row[0]}
-                  className="border-b border-navy-100 last:border-0 even:bg-navy-50/50"
-                >
-                  <td className="px-5 py-4 font-medium text-navy-900">{row[0]}</td>
-                  <td className="px-5 py-4 font-bold text-navy-600">{row[1]}</td>
-                  <td className="px-5 py-4 text-navy-700/80">{row[2]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="interior-pair-grid service-choice-grid mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+              {(site.pageDetails ?? defaultPageDetails).serviceChoices.map((row, index) => {
+                const Icon = [Store, Gem, Monitor, ImageIcon, Wallet, Building2][index];
+                const slug = ["chelnium", "3d-letters", "led-display", "lightbox", "neon-flex", "composite"][index];
+                return <Reveal key={row[0]} delay={index * 55} className="h-full"><article className="interior-card flex h-full gap-4 rounded-[24px] border border-[#e7e6ed] bg-white p-5 sm:p-6"><span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-navy-50 text-navy-600 sm:size-14"><Icon className="size-6" aria-hidden="true" /></span><div className="min-w-0 flex-1"><h3 className="text-base font-extrabold text-[#282731]">{row[0]}</h3><Link href={`/services/${slug}`} className="mt-3 inline-flex items-center gap-2 rounded-full bg-navy-50 px-3 py-1.5 text-xs font-bold text-navy-700 hover:bg-navy-100">{row[1]} <ArrowUpLeft className="size-3.5" aria-hidden="true" /></Link><p className="mt-3 text-sm leading-7 text-[#66646e]">{row[2]}</p></div></article></Reveal>;
+              })}
         </div>
       </Section>
 

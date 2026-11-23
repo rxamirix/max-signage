@@ -215,8 +215,9 @@ function LoginFormInner() {
         <button
           type="submit"
           disabled={sending || verifying}
-          className="inline-flex w-full items-center justify-center rounded-full bg-navy-600 px-6 py-4 text-lg font-extrabold text-brand-white transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="site-button-hit inline-flex w-full rounded-full disabled:opacity-60"
         >
+          <span className="site-button-face site-button-sweep inline-flex w-full items-center justify-center rounded-full bg-navy-600 px-6 py-4 text-lg font-extrabold text-brand-white">
           {step === "form"
             ? sending
               ? "در حال ارسال کد…"
@@ -224,6 +225,7 @@ function LoginFormInner() {
             : verifying
               ? "در حال تأیید…"
               : "تأیید و ورود"}
+          </span>
         </button>
       </form>
 
@@ -281,9 +283,9 @@ export function LoginForm() {
   );
 }
 
-export function LoginPageShell({ children }: { children: React.ReactNode }) {
+export function LoginPageShell({ children, logo = "/logo-mark-navy.png" }: { children: React.ReactNode; logo?: string }) {
   return (
-    <div className="relative min-h-[70svh] overflow-hidden bg-[linear-gradient(160deg,#f7f8fc_0%,#eef0f8_45%,#fefff9_100%)] py-14 md:py-20">
+    <div className="login-page-backdrop relative min-h-[70svh] overflow-hidden py-14">
       <div
         aria-hidden
         className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-brand-yellow/25 blur-3xl"
@@ -293,31 +295,31 @@ export function LoginPageShell({ children }: { children: React.ReactNode }) {
         className="pointer-events-none absolute -bottom-28 right-0 h-64 w-64 rounded-full bg-navy-600/15 blur-3xl"
       />
 
-      <div className="container-page relative z-10 mx-auto max-w-lg">
+      <div className="relative z-10 mx-auto w-full max-w-[420px] px-4">
         <div className="mb-8 flex flex-col items-center text-center">
           <Link href="/" aria-label={site.name} className="shrink-0">
             <Image
-              src="/logo-mark-navy.png"
+              src={logo}
               alt=""
               width={96}
               height={96}
               priority
-              className="h-14 w-auto md:h-16"
+              className="h-14 w-auto"
             />
           </Link>
-          <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-navy-950 md:text-[2.5rem]">
+          <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-navy-950">
             ورود / ثبت‌نام
           </h1>
         </div>
 
-        <div className="rounded-3xl border border-navy-100 bg-brand-white p-6 shadow-[0_20px_50px_rgba(20,22,63,0.08)] md:p-8">
+        <div className="rounded-3xl border border-navy-100 bg-brand-white p-6 shadow-[0_20px_50px_rgba(20,22,63,0.08)]">
           {children}
         </div>
 
         <p className="mt-6 text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-navy-500 transition-colors hover:text-navy-800"
+            className="site-button-sweep inline-flex items-center gap-1.5 rounded-full border border-navy-100 bg-white px-5 py-2.5 text-sm font-bold text-navy-600 transition-colors hover:bg-navy-50"
           >
             <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
               <path

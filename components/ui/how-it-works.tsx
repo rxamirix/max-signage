@@ -1,13 +1,14 @@
 import React from "react";
 
 interface CardProps {
-  number: string;
+  icon: React.ReactNode;
   title: string;
   description: string;
   duration?: string;
   note?: string;
   className?: string;
   rotate?: string;
+  index: number;
 }
 
 const ClockIcon = ({ className }: { className?: string }) => (
@@ -29,65 +30,76 @@ const ClockIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const Pin = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-  >
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <path d="M16 3a1 1 0 0 1 .117 1.993l-.117 .007v4.764l1.894 3.789a1 1 0 0 1 .1 .331l.006 .116v2a1 1 0 0 1 -.883 .993l-.117 .007h-4v4a1 1 0 0 1 -1.993 .117l-.007 -.117v-4h-4a1 1 0 0 1 -.993 -.883l-.007 -.117v-2a1 1 0 0 1 .06 -.34l.046 -.107l1.894 -3.791v-4.762a1 1 0 0 1 -.117 -1.993l.117 -.007h8z" />
-  </svg>
-);
+function Pictogram({ src, alt }: { src: string; alt: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
+      className="mx-auto h-12 w-12 object-contain md:h-16 md:w-16"
+    />
+  );
+}
+
+const STEP_ICONS = [
+  <Pictogram key="phone" src="/process/step-phone.png" alt="" />,
+  <Pictogram key="design" src="/process/step-3d.png" alt="" />,
+  <Pictogram key="contract" src="/process/step-contract.svg" alt="" />,
+  <Pictogram key="build" src="/process/step-gears.png" alt="" />,
+  <Pictogram key="install" src="/process/step-install.svg" alt="" />,
+];
+
+function iconForStep(title: string, index: number) {
+  if (title.includes("قرارداد")) return STEP_ICONS[2];
+  if (title.includes("تحویل") || title.includes("نصب")) return STEP_ICONS[4];
+  return STEP_ICONS[index % STEP_ICONS.length];
+}
 
 const Card = ({
-  number,
+  icon,
   title,
   description,
   duration,
   note,
   className,
   rotate,
+  index,
 }: CardProps) => {
   return (
     <div
-      className={`relative w-[78%] max-w-[17rem] md:w-[300px] md:max-w-none ${rotate ?? ""} ${className ?? ""}`}
+      className={`process-step-wrap relative w-[78%] max-w-[17rem] md:w-[300px] md:max-w-none ${rotate ?? ""} ${className ?? ""}`}
     >
-      <div className="rounded-2xl border border-navy-200 bg-white p-3 shadow-[0_10px_24px_rgba(20,22,63,0.12)] ring-1 ring-navy-100 md:rounded-[25px] md:p-4 md:shadow-[0_12px_32px_rgba(20,22,63,0.14)]">
-        <Pin className="mx-auto mb-3 h-5 w-5 text-navy-600 md:mb-6 md:h-8 md:w-8" />
-        <div className="flex flex-col antialiased">
-          <div className="mb-2 flex items-start justify-between gap-2 md:mb-4">
-            <span className="text-2xl font-extrabold text-navy-800 md:text-4xl">
-              {number}
-            </span>
-            {duration ? (
-              <span className="inline-flex max-w-[58%] items-center gap-1 rounded-full border border-navy-100 bg-navy-50 px-2 py-0.5 text-[9px] font-bold leading-tight text-navy-800 md:max-w-none md:px-2.5 md:py-1 md:text-[11px]">
-                <ClockIcon className="size-3 shrink-0 text-navy-600 md:size-3.5" />
-                <span className="truncate">{duration}</span>
-              </span>
-            ) : null}
-          </div>
-          <h3 className="mb-1 text-base leading-snug font-semibold text-navy-800 md:mb-[10px] md:text-2xl">
+      <div className="process-step-card relative rounded-[24px] border border-white/90 bg-white/95 p-4 md:rounded-[30px] md:p-5">
+        <span className="process-step-number absolute top-4 right-4 text-xs font-bold tabular-nums text-navy-500">{String(index + 1).padStart(2, '0')}</span>
+        <div className="process-step-icon mb-3 flex justify-center md:mb-4"><div className={index === 4 ? "grid size-20 place-items-center rounded-[22px] bg-[#fff9dc] md:size-24" : "grid size-20 place-items-center rounded-[22px] bg-navy-50 md:size-24"}>{icon}</div></div>
+        <div className="process-step-copy flex flex-col antialiased">
+          <h3 className="mb-1 text-base leading-snug font-extrabold text-[#25252c] md:mb-[10px] md:text-xl">
             {title}
           </h3>
-          <p className="line-clamp-2 text-xs leading-5 text-navy-700 md:line-clamp-none md:text-sm md:leading-7">
+          <p className="process-step-description text-xs leading-6 text-[#5d5c66] md:text-sm md:leading-7">
             {description}
           </p>
           {note ? (
-            <p className="mt-2 border-t border-navy-100 pt-2 text-[10px] font-bold leading-4 text-navy-700 md:mt-4 md:pt-3 md:text-xs md:leading-normal">
+            <p className="process-step-note mt-3 border-t border-[#ecebe5] pt-3 text-[10px] font-bold leading-5 text-navy-700 md:mt-4 md:text-xs md:leading-normal">
               {note}
             </p>
           ) : null}
         </div>
       </div>
+      {duration ? (
+        <div className="process-step-duration mt-2 flex justify-center md:mt-3">
+          <span className="inline-flex items-center gap-1 rounded-full border border-navy-100 bg-white px-2.5 py-1 text-[10px] font-bold leading-tight text-navy-700 shadow-sm md:px-3 md:text-xs">
+            <ClockIcon className="size-3 shrink-0 text-navy-600 md:size-3.5" />
+            <span>{duration}</span>
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };
 
 export interface Step {
+  image?: string;
   title: string;
   description: string;
   duration?: string;
@@ -180,8 +192,14 @@ export default function HowItWorks({
     },
   ];
 
-  const data = features && features.length > 0 ? features : defaultFeatures;
+  const data = features ?? defaultFeatures;
   const positions = stepPositions || DEFAULT_CARD_POSITIONS;
+  if (data.length === 0) return null;
+  if (data.length > positions.length) {
+    return <div className="container-page grid grid-cols-2 gap-4 py-8 lg:grid-cols-3">
+      {data.map((step, index) => <Card key={`${step.title}-${index}`} index={index} icon={step.image ? <Pictogram src={step.image} alt="" /> : iconForStep(step.title, index)} title={step.title} description={step.description} duration={step.duration} note={step.note} className="!w-full !max-w-none" />)}
+    </div>;
+  }
 
   let height = 1130;
   if (data.length === 1) height = 400;
@@ -195,18 +213,18 @@ export default function HowItWorks({
 
   return (
     <div
-      className={`relative bg-white px-4 max-md:pt-10 max-md:pb-10 md:px-8 md:pt-20 md:pb-10 ${className ?? ""}`}
+      className={`process-layout relative px-4 max-md:pt-10 max-md:pb-10 md:px-8 md:pt-20 md:pb-10 ${className ?? ""}`}
     >
       <div className="relative z-10 mx-auto max-w-6xl">
         <div
-          className="relative mx-auto flex h-auto w-full max-w-[1000px] flex-col space-y-0 px-2 md:block md:h-[var(--md-height)] md:space-y-0 md:px-0"
+          className="process-timeline relative mx-auto flex h-auto w-full max-w-[1000px] flex-col space-y-0 px-2 md:block md:h-[var(--md-height)] md:space-y-0 md:px-0"
           style={{ "--md-height": `${height}px` } as React.CSSProperties}
         >
           {data.length > 1 ? (
             <>
               {/* Mobile thread — same dashed “string” idea as desktop */}
               <svg
-                className="pointer-events-none absolute inset-0 z-0 h-full w-full md:hidden"
+                className="process-mobile-path pointer-events-none absolute inset-0 z-0 h-full w-full md:hidden"
                 viewBox="0 0 100 100"
                 preserveAspectRatio="none"
                 aria-hidden="true"
@@ -232,7 +250,7 @@ export default function HowItWorks({
                 <path
                   d={pathD}
                   stroke="currentColor"
-                  className="animate-how-it-works-dash text-black"
+                  className="animate-how-it-works-dash text-navy-400"
                   strokeWidth="2"
                   strokeDasharray="8 6"
                   fill="none"
@@ -248,7 +266,8 @@ export default function HowItWorks({
             return (
               <Card
                 key={step.title}
-                number={`0${index + 1}`}
+                index={index}
+                icon={step.image ? <Pictogram src={step.image} alt="" /> : iconForStep(step.title, index)}
                 title={step.title}
                 description={step.description}
                 duration={step.duration}

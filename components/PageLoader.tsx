@@ -13,7 +13,7 @@ export function PageLoader() {
     >
       <div className="relative grid place-items-center">
         <div
-          className="pointer-events-none absolute size-40 rounded-full bg-[radial-gradient(circle,rgba(234,234,53,0.45)_0%,rgba(45,49,146,0.25)_45%,transparent_70%)] blur-2xl"
+          className="pointer-events-none absolute size-40 rounded-full bg-[radial-gradient(circle,rgba(234,234,53,0.45)_0%,rgba(90,79,240,0.25)_45%,transparent_70%)] blur-2xl"
           aria-hidden
         />
         <LumaSpin className="relative z-10" />

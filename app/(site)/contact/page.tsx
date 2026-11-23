@@ -5,17 +5,15 @@ import { PageHero } from "@/components/PageHero";
 import { QuoteForm } from "@/components/QuoteForm";
 import {
   Button,
-  PhoneIcon,
-  PhoneText,
   PinIcon,
   Section,
   SectionHeading,
-  WhatsAppIcon,
   InstagramIcon,
   ClockIcon,
   CheckIcon,
 } from "@/components/ui";
 import { getLocations, getSiteSettings } from "@/lib/content-store";
+import { defaultPageDetails } from "@/lib/home-content";
 import { pageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 
@@ -38,28 +36,6 @@ const crumbs = [
   { name: "ارتباط با ما", url: "/contact" },
 ];
 
-const contactFaq = [
-  {
-    question: "سریع‌ترین راه گرفتن قیمت چیست؟",
-    answer:
-      "تماس تلفنی با ۰۹۱۱۲۵۸۸۸۴۶ یا ارسال عکس سردر مغازه در واتساپ. معمولاً در همان تماس اول یک برآورد اولیه می‌گیرید و قیمت دقیق بعد از بازدید اعلام می‌شود.",
-  },
-  {
-    question: "بازدید از محل چقدر طول می‌کشد؟",
-    answer:
-      "معمولاً کمتر از نیم ساعت. کارشناس ما ابعاد را برداشت می‌کند، شرایط برق و نصب را بررسی می‌کند و گزینه‌های مناسب را توضیح می‌دهد.",
-  },
-  {
-    question: "خارج از بهشهر و نکا هم بازدید می‌آیید؟",
-    answer:
-      "بله. بازدید در ساری، قائم‌شهر، آمل، بابل و سایر شهرهای مازندران هم رایگان انجام می‌شود؛ فقط زمان آن با هماهنگی قبلی تنظیم می‌گردد.",
-  },
-  {
-    question: "امکان مراجعه حضوری به کارگاه هست؟",
-    answer:
-      "بله. کارگاه بهشهر در میدان قدس و شعبه نکا مقابل اداره دارایی، شنبه تا پنجشنبه از ۸ صبح تا ۸ شب پذیرای شماست.",
-  },
-];
 
 export default async function ContactPage() {
   const [locations, site] = await Promise.all([
@@ -67,49 +43,36 @@ export default async function ContactPage() {
     getSiteSettings(),
   ]);
   const { branches } = site;
+  const details = site.pageDetails ?? defaultPageDetails;
+  const contactFaq = details.contactFaq;
 
   return (
     <>
       <JsonLd data={[breadcrumbJsonLd(crumbs), faqJsonLd(contactFaq)]} />
 
       <PageHero
+        feature="contact"
         title="یک تماس، و کار از همین‌جا شروع می‌شود"
         crumbs={crumbs}
         description="بازدید از محل، طراحی سه‌بعدی و استعلام قیمت کاملاً رایگان است و هیچ تعهدی برای شما ایجاد نمی‌کند."
-      >
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Button href={`tel:${site.phone}`} size="lg" external>
-            <PhoneIcon className="size-5" />
-            <PhoneText />
-          </Button>
-          <Button
-            href={`https://wa.me/${site.whatsapp}`}
-            variant="outline"
-            size="lg"
-            external
-            className="text-brand-white"
-          >
-            <WhatsAppIcon className="size-5" />
-            واتساپ
-          </Button>
-        </div>
-      </PageHero>
+      />
 
-      <Section>
-        <div className="grid gap-12 lg:grid-cols-12">
+      <Section className="interior-soft-section">
+        <div className="grid items-start gap-7 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
             <SectionHeading
               align="start"
-              title="ما را کجا پیدا کنید"
+              title={details.contactBranchesTitle}
             />
 
-            <div className="mt-8 flex flex-col gap-5">
+            <div className="mt-6 flex flex-col gap-4">
+              <div className="interior-pair-grid contact-branch-grid grid grid-cols-2 gap-3 lg:grid-cols-1">
               {branches.map((branch) => (
                 <div
                   key={branch.id}
-                  className="rounded-card border border-navy-100 bg-navy-50 p-6"
+                  className="interior-card rounded-[23px] border border-[#e7e6ed] bg-white p-5 sm:p-6"
                 >
-                  <h3 className="text-lg text-navy-900">{branch.title}</h3>
+                  <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-[14px] bg-navy-50 text-navy-600"><PinIcon className="size-5" /></span><h3 className="text-lg text-[#282731]">{branch.title}</h3></div>
                   <p className="mt-3 flex items-start gap-2.5 text-navy-700/85">
                     <PinIcon className="mt-1 size-5 text-navy-600" />
                     {branch.address}
@@ -118,48 +81,50 @@ export default async function ContactPage() {
                     <ClockIcon className="size-5 text-navy-600" />
                     {site.workingHours}
                   </p>
-                  <div className="mt-5">
-                    <Button href={branch.mapUrl} variant="outline" external>
+                  <div className="mt-4 border-t border-[#eae9ee] pt-4">
+                    <Button href={branch.mapUrl} variant="secondary" external>
                       مسیریابی
                     </Button>
                   </div>
                 </div>
               ))}
+              </div>
 
               <a
                 href={site.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between gap-4 rounded-card border border-navy-100 p-6 transition-colors hover:border-navy-300 hover:bg-navy-50"
+                className="interior-card flex items-center gap-3 rounded-[23px] border border-[#e7e6ed] bg-white p-5 transition-colors hover:border-navy-300"
               >
-                <span>
+                <span className="grid size-12 shrink-0 place-items-center rounded-[14px] bg-navy-50 text-navy-600"><InstagramIcon className="size-6" /></span>
+                <span className="min-w-0 flex-1 text-right">
                   <span className="block font-bold text-navy-900">
                     نمونه کارهای بیشتر در اینستاگرام
                   </span>
-                  <span className="mt-1 block text-sm text-navy-600" dir="ltr">
+                  <span className="mt-1 inline-block max-w-full break-all text-sm text-navy-600" dir="ltr">
                     @{site.instagramHandle}
                   </span>
                 </span>
-                <InstagramIcon className="size-7 text-navy-600" />
               </a>
             </div>
           </div>
 
           <div className="lg:col-span-7" id="quote">
-            <div className="rounded-card border border-navy-100 bg-brand-white p-6 shadow-xl shadow-navy-900/5 md:p-9">
+            <div className="interior-card rounded-[28px] border border-[#e7e6ed] bg-white p-6 md:p-9">
+              <span className="mb-5 block h-[3px] w-12 rounded-full bg-brand-yellow" aria-hidden="true" />
               <h2 className="text-2xl text-navy-900 md:text-3xl">
-                فرم استعلام قیمت رایگان
+                {details.contactQuoteTitle}
               </h2>
               <p className="mt-3 leading-8 text-navy-700/80">
                 فرم را پر کنید تا اطلاعات به‌صورت یک پیام آماده در واتساپ باز
                 شود و شما فقط آن را ارسال کنید.
               </p>
 
-              <ul className="mt-6 mb-8 flex flex-wrap gap-x-6 gap-y-2">
+              <ul className="mt-5 mb-7 flex flex-wrap gap-2">
                 {["بدون هزینه", "بدون تعهد", "پاسخ سریع"].map((item) => (
                   <li
                     key={item}
-                    className="flex items-center gap-2 text-sm font-medium text-navy-700"
+                    className="flex items-center gap-1.5 rounded-full bg-navy-50 px-3 py-1.5 text-xs font-semibold text-navy-700"
                   >
                     <CheckIcon className="size-5 text-navy-600" />
                     {item}
@@ -173,9 +138,9 @@ export default async function ContactPage() {
         </div>
       </Section>
 
-      <Section tone="muted">
+      <Section tone="light" className="interior-soft-section">
         <SectionHeading
-          title="در سراسر مازندران در خدمت شما هستیم"
+          title={details.contactLocationsTitle}
         />
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           {locations.map((location) => (
@@ -191,7 +156,7 @@ export default async function ContactPage() {
       </Section>
 
       <Section>
-        <SectionHeading title="قبل از تماس، شاید بپرسید" />
+        <SectionHeading title={details.contactFaqTitle} />
         <div className="mt-12">
           <Faq items={contactFaq} />
         </div>

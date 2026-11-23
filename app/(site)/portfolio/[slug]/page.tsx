@@ -192,7 +192,7 @@ export default async function ProjectPage({ params }: Params) {
             title="نمونه کارهای مشابه"
             align="start"
           />
-          <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <div className="interior-pair-grid mt-10 grid grid-cols-2 gap-3 sm:gap-7 lg:grid-cols-3">
             {related.map((item) => (
               <ProjectCard key={item.slug} project={item} />
             ))}

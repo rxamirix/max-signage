@@ -40,7 +40,7 @@ export function Section({
   };
 
   return (
-    <section id={id} className={cn("py-16 md:py-24", tones[tone], className)}>
+    <section id={id} className={cn("site-section py-16 md:py-24", tones[tone], className)}>
       <div className="container-page">{children}</div>
     </section>
   );
@@ -61,8 +61,9 @@ export function SectionHeading({
 }) {
   return (
     <div
+      data-tone={tone}
       className={cn(
-        "flex flex-col gap-4",
+        "section-heading flex flex-col gap-4",
         align === "center" ? "items-center text-center" : "items-start text-start",
         align === "center" && "mx-auto max-w-3xl",
       )}
@@ -123,12 +124,8 @@ export function Button({
     lg: "px-7 py-3.5 text-base md:text-lg",
   };
 
-  const classes = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow",
-    variants[variant],
-    sizes[size],
-    className,
-  );
+  const classes = cn("site-button-hit inline-flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow", className);
+  const face = <span className={cn("site-button-face site-button-sweep inline-flex w-full items-center justify-center gap-2 rounded-full font-bold", variants[variant], sizes[size])}>{children}</span>;
 
   if (external) {
     return (
@@ -139,14 +136,14 @@ export function Button({
         target="_blank"
         rel="noopener noreferrer"
       >
-        {children}
+        {face}
       </a>
     );
   }
 
   return (
     <Link href={href} className={classes} aria-label={ariaLabel}>
-      {children}
+      {face}
     </Link>
   );
 }

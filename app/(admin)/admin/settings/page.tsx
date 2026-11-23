@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import type { SiteSettings } from "@/lib/content-store";
 import type { Branch } from "@/lib/site";
 import { LinesEditor } from "@/components/admin/form-helpers";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
+import { defaultHomeSections, defaultHeroContent, defaultPageHeroes, defaultPageDetails, type HomeSections, type PageHeroes } from "@/lib/home-content";
 import {
   AdminButton,
   AdminCard,
@@ -62,6 +64,12 @@ export default function AdminSettingsPage() {
   if (!site) {
     return <p className="text-sm text-navy-500">در حال بارگذاری…</p>;
   }
+  const home = site.homeSections ?? defaultHomeSections;
+  const hero = site.heroContent ?? defaultHeroContent;
+  const pageHeroes = site.pageHeroes ?? defaultPageHeroes;
+  const details = site.pageDetails ?? defaultPageDetails;
+  const brandImages = site.brandImages ?? { hero: "", light: "", dark: "", footer: "" };
+  const sectionLabels: Record<keyof HomeSections, string> = { services: "خدمات", portfolio: "نمونه کارها", difference: "تفاوت مکث", process: "مراحل سفارش", materials: "متریال", testimonials: "نظرات مشتریان", blog: "مقالات", faq: "سوالات متداول", cta: "دعوت به استعلام" };
 
   return (
     <div className="pb-24">
@@ -72,6 +80,92 @@ export default function AdminSettingsPage() {
       />
 
       <div className="grid gap-4 lg:grid-cols-2">
+        <AdminCard className="space-y-4 lg:col-span-2">
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">هیروی صفحه اصلی</h2>
+          <AdminTextarea label="متن زیر لوگو (خالی = متن خودکار برند)" value={hero.subtext} onChange={(e) => set("heroContent", { ...hero, subtext: e.target.value })} />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <AdminInput label="دکمه استعلام" value={hero.primaryLabel} onChange={(e) => set("heroContent", { ...hero, primaryLabel: e.target.value })} />
+            <AdminInput label="دکمه نمونه کارها" value={hero.secondaryLabel} onChange={(e) => set("heroContent", { ...hero, secondaryLabel: e.target.value })} />
+            <AdminInput label="عنوان کارت شعب" value={hero.branchLabel} onChange={(e) => set("heroContent", { ...hero, branchLabel: e.target.value })} />
+            <AdminInput label="عنوان کارت طراحی" value={hero.cardLabel} onChange={(e) => set("heroContent", { ...hero, cardLabel: e.target.value })} />
+            <AdminInput label="عنوان گارانتی" value={hero.warrantyTitle} onChange={(e) => set("heroContent", { ...hero, warrantyTitle: e.target.value })} />
+            <AdminInput label="توضیح گارانتی" value={hero.warrantyText} onChange={(e) => set("heroContent", { ...hero, warrantyText: e.target.value })} />
+          </div>
+          <div className="grid gap-3 lg:grid-cols-3">
+            {hero.cards.map((card, index) => <div key={index} className="space-y-3 rounded-2xl border border-navy-100 p-3">
+              <AdminInput label="عنوان کارت" value={card.title} onChange={(e) => set("heroContent", { ...hero, cards: hero.cards.map((item, i) => i === index ? { ...item, title: e.target.value } : item) })} />
+              <AdminInput label="توضیح کارت" value={card.recipient} onChange={(e) => set("heroContent", { ...hero, cards: hero.cards.map((item, i) => i === index ? { ...item, recipient: e.target.value } : item) })} />
+              <LinesEditor label="ویژگی‌ها" value={card.skills} onChange={(skills) => set("heroContent", { ...hero, cards: hero.cards.map((item, i) => i === index ? { ...item, skills } : item) })} />
+            </div>)}
+          </div>
+        </AdminCard>
+        <AdminCard className="space-y-4 lg:col-span-2">
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">متن بخش‌های صفحه اصلی</h2>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {(Object.keys(sectionLabels) as (keyof HomeSections)[]).map((key) => <div key={key} className="space-y-2 rounded-2xl border border-navy-100 p-3">
+              <h3 className="font-bold text-navy-900">{sectionLabels[key]}</h3>
+              <AdminInput label="عنوان" value={home[key].title} onChange={(e) => set("homeSections", { ...home, [key]: { ...home[key], title: e.target.value } })} />
+              <AdminTextarea label="توضیح" value={home[key].description} onChange={(e) => set("homeSections", { ...home, [key]: { ...home[key], description: e.target.value } })} />
+            </div>)}
+          </div>
+        </AdminCard>
+        <AdminCard className="space-y-3 lg:col-span-2">
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">عنوان و توضیح صفحات داخلی</h2>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {(Object.keys(pageHeroes) as (keyof PageHeroes)[]).map((key) => <div key={key} className="space-y-2 rounded-2xl border border-navy-100 p-3">
+              <h3 className="font-bold text-navy-900">{({ "/services": "خدمات", "/portfolio": "نمونه کارها", "/materials": "متریال", "/about": "درباره ما", "/blog": "مقالات", "/contact": "ارتباط با ما" })[key]}</h3>
+              <AdminInput label="عنوان هیرو" value={pageHeroes[key].title} onChange={(e) => set("pageHeroes", { ...pageHeroes, [key]: { ...pageHeroes[key], title: e.target.value } })} />
+              <AdminTextarea label="توضیح هیرو" value={pageHeroes[key].description} onChange={(e) => set("pageHeroes", { ...pageHeroes, [key]: { ...pageHeroes[key], description: e.target.value } })} />
+            </div>)}
+          </div>
+        </AdminCard>
+        <AdminCard className="space-y-3 lg:col-span-2">
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">تصاویر صفحات</h2>
+          <ImageUploadField label="تصویر کارگاه در صفحه درباره ما" value={site.aboutImage || "/images/services/chelnium.jpg"} onChange={(url) => set("aboutImage", url)} />
+          <div className="grid gap-3 lg:grid-cols-2">
+            <ImageUploadField label="لوگوی هیرو (خالی = لوگوی اصلی)" value={brandImages.hero} previewFallback="/logo-max-navy.png" onChange={(url) => set("brandImages", { ...brandImages, hero: url })} />
+            <ImageUploadField label="لوگوی هدر روشن و ورود" value={brandImages.light} previewFallback="/logo-mark-navy.png" onChange={(url) => set("brandImages", { ...brandImages, light: url })} />
+            <ImageUploadField label="لوگوی هدر تیره" value={brandImages.dark} previewFallback="/logo-mark-white.png" onChange={(url) => set("brandImages", { ...brandImages, dark: url })} />
+            <ImageUploadField label="لوگوی فوتر" value={brandImages.footer} previewFallback="/logo-max-white.png" onChange={(url) => set("brandImages", { ...brandImages, footer: url })} />
+          </div>
+        </AdminCard>
+        <AdminCard className="space-y-4 lg:col-span-2">
+          <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">محتوای صفحات داخلی</h2>
+          <details className="rounded-xl border border-navy-100 p-4">
+            <summary className="cursor-pointer font-bold">عنوان بخش‌های صفحات داخلی</summary>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {([['serviceGuideTitle','عنوان راهنمای خدمات'],['serviceGuideDescription','توضیح راهنمای خدمات'],['climateTitle','عنوان نکات متریال'],['climateDescription','توضیح نکات متریال'],['aboutStoryTitle','عنوان داستان مکث'],['aboutValuesTitle','عنوان اصول کاری'],['contactBranchesTitle','عنوان شعب'],['contactFaqTitle','عنوان سوالات تماس'],['contactLocationsTitle','عنوان شهرها'],['contactQuoteTitle','عنوان فرم استعلام']] as const).map(([key,label]) => <AdminInput key={key} label={label} value={details[key]} onChange={(e) => set("pageDetails", { ...details, [key]: e.target.value })} />)}
+            </div>
+          </details>
+          <details className="rounded-xl border border-navy-100 p-4">
+            <summary className="cursor-pointer font-bold">درباره ما</summary>
+            <div className="mt-4 space-y-3"><LinesEditor label="داستان مکث (هر بند در یک خط)" value={details.aboutStory} onChange={(aboutStory) => set("pageDetails", { ...details, aboutStory })} />
+            {details.aboutValues.map((item, index) => <div className="grid gap-2 rounded-xl bg-navy-50/50 p-3" key={index}>
+              <AdminInput label="عنوان اصل کاری" value={item.title} onChange={(e) => set("pageDetails", { ...details, aboutValues: details.aboutValues.map((value, i) => i === index ? { ...value, title: e.target.value } : value) })} />
+              <AdminTextarea label="توضیح" value={item.description} onChange={(e) => set("pageDetails", { ...details, aboutValues: details.aboutValues.map((value, i) => i === index ? { ...value, description: e.target.value } : value) })} />
+            </div>)}</div>
+          </details>
+          <details className="rounded-xl border border-navy-100 p-4">
+            <summary className="cursor-pointer font-bold">نکات اقلیمی متریال</summary>
+            <div className="mt-4 space-y-3">{details.climate.map((item, index) => <div className="grid gap-2 rounded-xl bg-navy-50/50 p-3" key={index}>
+              <AdminInput label="عنوان" value={item.title} onChange={(e) => set("pageDetails", { ...details, climate: details.climate.map((value, i) => i === index ? { ...value, title: e.target.value } : value) })} />
+              <AdminTextarea label="توضیح" value={item.body} onChange={(e) => set("pageDetails", { ...details, climate: details.climate.map((value, i) => i === index ? { ...value, body: e.target.value } : value) })} />
+            </div>)}</div>
+          </details>
+          <details className="rounded-xl border border-navy-100 p-4">
+            <summary className="cursor-pointer font-bold">راهنمای انتخاب خدمات</summary>
+            <div className="mt-4 space-y-3">{details.serviceChoices.map((row, index) => <div className="grid gap-2 rounded-xl bg-navy-50/50 p-3" key={index}>
+              {row.map((value, fieldIndex) => <AdminInput key={fieldIndex} label={["نیاز مشتری", "خدمت پیشنهادی", "توضیح"][fieldIndex]} value={value} onChange={(e) => set("pageDetails", { ...details, serviceChoices: details.serviceChoices.map((item, i) => i === index ? item.map((entry, j) => j === fieldIndex ? e.target.value : entry) : item) })} />)}
+            </div>)}</div>
+          </details>
+          <details className="rounded-xl border border-navy-100 p-4">
+            <summary className="cursor-pointer font-bold">سوالات صفحه ارتباط با ما</summary>
+            <div className="mt-4 space-y-3">{details.contactFaq.map((item, index) => <div className="grid gap-2 rounded-xl bg-navy-50/50 p-3" key={index}>
+              <AdminInput label="سوال" value={item.question} onChange={(e) => set("pageDetails", { ...details, contactFaq: details.contactFaq.map((value, i) => i === index ? { ...value, question: e.target.value } : value) })} />
+              <AdminTextarea label="پاسخ" value={item.answer} onChange={(e) => set("pageDetails", { ...details, contactFaq: details.contactFaq.map((value, i) => i === index ? { ...value, answer: e.target.value } : value) })} />
+            </div>)}</div>
+          </details>
+        </AdminCard>
         <AdminCard className="space-y-3">
           <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">
             هویت برند
@@ -111,28 +205,11 @@ export default function AdminSettingsPage() {
             value={site.description}
             onChange={(e) => set("description", e.target.value)}
           />
-          <AdminInput
-            label="سال تأسیس"
-            type="number"
-            value={String(site.foundingYear)}
-            onChange={(e) => set("foundingYear", Number(e.target.value) || 0)}
-          />
-          <AdminInput
-            label="سابقه (عدد)"
-            type="number"
-            value={String(site.experienceYears)}
-            onChange={(e) => set("experienceYears", Number(e.target.value) || 0)}
-          />
+          <AdminTextarea label="متن معرفی در فوتر (خالی = متن خودکار)" value={site.footerDescription ?? ""} onChange={(e) => set("footerDescription", e.target.value)} />
           <AdminInput
             label="سابقه (نمایش فارسی)"
             value={site.experienceYearsFa}
             onChange={(e) => set("experienceYearsFa", e.target.value)}
-          />
-          <LinesEditor
-            label="بنیان‌گذاران"
-            hint="هر نام در یک خط."
-            value={site.founders}
-            onChange={(founders) => set("founders", founders)}
           />
         </AdminCard>
 

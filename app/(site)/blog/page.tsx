@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpLeft, BookOpenText, Clock3, Lightbulb, Ruler } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
@@ -46,63 +47,54 @@ export default async function BlogPage() {
       <JsonLd data={[breadcrumbJsonLd(crumbs), blogJsonLd]} />
 
       <PageHero
+        feature="blog"
         title="قبل از سفارش تابلو، این‌ها را بدانید"
         crumbs={crumbs}
         description="راهنماهایی که از دل بیست سال تجربه کارگاهی نوشته شده‌اند؛ بدون تبلیغات اضافه، فقط اطلاعاتی که به تصمیم بهتر شما کمک می‌کند."
       />
 
-      <Section>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post, index) => (
-            <Reveal key={post.slug} delay={index * 70}>
+      <Section className="interior-soft-section">
+        <div className="interior-pair-grid blog-list-grid grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+          {posts.map((post, index) => {
+            const Icon = [BookOpenText, Ruler, Lightbulb][index % 3];
+            return <Reveal key={post.slug} delay={Math.min(index * 65, 260)} className="h-full min-w-0">
               <article className="h-full">
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col overflow-hidden rounded-card border border-navy-100 bg-brand-white transition-all duration-300 hover:-translate-y-1 hover:border-navy-300 hover:shadow-2xl hover:shadow-navy-900/10"
+                  className="interior-card group flex h-full flex-col overflow-hidden rounded-[26px] border border-[#e7e6ed] bg-white p-3"
                 >
-                  {post.coverImage ? (
-                    <div className="aspect-[16/10] overflow-hidden bg-navy-100">
+                  <div className="blog-cover relative flex aspect-[16/9] shrink-0 items-center justify-center overflow-hidden rounded-[19px]" data-blog-index={index % 3}>
+                  {post.coverImage ? (<>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={post.coverImage}
                         alt=""
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                       />
-                    </div>
-                  ) : null}
-                  <div className="flex flex-1 flex-col p-7">
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-navy-600">
-                    <span className="rounded-full bg-navy-50 px-3 py-1 font-bold">
-                      {post.category}
-                    </span>
+                  </>) : <><span className="blog-cover-orbit" aria-hidden="true" /><Icon strokeWidth={1.15} className="relative z-10 size-9 transition-transform duration-500 group-hover:scale-110 sm:size-14" aria-hidden="true" /></>}
+                  <span className="absolute top-3 right-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#2e2c34]">{post.category}</span>
+                  </div>
+                  <div className="blog-card-copy flex flex-1 flex-col px-3 pt-5 pb-3 sm:px-5">
+                  <div className="flex flex-wrap items-center gap-2.5 text-[11px] text-[#777483]">
                     <time dateTime={post.dateIso}>{post.date}</time>
-                    <span>{post.readingTime} مطالعه</span>
+                    <span className="flex items-center gap-1"><Clock3 className="size-3.5" aria-hidden="true" />{post.readingTime} مطالعه</span>
                   </div>
 
-                  <h2 className="mt-4 text-xl leading-9 text-navy-900 transition-colors group-hover:text-navy-600">
+                  <h2 className="mt-3 text-lg leading-relaxed text-[#282731] transition-colors group-hover:text-navy-600">
                     {post.title}
                   </h2>
-                  <p className="mt-4 flex-1 leading-8 text-navy-700/80">
+                  <p className="mt-3 flex-1 text-sm leading-8 text-[#66646e]">
                     {post.excerpt}
                   </p>
-                  <span className="mt-6 inline-flex items-center gap-2 font-bold text-navy-600">
+                  <span className="mt-5 flex items-center justify-between gap-2 border-t border-[#eae9ee] pt-3 text-sm font-bold text-navy-600">
                     خواندن مقاله
-                    <svg viewBox="0 0 20 20" className="size-4" aria-hidden="true">
-                      <path
-                        d="M12 4 6 10l6 6"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"
-                      />
-                    </svg>
+                    <span className="grid size-9 place-items-center rounded-full bg-navy-50 text-navy-600 group-hover:bg-navy-600 group-hover:text-white"><ArrowUpLeft className="size-4" aria-hidden="true" /></span>
                   </span>
                   </div>
                 </Link>
               </article>
-            </Reveal>
-          ))}
+            </Reveal>;
+          })}
         </div>
       </Section>
 

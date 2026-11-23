@@ -38,8 +38,8 @@ export function HeroCopy() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.85, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          whileHover={{ scale: 1.03, y: -2 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ filter: "brightness(1.04)" }}
+          whileTap={{ filter: "brightness(0.94)" }}
         >
           <span
             aria-hidden="true"

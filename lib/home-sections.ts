@@ -54,8 +54,9 @@ export function jumpToHomeSection(id: string, instant = false) {
 
   const node = document.getElementById(id);
   if (!node) return;
+  const headerOffset = window.innerWidth < 768 ? 64 : 0;
   window.scrollTo({
-    top: node.getBoundingClientRect().top + window.scrollY,
+    top: Math.max(0, node.getBoundingClientRect().top + window.scrollY - headerOffset),
     behavior: instant ? "auto" : "smooth",
   });
 }
