@@ -63,9 +63,6 @@ export function Hero({ settings: site }: { settings: SiteSettings }) {
             <span>{content.headlineBottom || defaultHeroContent.headlineBottom}</span>
             <span className="sr-only">تابلو تبلیغاتی در مازندران، {site.name}</span>
           </h1>
-          {site.trustBadges.length > 0 && <ul className="reference-hero-benefits" aria-label="مزیت‌های مکث">
-            {site.trustBadges.map(badge => <li key={badge}>{badge}</li>)}
-          </ul>}
           <div className="reference-hero-action">
             <Button href="/contact#quote" variant="primary">{content.primaryLabel}<ArrowLeft className="size-4" aria-hidden="true" /></Button>
           </div>
