@@ -73,7 +73,7 @@ export function Hero({ settings: site }: { settings: SiteSettings }) {
               <li key={label} title={meaning}><Icon aria-hidden="true" /><span>{label}</span></li>
             ))}
           </ul>
-          <div className="reference-hero-mobile-action">
+          <div className="reference-hero-action">
             <Button href="/contact#quote" variant="secondary">{content.primaryLabel}<ArrowLeft className="size-4" aria-hidden="true" /></Button>
           </div>
         </div>

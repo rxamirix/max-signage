@@ -11,7 +11,7 @@ import { services as defaultServices } from "@/lib/services";
 import { useSiteContent } from "./SiteContentProvider";
 import { serviceImage } from "@/lib/service-images";
 import { SiteSearch } from "./SiteSearch";
-import { Button, cn, InstagramIcon, WhatsAppIcon } from "./ui";
+import { cn, InstagramIcon, WhatsAppIcon } from "./ui";
 
 type HeaderProps = {
   /** `hero` = overlay nav inside a page hero; layout uses default skip-only */
@@ -124,13 +124,14 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
         data-open={open}
         className={cn(
           "inset-x-0 top-0 z-[110] w-full transition-[color,background-color] duration-500",
+          compactHome && "reference-home-header",
           stickyHome ? "fixed" : "absolute",
           lightChrome ? "text-navy-900" : "text-brand-white",
           open && "bg-navy-950 text-brand-white",
         )}
       >
         <div className="container-page">
-          <div className="flex h-16 items-center justify-between gap-4 md:h-20">
+          <div className="header-home-row flex h-16 items-center justify-between gap-4 md:h-20">
             <div className="shrink-0">
               <Link
                 href="/"
@@ -192,7 +193,7 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
 
             <nav
               aria-label="منوی اصلی"
-              className={cn("hidden", !compactHome && "xl:block")}
+              className={cn("hidden", compactHome ? "lg:block" : "xl:block")}
               onMouseLeave={() => setHoveredHref(null)}
             >
               <div className="header-chrome rounded-full p-1.5" data-tone={lightChrome && !open ? "light" : "hero"}>
@@ -271,13 +272,12 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
             </nav>
 
             <div className="flex shrink-0 items-center gap-2">
-              {compactHome && <Button className="reference-header-quote hidden sm:inline-flex" href="/contact#quote" variant="secondary">{content?.site.heroContent?.primaryLabel || "استعلام رایگان"}<ArrowLeft className="size-4" aria-hidden="true" /></Button>}
-              {!compactHome && <SiteSearch
+              <div className={cn(compactHome && "home-header-search hidden lg:block")}><SiteSearch
                 variant="desktop"
                 tone={lightChrome && !open ? "light" : "hero"}
-              />}
+              /></div>
 
-              <div className={cn("header-chrome rounded-full", !compactHome && "xl:hidden")} data-tone={lightChrome && !open ? "light" : "hero"}>
+              <div className={cn("header-chrome rounded-full", compactHome ? "lg:hidden" : "xl:hidden")} data-tone={lightChrome && !open ? "light" : "hero"}>
                 {user && !compactHome ? (
                   <Link
                     href="/account"
@@ -312,7 +312,7 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
                 )}
               </div>
 
-              <div className={cn("header-chrome hidden rounded-full", !compactHome && "xl:block")} data-tone={lightChrome && !open ? "light" : "hero"}>
+              <div className={cn("header-chrome hidden rounded-full", compactHome ? "lg:block" : "xl:block")} data-tone={lightChrome && !open ? "light" : "hero"}>
                 {user ? (
                   <Link
                     href="/account"
@@ -347,7 +347,7 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
                 )}
               </div>
 
-              <div className={cn("header-chrome rounded-full", !compactHome && "xl:hidden")} data-tone={lightChrome && !open ? "light" : "hero"}>
+              <div className={cn("header-chrome rounded-full", compactHome ? "lg:hidden" : "xl:hidden")} data-tone={lightChrome && !open ? "light" : "hero"}>
                 <button
                   type="button"
                   onClick={() => setOpen((value) => !value)}
@@ -388,7 +388,7 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
       {open ? (
         <div
           id="mobile-menu"
-          className={cn("fixed inset-0 z-[105] bg-black/30 px-2 pt-[4.25rem] pb-2 backdrop-blur-sm md:pt-[5.25rem]", !compactHome && "xl:hidden")}
+          className={cn("fixed inset-0 z-[105] bg-black/30 px-2 pt-[4.25rem] pb-2 backdrop-blur-sm md:pt-[5.25rem]", compactHome ? "lg:hidden" : "xl:hidden")}
           onClick={event => { if (event.target === event.currentTarget) setOpen(false); }}
         >
           <motion.nav initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .25, ease: [.22,1,.36,1] }} aria-label="منوی موبایل" className="mobile-nav-sheet mx-auto h-full max-w-lg overflow-y-auto overscroll-contain rounded-[25px] border border-white/80 bg-white p-4 text-[#282731] shadow-[0_24px_65px_rgba(0,0,0,.18)] sm:p-6">
