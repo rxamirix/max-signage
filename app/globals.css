@@ -183,7 +183,7 @@
 .reference-hero-action { display: flex; justify-content: center; margin-top: clamp(22px, 3vw, 42px); }
 .reference-hero-action .site-button-face { min-width: 170px; }
 @media (min-width: 768px) {
-  .reference-hero-copy { align-items:flex-start; text-align:right; }
+  .reference-hero-copy { align-items:flex-start; text-align:right; translate:0 clamp(24px, 3vw, 42px); }
   .reference-hero-title { width:100%; text-align:right; font-size:clamp(38px, 6vw, 104px); }
   .reference-hero-benefits { align-self:flex-start; margin-top:23px; }
   .reference-hero-action { align-self:flex-start; }
@@ -204,7 +204,7 @@
   .reference-hero-inner { grid-template-columns: minmax(0,1fr); min-height: auto; padding: 76px 12px 35px; gap: 0; }
   .reference-hero-visual { width:100%; height:clamp(240px,86vw,440px); aspect-ratio:auto; max-height:none; }
   .reference-hero-image { width:min(140%,650px); }
-  .reference-hero-copy { padding: 0; }
+  .reference-hero-copy { padding: 22px 0 0; }
   .reference-hero-title { font-size: clamp(31px, 10.5vw, 53px); gap: 0; line-height: 1.25; }
   .reference-hero-benefits { margin-top:15px; gap:4px 9px; font-size:10px; max-width:92%; }
   .reference-hero-benefits li { gap:4px; }
