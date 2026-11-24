@@ -2,7 +2,7 @@
 
 import { Header } from "./Header";
 import Image from "next/image";
-import { ArrowLeft, ShieldCheck, Timer, WalletCards } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "./ui";
 import type { SiteSettings } from "@/lib/content-store";
 import { defaultHeroContent } from "@/lib/home-content";
@@ -39,11 +39,6 @@ export function WaveDivider({
 
 export function Hero({ settings: site }: { settings: SiteSettings }) {
   const content = site.heroContent ?? defaultHeroContent;
-  const benefits = [
-    { icon: WalletCards, label: "Customer-driven", meaning: "مشتری‌محوری" },
-    { icon: Timer, label: "Time-bound", meaning: "تحویل به‌موقع" },
-    { icon: ShieldCheck, label: "Safety", meaning: "ایمنی" },
-  ];
 
   return (
     <section id="hero" className="reference-hero relative bg-white" aria-labelledby="home-hero-title">
@@ -68,11 +63,9 @@ export function Hero({ settings: site }: { settings: SiteSettings }) {
             <span>{content.headlineBottom || defaultHeroContent.headlineBottom}</span>
             <span className="sr-only">تابلو تبلیغاتی در مازندران، {site.name}</span>
           </h1>
-          <ul className="reference-hero-benefits" dir="ltr" aria-label="مزیت‌های مکث">
-            {benefits.map(({ icon: Icon, label, meaning }) => (
-              <li key={label} title={meaning}><Icon aria-hidden="true" /><span>{label}</span></li>
-            ))}
-          </ul>
+          {site.trustBadges.length > 0 && <ul className="reference-hero-benefits" aria-label="مزیت‌های مکث">
+            {site.trustBadges.map(badge => <li key={badge}>{badge}</li>)}
+          </ul>}
           <div className="reference-hero-action">
             <Button href="/contact#quote" variant="primary">{content.primaryLabel}<ArrowLeft className="size-4" aria-hidden="true" /></Button>
           </div>

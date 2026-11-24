@@ -87,7 +87,7 @@ export default async function HomePage() {
         <HomeCoverFlow items={serviceCoverItems(services)} />
 
         <div className="px-4 pb-10 text-center md:pb-20">
-          <Button href="/services" variant="primary" size="lg">
+          <Button href="/services" variant="primary" className="home-view-all">
             مشاهده همه خدمات
           </Button>
         </div>
@@ -111,7 +111,7 @@ export default async function HomePage() {
         </div>
 
         <div className="mt-5 text-center md:mt-10">
-          <Button href="/portfolio" variant="primary" size="lg">
+          <Button href="/portfolio" variant="primary" className="home-view-all">
             مشاهده همه نمونه کارها
           </Button>
         </div>
@@ -198,7 +198,7 @@ export default async function HomePage() {
         </div>
 
         <div className="mt-7 text-center sm:mt-12">
-          <Button href="/materials" variant="secondary" size="lg">
+          <Button href="/materials" variant="secondary" className="home-view-all">
             جدول کامل متریال و مشخصات
           </Button>
         </div>
@@ -244,7 +244,7 @@ export default async function HomePage() {
           );})}
           </HomeSnapSlider>
         </div>
-        <div className="mt-5 text-center sm:mt-9"><Button href="/blog" variant="secondary">همه مقالات</Button></div>
+        <div className="mt-5 text-center sm:mt-9"><Button href="/blog" variant="secondary" className="home-view-all">همه مقالات</Button></div>
       </Section>
 
       <Section id="faq" className="home-faq-section">
