@@ -11,6 +11,9 @@ export const defaultHomeSections = {
 };
 
 export const defaultHeroContent = {
+  headlineTop: "مکث کن",
+  headlineBottom: "وقتِ دیده شدنه!",
+  image: "/images/hero/stop-figure.png",
   subtext: "",
   primaryLabel: "استعلام رایگان",
   secondaryLabel: "نمونه کارها",

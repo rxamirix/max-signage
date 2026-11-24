@@ -72,7 +72,7 @@ export function SectionDots() {
     };
   }, [pathname]);
 
-  if (pathname !== "/") return null;
+  if (pathname !== "/" || active === "hero") return null;
 
   return (
     <nav

@@ -82,21 +82,12 @@ export default function AdminSettingsPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         <AdminCard className="space-y-4 lg:col-span-2">
           <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">هیروی صفحه اصلی</h2>
-          <AdminTextarea label="متن زیر لوگو (خالی = متن خودکار برند)" value={hero.subtext} onChange={(e) => set("heroContent", { ...hero, subtext: e.target.value })} />
+          <ImageUploadField label="تصویر اصلی هیرو" value={hero.image} previewFallback={defaultHeroContent.image} onChange={(url) => set("heroContent", { ...hero, image: url })} />
           <div className="grid gap-3 sm:grid-cols-2">
+            <AdminInput label="خط اول تیتر هیرو" value={hero.headlineTop} onChange={(e) => set("heroContent", { ...hero, headlineTop: e.target.value })} />
+            <AdminInput label="خط دوم تیتر هیرو" value={hero.headlineBottom} onChange={(e) => set("heroContent", { ...hero, headlineBottom: e.target.value })} />
             <AdminInput label="دکمه استعلام" value={hero.primaryLabel} onChange={(e) => set("heroContent", { ...hero, primaryLabel: e.target.value })} />
             <AdminInput label="دکمه نمونه کارها" value={hero.secondaryLabel} onChange={(e) => set("heroContent", { ...hero, secondaryLabel: e.target.value })} />
-            <AdminInput label="عنوان کارت شعب" value={hero.branchLabel} onChange={(e) => set("heroContent", { ...hero, branchLabel: e.target.value })} />
-            <AdminInput label="عنوان کارت طراحی" value={hero.cardLabel} onChange={(e) => set("heroContent", { ...hero, cardLabel: e.target.value })} />
-            <AdminInput label="عنوان گارانتی" value={hero.warrantyTitle} onChange={(e) => set("heroContent", { ...hero, warrantyTitle: e.target.value })} />
-            <AdminInput label="توضیح گارانتی" value={hero.warrantyText} onChange={(e) => set("heroContent", { ...hero, warrantyText: e.target.value })} />
-          </div>
-          <div className="grid gap-3 lg:grid-cols-3">
-            {hero.cards.map((card, index) => <div key={index} className="space-y-3 rounded-2xl border border-navy-100 p-3">
-              <AdminInput label="عنوان کارت" value={card.title} onChange={(e) => set("heroContent", { ...hero, cards: hero.cards.map((item, i) => i === index ? { ...item, title: e.target.value } : item) })} />
-              <AdminInput label="توضیح کارت" value={card.recipient} onChange={(e) => set("heroContent", { ...hero, cards: hero.cards.map((item, i) => i === index ? { ...item, recipient: e.target.value } : item) })} />
-              <LinesEditor label="ویژگی‌ها" value={card.skills} onChange={(skills) => set("heroContent", { ...hero, cards: hero.cards.map((item, i) => i === index ? { ...item, skills } : item) })} />
-            </div>)}
           </div>
         </AdminCard>
         <AdminCard className="space-y-4 lg:col-span-2">
@@ -123,7 +114,6 @@ export default function AdminSettingsPage() {
           <h2 className="border-b border-navy-100 pb-2 font-extrabold text-navy-950">تصاویر صفحات</h2>
           <ImageUploadField label="تصویر کارگاه در صفحه درباره ما" value={site.aboutImage || "/images/services/chelnium.jpg"} onChange={(url) => set("aboutImage", url)} />
           <div className="grid gap-3 lg:grid-cols-2">
-            <ImageUploadField label="لوگوی هیرو (خالی = لوگوی اصلی)" value={brandImages.hero} previewFallback="/logo-max-navy.png" onChange={(url) => set("brandImages", { ...brandImages, hero: url })} />
             <ImageUploadField label="لوگوی هدر روشن و ورود" value={brandImages.light} previewFallback="/logo-mark-navy.png" onChange={(url) => set("brandImages", { ...brandImages, light: url })} />
             <ImageUploadField label="لوگوی هدر تیره" value={brandImages.dark} previewFallback="/logo-mark-white.png" onChange={(url) => set("brandImages", { ...brandImages, dark: url })} />
             <ImageUploadField label="لوگوی فوتر" value={brandImages.footer} previewFallback="/logo-max-white.png" onChange={(url) => set("brandImages", { ...brandImages, footer: url })} />

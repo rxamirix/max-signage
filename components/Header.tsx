@@ -11,12 +11,13 @@ import { services as defaultServices } from "@/lib/services";
 import { useSiteContent } from "./SiteContentProvider";
 import { serviceImage } from "@/lib/service-images";
 import { SiteSearch } from "./SiteSearch";
-import { cn, InstagramIcon, WhatsAppIcon } from "./ui";
+import { Button, cn, InstagramIcon, WhatsAppIcon } from "./ui";
 
 type HeaderProps = {
   /** `hero` = overlay nav inside a page hero; layout uses default skip-only */
   variant?: "site" | "hero";
   lightHero?: boolean;
+  compactHome?: boolean;
 };
 
 function YellowLamp() {
@@ -36,7 +37,7 @@ function YellowLamp() {
   );
 }
 
-export function Header({ variant = "site", lightHero = false }: HeaderProps) {
+export function Header({ variant = "site", lightHero = false, compactHome = false }: HeaderProps) {
   const content = useSiteContent();
   const site = content?.site ?? defaultSite;
   const navigation = content?.site.navigation ?? defaultNavigation;
@@ -161,7 +162,7 @@ export function Header({ variant = "site", lightHero = false }: HeaderProps) {
                 </span>
                 <span
                   className={cn(
-                    "hidden text-xs leading-tight transition-colors duration-700 ease-out lg:block",
+                    "hidden text-xs leading-tight transition-colors duration-700 ease-out", !compactHome && "lg:block",
                     lightChrome && !open
                       ? "border-navy-900/15 text-navy-700"
                       : "border-white/25 text-white/85",
@@ -191,7 +192,7 @@ export function Header({ variant = "site", lightHero = false }: HeaderProps) {
 
             <nav
               aria-label="منوی اصلی"
-              className="hidden xl:block"
+              className={cn("hidden", !compactHome && "xl:block")}
               onMouseLeave={() => setHoveredHref(null)}
             >
               <div className="header-chrome rounded-full p-1.5" data-tone={lightChrome && !open ? "light" : "hero"}>
@@ -270,13 +271,14 @@ export function Header({ variant = "site", lightHero = false }: HeaderProps) {
             </nav>
 
             <div className="flex shrink-0 items-center gap-2">
-              <SiteSearch
+              {compactHome && <Button className="reference-header-quote hidden sm:inline-flex" href="/contact#quote" variant="secondary">{content?.site.heroContent?.primaryLabel || "استعلام رایگان"}<ArrowLeft className="size-4" aria-hidden="true" /></Button>}
+              {!compactHome && <SiteSearch
                 variant="desktop"
                 tone={lightChrome && !open ? "light" : "hero"}
-              />
+              />}
 
-              <div className="header-chrome rounded-full xl:hidden" data-tone={lightChrome && !open ? "light" : "hero"}>
-                {user ? (
+              <div className={cn("header-chrome rounded-full", !compactHome && "xl:hidden")} data-tone={lightChrome && !open ? "light" : "hero"}>
+                {user && !compactHome ? (
                   <Link
                     href="/account"
                     aria-label={`حساب کاربری ${user.name}`}
@@ -305,12 +307,12 @@ export function Header({ variant = "site", lightHero = false }: HeaderProps) {
                         : "text-brand-white",
                     )}
                   >
-                    نمونه‌کارها
+                    {compactHome ? content?.site.heroContent?.secondaryLabel || "نمونه‌کارها" : "نمونه‌کارها"}
                   </Link>
                 )}
               </div>
 
-              <div className="header-chrome hidden rounded-full xl:block" data-tone={lightChrome && !open ? "light" : "hero"}>
+              <div className={cn("header-chrome hidden rounded-full", !compactHome && "xl:block")} data-tone={lightChrome && !open ? "light" : "hero"}>
                 {user ? (
                   <Link
                     href="/account"
@@ -345,7 +347,7 @@ export function Header({ variant = "site", lightHero = false }: HeaderProps) {
                 )}
               </div>
 
-              <div className="header-chrome rounded-full xl:hidden" data-tone={lightChrome && !open ? "light" : "hero"}>
+              <div className={cn("header-chrome rounded-full", !compactHome && "xl:hidden")} data-tone={lightChrome && !open ? "light" : "hero"}>
                 <button
                   type="button"
                   onClick={() => setOpen((value) => !value)}
@@ -386,7 +388,7 @@ export function Header({ variant = "site", lightHero = false }: HeaderProps) {
       {open ? (
         <div
           id="mobile-menu"
-          className="fixed inset-0 z-[105] bg-black/30 px-2 pt-[4.25rem] pb-2 backdrop-blur-sm xl:hidden md:pt-[5.25rem]"
+          className={cn("fixed inset-0 z-[105] bg-black/30 px-2 pt-[4.25rem] pb-2 backdrop-blur-sm md:pt-[5.25rem]", !compactHome && "xl:hidden")}
           onClick={event => { if (event.target === event.currentTarget) setOpen(false); }}
         >
           <motion.nav initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .25, ease: [.22,1,.36,1] }} aria-label="منوی موبایل" className="mobile-nav-sheet mx-auto h-full max-w-lg overflow-y-auto overscroll-contain rounded-[25px] border border-white/80 bg-white p-4 text-[#282731] shadow-[0_24px_65px_rgba(0,0,0,.18)] sm:p-6">
