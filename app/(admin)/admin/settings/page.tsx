@@ -86,7 +86,7 @@ export default function AdminSettingsPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <AdminInput label="خط اول تیتر هیرو" value={hero.headlineTop} onChange={(e) => set("heroContent", { ...hero, headlineTop: e.target.value })} />
             <AdminInput label="خط دوم تیتر هیرو" value={hero.headlineBottom} onChange={(e) => set("heroContent", { ...hero, headlineBottom: e.target.value })} />
-            <AdminInput label="دکمه استعلام" value={hero.primaryLabel} onChange={(e) => set("heroContent", { ...hero, primaryLabel: e.target.value })} />
+            <AdminInput label="دکمه مشاوره" value={hero.primaryLabel} onChange={(e) => set("heroContent", { ...hero, primaryLabel: e.target.value })} />
             <AdminInput label="دکمه نمونه کارها" value={hero.secondaryLabel} onChange={(e) => set("heroContent", { ...hero, secondaryLabel: e.target.value })} />
           </div>
         </AdminCard>

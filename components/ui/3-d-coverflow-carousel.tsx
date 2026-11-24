@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { SlideDots } from "@/components/SlideDots";
 
 export interface CarouselItem {
   tag?: string;
@@ -278,7 +279,7 @@ export function CoverFlowCarousel({
           type="button"
           onClick={prevSlide}
           aria-label="اسلاید قبلی"
-          className="absolute top-1/2 left-2 z-40 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-navy-200 bg-white/90 text-navy-700 shadow-sm sm:left-6 sm:h-10 sm:w-10"
+          className="slide-arrow absolute top-1/2 left-2 z-40 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-navy-200 bg-white/90 text-navy-700 shadow-sm md:left-6 md:flex"
         >
           <ChevronLeft size={18} strokeWidth={2.5} />
         </button>
@@ -287,24 +288,12 @@ export function CoverFlowCarousel({
           type="button"
           onClick={nextSlide}
           aria-label="اسلاید بعدی"
-          className="absolute top-1/2 right-2 z-40 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-navy-200 bg-white/90 text-navy-700 shadow-sm sm:right-6 sm:h-10 sm:w-10"
+          className="slide-arrow absolute top-1/2 right-2 z-40 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-navy-200 bg-white/90 text-navy-700 shadow-sm md:right-6 md:flex"
         >
           <ChevronRight size={18} strokeWidth={2.5} />
         </button>
 
-        <div className="z-30 flex items-center justify-center gap-1.5">
-          {items.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => goToSlide(idx)}
-              aria-label={`رفتن به اسلاید ${idx + 1}`}
-              className={`h-2 rounded-full border-none transition-all duration-300 ${
-                idx === currentIndex ? "w-6 bg-brand-yellow" : "w-2 bg-navy-300"
-              }`}
-            />
-          ))}
-        </div>
+        <SlideDots count={total} active={currentIndex} onSelect={goToSlide} />
       </div>
     </section>
   );

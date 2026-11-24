@@ -124,7 +124,8 @@ export function Button({
     lg: "px-7 py-3.5 text-base md:text-lg",
   };
 
-  const classes = cn("site-button-hit inline-flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow", className);
+  const isConsultation = href.endsWith("#quote");
+  const classes = cn("site-button-hit brand-action inline-flex focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-yellow", isConsultation && "brand-action-quote", className);
   const face = <span className={cn("site-button-face site-button-sweep inline-flex w-full items-center justify-center gap-2 rounded-full font-bold", variants[variant], sizes[size])}>{children}</span>;
 
   if (external) {

@@ -172,7 +172,9 @@ export async function readCollection<K extends keyof Collections>(
   const parsed = JSON.parse(raw) as Collections[K];
   if (name === "site") {
     const current = parsed as SiteSettings;
-    return { ...current, homeSections: { ...defaultHomeSections, ...current.homeSections }, heroContent: { ...defaultHeroContent, ...current.heroContent }, pageHeroes: { ...defaultPageHeroes, ...current.pageHeroes }, pageDetails: { ...defaultPageDetails, ...current.pageDetails }, aboutImage: current.aboutImage ?? "/images/services/chelnium.jpg" } as Collections[K];
+    const heroContent = { ...defaultHeroContent, ...current.heroContent };
+    if (heroContent.primaryLabel === "استعلام رایگان") heroContent.primaryLabel = defaultHeroContent.primaryLabel;
+    return { ...current, homeSections: { ...defaultHomeSections, ...current.homeSections }, heroContent, pageHeroes: { ...defaultPageHeroes, ...current.pageHeroes }, pageDetails: { ...defaultPageDetails, ...current.pageDetails }, aboutImage: current.aboutImage ?? "/images/services/chelnium.jpg" } as Collections[K];
   }
   if (name === "process") {
     return (parsed as ProcessStep[]).map((step, index) => ({ ...step, image: step.image ?? defaultProcessImages[index % defaultProcessImages.length] })) as Collections[K];

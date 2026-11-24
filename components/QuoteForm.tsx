@@ -189,14 +189,14 @@ export function QuoteForm({
       <div className="flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-4 text-lg font-extrabold text-white hover:bg-[#1fbd5a]"
+          className="brand-action-direct brand-action-quote inline-flex flex-1 items-center justify-center gap-2 px-6 py-4 text-lg font-extrabold"
         >
           <WhatsAppIcon />
           ارسال درخواست در واتساپ
         </button>
         <a
           href={`tel:${site.phone}`}
-          className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-navy-600 px-6 py-4 text-lg font-extrabold text-navy-700 transition-colors hover:bg-navy-600 hover:text-brand-white"
+          className="brand-action-direct inline-flex items-center justify-center gap-2 px-6 py-4 text-lg font-extrabold transition-colors"
         >
           تماس مستقیم
         </a>

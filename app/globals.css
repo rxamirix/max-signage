@@ -181,7 +181,13 @@
 .reference-hero-benefits li { display: inline-flex; gap: 7px; align-items: center; white-space: nowrap; }
 .reference-hero-benefits svg { width: clamp(19px, 2.1vw, 30px); height: auto; color: #b8b0e6; stroke-width: 1.6; }
 .reference-hero-action { display: flex; justify-content: center; margin-top: clamp(22px, 3vw, 42px); }
-.reference-hero-action .site-button-face { background: linear-gradient(110deg,#6d60f4,#5a4ff0 55%,#4639d4); }
+.reference-hero-action .site-button-face { min-width: 170px; }
+@media (min-width: 768px) {
+  .reference-hero-copy { align-items:flex-start; text-align:right; }
+  .reference-hero-title { width:100%; text-align:right; font-size:clamp(40px, 6.65vw, 116px); }
+  .reference-hero-benefits { align-self:flex-start; margin-top:clamp(20px,3vw,40px); }
+  .reference-hero-action { align-self:flex-start; }
+}
 @media (min-width: 1024px) {
   .reference-home-header .header-home-row { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); gap: 10px; }
   .reference-home-header .header-home-row > :first-child { justify-self: start; }
@@ -237,6 +243,13 @@
 .home-materials-section { background: linear-gradient(180deg, #f4f4f6 0%, #fff 100%); }
 .material-home-card { box-shadow: 0 12px 30px -24px rgb(42 39 33 / .25); transition: translate .35s ease, box-shadow .35s ease, border-color .35s ease; }
 .material-home-card:hover { border-color: var(--color-navy-300); box-shadow: 0 20px 36px -24px rgb(42 39 33 / .30); }
+.slide-dots { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:3px; position:relative; z-index:30; }
+.slide-dot { display:grid; place-items:center; width:24px; height:24px; padding:0; border:0; background:transparent; cursor:pointer; border-radius:50%; }
+.slide-dot::before { content:""; display:block; width:9px; height:9px; border-radius:50%; background:var(--color-navy-200); transition:background .2s, transform .2s; }
+.slide-dot[aria-current="true"]::before { background:var(--color-navy-600); transform:scale(1.25); }
+.slide-dot:focus-visible { outline:2px solid var(--color-navy-500); outline-offset:1px; }
+.material-card-hit { position:absolute; inset:0; border-radius:inherit; cursor:pointer; }
+.material-card-hit:focus-visible { outline:2px solid var(--color-navy-600); outline-offset:3px; }
 .material-swatch { background: linear-gradient(135deg, #f3f2ed, #e6e4dc); }
 .material-swatch span { position: absolute; display: block; left: 18%; top: 22%; width: 64%; height: 48%; border-radius: 9px; transform: rotate(-12deg) skewX(-10deg); box-shadow: 0 8px 15px rgb(31 29 35 / .15); }
 .material-swatch span:nth-child(2) { transform: translateY(13%) rotate(-12deg) skewX(-10deg); }
@@ -275,6 +288,19 @@
 
 /* The outer link/button owns the unchanged hit box. Only its visual face moves. */
 .site-button-hit { position: relative; isolation: isolate; overflow: visible; }
+.brand-action, .brand-action-direct { --action-top:#214477; --action-bottom:#08234e; --action-edge:#061a39; --action-text:#fff; }
+.brand-action-quote { --action-top:#f7f46b; --action-bottom:#e3df2b; --action-edge:#a9a515; --action-text:#17213a; }
+.brand-action { border-radius:4px; filter:drop-shadow(0 4px 0 var(--action-edge)) drop-shadow(0 7px 10px rgb(8 35 78 / .16)); }
+.brand-action .site-button-face, .brand-action-direct { clip-path:polygon(11px 0, calc(100% - 5px) 0, 100% 5px, 100% calc(100% - 11px), calc(100% - 11px) 100%, 5px 100%, 0 calc(100% - 5px), 0 11px); border-radius:0; border:0; color:var(--action-text); background:linear-gradient(155deg,var(--action-top),var(--action-bottom)); box-shadow:inset 0 1px 0 rgb(255 255 255 / .24), inset 0 -2px 3px rgb(0 0 0 / .14); }
+.brand-action-direct { filter:drop-shadow(0 3px 0 var(--action-edge)); }
+.brand-action-direct:active { transform:translateY(1px); }
+.brand-action .site-button-face:hover, .brand-action-direct:hover { color:var(--action-text); }
+.header-home-row > div:last-child > .header-chrome { background:linear-gradient(155deg,#214477,#08234e); border-color:#214477; border-radius:9px 3px 9px 3px; box-shadow:0 3px 0 #061a39,0 7px 14px rgb(8 35 78 / .13); }
+.header-home-row > div:last-child > .header-chrome > :is(a,button) { color:white; }
+.header-home-row .home-header-search .header-chrome { background:linear-gradient(155deg,#214477,#08234e); border-color:#214477; border-radius:9px 3px 9px 3px; box-shadow:0 3px 0 #061a39,0 7px 14px rgb(8 35 78 / .13); }
+.header-home-row .home-header-search .header-chrome :is(input,svg) { color:white; }
+.header-home-row .home-header-search .header-chrome input::placeholder { color:rgb(255 255 255 / .65); }
+.mobile-detail-trigger { border-radius:9px 3px 9px 3px !important; background:linear-gradient(155deg,#214477,#08234e) !important; color:white !important; box-shadow:0 2px 0 #061a39; }
 .site-button-hit::after { display: none; }
 .site-button-hit > .site-button-face { pointer-events: none; transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s cubic-bezier(.22,1,.36,1), filter .2s ease; }
 .site-button-hit:is(:hover, :focus-visible):not(:disabled) > .site-button-face { transform: translateY(-3px); filter: brightness(1.025); }
@@ -392,7 +418,7 @@ html:has(.mobile-detail-sheet[open]) { overflow:hidden; }
 @media (min-width: 768px) {
   .home-blog-slider .home-snap-track { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); overflow: visible; mask-image: none !important; padding: 0; gap: 1.5rem; }
   .home-blog-slider .home-snap-slide { width: auto; }
-  .home-blog-slider > div:last-child { display: none; }
+  .home-blog-slider .home-snap-controls { display: none; }
 }
 @media (max-width: 639px) {
   .container-page { padding-inline: 1rem; }
@@ -410,8 +436,7 @@ html:has(.mobile-detail-sheet[open]) { overflow:hidden; }
   .home-coverflow .coverflow-stage p { font-size: 11px; line-height: 1.65; }
   .home-snap-track { --snap-fade: 9px; }
   .home-snap-track { padding-top: 1rem; padding-bottom: 1.15rem; }
-  .home-snap-track + div { gap: 12px; }
-  .home-snap-track + div button { width: 38px; height: 38px; }
+  .slide-arrow { display:none !important; }
   .home-portfolio-section, .home-blog-section, .home-difference-section, .home-materials-section { padding-block: 2.5rem; }
   .home-portfolio-section .portfolio-project-card { padding: 6px; border-radius: 16px; }
   .home-portfolio-section .project-cover { aspect-ratio: 1.36; border-radius: 11px; }

@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { cn } from "@/lib/utils";
+import { SlideDots } from "./SlideDots";
 
 type HomeSnapSliderProps = {
   children: ReactNode[];
@@ -21,22 +22,26 @@ function MaxScrollControls({
   canNext,
   onPrev,
   onNext,
-  progress,
+  positions,
+  active,
+  onSelect,
 }: {
   canPrev: boolean;
   canNext: boolean;
   onPrev: () => void;
   onNext: () => void;
-  progress: number;
+  positions: number[];
+  active: number;
+  onSelect: (index: number) => void;
 }) {
   return (
-    <div className="mt-1 flex items-center justify-center gap-4 px-4 md:mt-2">
+    <div className="home-snap-controls mt-1 flex items-center justify-center gap-4 px-4 md:mt-2">
       <button
         type="button"
         aria-label="اسلاید قبلی"
         disabled={!canPrev}
         onClick={onPrev}
-        className="inline-flex size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35"
+        className="slide-arrow hidden size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35 md:inline-flex"
       >
         <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
           <path
@@ -50,16 +55,14 @@ function MaxScrollControls({
         </svg>
       </button>
 
-      <span aria-hidden="true" className="h-1.5 w-24 overflow-hidden rounded-full bg-navy-100 sm:w-36">
-        <span className="block h-full origin-right rounded-full bg-gradient-to-l from-navy-600 to-navy-400 transition-transform duration-300" style={{ transform: `scaleX(${Math.max(.12, progress)})` }} />
-      </span>
+      <SlideDots count={positions.length} active={active} onSelect={onSelect} />
 
       <button
         type="button"
         aria-label="اسلاید بعدی"
         disabled={!canNext}
         onClick={onNext}
-        className="inline-flex size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35"
+        className="slide-arrow hidden size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35 md:inline-flex"
       >
         <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
           <path
@@ -86,7 +89,8 @@ export function HomeSnapSlider({
   const dragRef = useRef({ x: 0, y: 0, moved: false, active: false });
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const [positions, setPositions] = useState<number[]>([0]);
+  const [active, setActive] = useState(0);
 
   const update = useCallback(() => {
     const el = scrollerRef.current;
@@ -95,7 +99,15 @@ export function HomeSnapSlider({
     const pos = Math.abs(el.scrollLeft);
     setCanPrev(pos > 8);
     setCanNext(pos < max - 8);
-    setProgress(max > 0 ? Math.max(0, Math.min(1, pos / max)) : 1);
+    const rtl = getComputedStyle(el).direction === "rtl";
+    const center = el.getBoundingClientRect().left + el.clientWidth / 2;
+    const targets = [0, ...Array.from(el.children, (slide) => {
+      const rect = slide.getBoundingClientRect();
+      const offset = rect.left + rect.width / 2 - center;
+      return Math.max(0, Math.min(max, pos + (rtl ? -offset : offset)));
+    }), max].sort((a, b) => a - b).filter((value, index, all) => index === 0 || value - all[index - 1] > 8);
+    setPositions((previous) => previous.length === targets.length && previous.every((value, i) => Math.abs(value - targets[i]) < 2) ? previous : targets);
+    setActive(targets.reduce((nearest, target, index) => Math.abs(target - pos) < Math.abs(targets[nearest] - pos) ? index : nearest, 0));
   }, []);
 
   useEffect(() => {
@@ -110,15 +122,12 @@ export function HomeSnapSlider({
     };
   }, [update, children.length]);
 
-  const scrollByDir = (dir: 1 | -1) => {
+  const selectSlide = (index: number) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const firstSlide = el.firstElementChild?.getBoundingClientRect();
-    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-    const amount = firstSlide ? firstSlide.width + gap : el.clientWidth * .75;
     const rtl = getComputedStyle(el).direction === "rtl";
-    const delta = (rtl ? -dir : dir) * amount;
-    el.scrollBy({ left: delta, behavior: "smooth" });
+    const target = positions[index];
+    if (target !== undefined) el.scrollTo({ left: rtl ? -target : target, behavior: "smooth" });
   };
 
   return (
@@ -166,13 +175,15 @@ export function HomeSnapSlider({
         ))}
       </div>
 
-      <MaxScrollControls
+      {positions.length > 1 && <MaxScrollControls
         canPrev={canPrev}
         canNext={canNext}
-        onPrev={() => scrollByDir(-1)}
-        onNext={() => scrollByDir(1)}
-        progress={progress}
-      />
+        onPrev={() => selectSlide(Math.max(0, active - 1))}
+        onNext={() => selectSlide(Math.min(positions.length - 1, active + 1))}
+        positions={positions}
+        active={active}
+        onSelect={selectSlide}
+      />}
     </div>
   );
 }

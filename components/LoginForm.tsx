@@ -215,7 +215,7 @@ function LoginFormInner() {
         <button
           type="submit"
           disabled={sending || verifying}
-          className="site-button-hit inline-flex w-full rounded-full disabled:opacity-60"
+          className="site-button-hit brand-action inline-flex w-full disabled:opacity-60"
         >
           <span className="site-button-face site-button-sweep inline-flex w-full items-center justify-center rounded-full bg-navy-600 px-6 py-4 text-lg font-extrabold text-brand-white">
           {step === "form"
@@ -238,7 +238,7 @@ function LoginFormInner() {
         type="button"
         onClick={demoLogin}
         disabled={demoLoading}
-        className="inline-flex w-full items-center justify-center rounded-full border-2 border-dashed border-navy-300 bg-navy-50 px-6 py-3.5 text-sm font-extrabold text-navy-800 transition hover:border-navy-500 hover:bg-navy-100 disabled:opacity-60"
+        className="brand-action-direct inline-flex w-full items-center justify-center px-6 py-3.5 text-sm font-extrabold transition disabled:opacity-60"
       >
         {demoLoading ? "در حال ورود آزمایشی…" : "ورود آزمایشی (بدون پیامک)"}
       </button>
@@ -319,7 +319,7 @@ export function LoginPageShell({ children, logo = "/logo-mark-navy.png" }: { chi
         <p className="mt-6 text-center">
           <Link
             href="/"
-            className="site-button-sweep inline-flex items-center gap-1.5 rounded-full border border-navy-100 bg-white px-5 py-2.5 text-sm font-bold text-navy-600 transition-colors hover:bg-navy-50"
+            className="brand-action-direct site-button-sweep inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold transition-colors"
           >
             <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
               <path

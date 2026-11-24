@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Check, Droplets, ShieldCheck, Zap } from "lucide-react";
+import { Droplets, ShieldCheck, Zap } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHero } from "@/components/PageHero";
 import { MobileCardDetails } from "@/components/MobileCardDetails";
+import { MaterialDetailContent } from "@/components/MaterialDetailContent";
 import { Reveal } from "@/components/Reveal";
 import { Section, SectionHeading } from "@/components/ui";
 import { getMaterials, getSiteSettings } from "@/lib/content-store";
@@ -59,26 +60,7 @@ export default async function MaterialsPage() {
                 </div>
 
                 <MobileCardDetails title={material.name} preview={material.description}>
-                <p className="mt-3 flex-1 text-sm leading-8 text-[#66646e]">
-                  {material.description}
-                </p>
-
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {material.properties.map((property) => (
-                    <li
-                      key={property}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-[#e9e8ed] bg-[#f8f8fa] px-2.5 py-1 text-xs font-medium text-[#5e5c66]"
-                    >
-                      <Check className="size-3 text-navy-600" aria-hidden="true" />
-                      {property}
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="mt-5 border-t border-[#e9e8ee] pt-3 text-sm leading-7 text-[#66646e]">
-                  <span className="font-bold text-navy-900">گریدها و انواع: </span>
-                  {material.grades}
-                </p>
+                  <MaterialDetailContent material={material} />
                 </MobileCardDetails>
                 </div>
               </article>

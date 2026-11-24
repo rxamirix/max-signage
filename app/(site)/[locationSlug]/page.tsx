@@ -100,7 +100,7 @@ export default async function LocationPage({ params }: Params) {
             <PhoneText value={site.phoneDisplay} />
           </Button>
           <Button href="#quote" variant="outline" className="text-brand-white">
-            استعلام قیمت رایگان
+            مشاوره رایگان
           </Button>
         </div>
       </PageHero>

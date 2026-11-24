@@ -4,6 +4,8 @@ import { CtaSection } from "@/components/CtaSection";
 import { Faq } from "@/components/Faq";
 import { Hero } from "@/components/Hero";
 import { HomeSnapSlider } from "@/components/HomeSnapSlider";
+import { MobileCardDetails } from "@/components/MobileCardDetails";
+import { MaterialDetailContent } from "@/components/MaterialDetailContent";
 import { JsonLd } from "@/components/JsonLd";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
@@ -169,6 +171,7 @@ export default async function HomePage() {
         <div className="mt-5 grid grid-cols-2 gap-2.5 sm:mt-12 sm:gap-5 lg:grid-cols-4">
           {materials.slice(0, 4).map((material, index) => (
             <Reveal key={material.name} delay={index * 60} className="h-full">
+              <MobileCardDetails title={material.name} cardTrigger={
               <article className="material-home-card flex h-full flex-col rounded-[17px] border border-[#e8e6df] bg-white p-2 sm:rounded-[25px] sm:p-3">
                 <div className="material-swatch relative aspect-[2/1] overflow-hidden rounded-[12px] sm:aspect-[5/3] sm:rounded-[17px]" data-material-index={index} aria-hidden="true">{material.image ? <img src={material.image} alt="" className="absolute inset-0 h-full w-full object-cover" /> : <><span /><span /><span /></>}</div>
                 <div className="flex flex-1 flex-col px-1 pt-2.5 pb-1.5 sm:px-3 sm:pt-4 sm:pb-3">
@@ -184,8 +187,12 @@ export default async function HomePage() {
                 <ul className="mt-4 hidden flex-wrap gap-1.5 border-t border-[#eae8e2] pt-3 sm:flex">
                   {material.properties.slice(0, 2).map(property => <li key={property} className="rounded-full border border-[#e8e6df] bg-[#f8f7f4] px-2 py-1 text-[10px] font-semibold text-[#4a494e]">{property}</li>)}
                 </ul>
+                <span className="brand-action-direct mt-3 flex items-center justify-between px-2 py-2 text-[10px] font-bold sm:text-xs">مشاهده جزئیات <ArrowUpLeft className="size-3.5" aria-hidden="true" /></span>
                 </div>
               </article>
+              }>
+                <MaterialDetailContent material={material} />
+              </MobileCardDetails>
             </Reveal>
           ))}
         </div>

@@ -279,7 +279,7 @@ export function PortfolioGrid({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-2 rounded-full bg-navy-600 px-5 py-2.5 text-sm font-bold text-brand-white shadow-lg shadow-navy-600/20 transition-colors hover:bg-navy-700"
+            className="brand-action-direct inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold transition-colors"
           >
             <Filter className="size-4" aria-hidden="true" />
             جستجوی پیشرفته
@@ -446,7 +446,7 @@ export function PortfolioGrid({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="flex-1 rounded-full bg-navy-600 py-3 text-sm font-bold text-brand-white"
+                className="brand-action-direct flex-1 py-3 text-sm font-bold"
               >
                 نمایش {filtered.length.toLocaleString("fa-IR")} پروژه
               </button>

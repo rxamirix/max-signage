@@ -15,7 +15,7 @@ export const defaultHeroContent = {
   headlineBottom: "وقتِ دیده شدنه!",
   image: "/images/hero/stop-figure.png",
   subtext: "",
-  primaryLabel: "استعلام رایگان",
+  primaryLabel: "مشاوره رایگان",
   secondaryLabel: "نمونه کارها",
   branchLabel: "شعبه‌های حضوری",
   cardLabel: "فلسفه طراحی مکث",

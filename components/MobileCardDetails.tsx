@@ -4,10 +4,11 @@ import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ArrowUpLeft, X } from "lucide-react";
 
 /** Keep the full desktop content while offering a readable, compact mobile card. */
-export function MobileCardDetails({ title, preview, children, label = "مشاهده جزئیات" }: {
+export function MobileCardDetails({ title, preview, children, cardTrigger, label = "مشاهده جزئیات" }: {
   title: string;
   preview?: ReactNode;
   children: ReactNode;
+  cardTrigger?: ReactNode;
   label?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -26,6 +27,12 @@ export function MobileCardDetails({ title, preview, children, label = "مشاه�
 
   return (
     <>
+      {cardTrigger ? (
+        <div className="relative h-full rounded-[17px] sm:rounded-[25px]">
+          {cardTrigger}
+          <button ref={trigger} type="button" aria-haspopup="dialog" aria-label={`${label} ${title}`} onClick={() => setOpen(true)} className="material-card-hit" />
+        </div>
+      ) : <>
       <div className="mobile-detail-desktop hidden flex-1 flex-col sm:flex">
         {children}
       </div>
@@ -35,6 +42,7 @@ export function MobileCardDetails({ title, preview, children, label = "مشاه�
           <span>{label}</span><ArrowUpLeft className="size-3.5 shrink-0" aria-hidden="true" />
         </button>
       </div>
+      </>}
       <dialog ref={dialog} aria-labelledby={headingId} className="mobile-detail-sheet" onClose={() => { setOpen(false); trigger.current?.focus({ preventScroll: true }); }} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
         {open && <div className="mobile-detail-sheet-inner" dir="rtl">
           <div className="mobile-detail-sheet-header">

@@ -74,7 +74,7 @@ export function Hero({ settings: site }: { settings: SiteSettings }) {
             ))}
           </ul>
           <div className="reference-hero-action">
-            <Button href="/contact#quote" variant="secondary">{content.primaryLabel}<ArrowLeft className="size-4" aria-hidden="true" /></Button>
+            <Button href="/contact#quote" variant="primary">{content.primaryLabel}<ArrowLeft className="size-4" aria-hidden="true" /></Button>
           </div>
         </div>
       </div>

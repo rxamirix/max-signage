@@ -26,7 +26,7 @@ export function CtaSection({
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button href="/contact#quote" size="lg">استعلام رایگان <ArrowUpLeft className="size-4" aria-hidden="true" /></Button>
+              <Button href="/contact#quote" size="lg">مشاوره رایگان <ArrowUpLeft className="size-4" aria-hidden="true" /></Button>
               <Button href="/contact" variant="outline" size="lg">تماس با ما</Button>
             </div>
           </div>

@@ -239,7 +239,7 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
                             <div dir="rtl" className="mega-services-panel rounded-[26px] border border-[#e5e5ed] bg-white p-4 text-[#24242d]">
                               <div className="mb-4 flex items-center justify-between gap-3 px-1">
                                 <span className="flex items-center gap-2.5 text-sm font-extrabold"><span className="grid size-9 place-items-center rounded-xl bg-navy-50 text-navy-600"><Layers3 className="size-4" aria-hidden="true" /></span>خدمات تابلوسازی مکث</span>
-                                <Link href="/services" className="site-button-sweep inline-flex items-center gap-2 rounded-full bg-navy-50 px-3.5 py-2 text-xs font-bold text-navy-700 hover:bg-navy-100">همه خدمات <ArrowLeft className="size-4" aria-hidden="true" /></Link>
+                                <Link href="/services" className="brand-action-direct site-button-sweep inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold">همه خدمات <ArrowLeft className="size-4" aria-hidden="true" /></Link>
                               </div>
                               <ul className="grid grid-cols-3 gap-3">
                                 {services.map((service) => (
@@ -259,7 +259,7 @@ export function Header({ variant = "site", lightHero = false, compactHome = fals
                               </ul>
                               <div className="mt-4 flex items-center justify-between gap-4 rounded-[17px] bg-[#21212b] px-4 py-3 text-white">
                                 <div className="flex items-center gap-2.5 text-xs font-semibold"><MessageCircle className="size-5 text-navy-200" aria-hidden="true" />برای انتخاب تابلو، مشاوره رایگان بگیرید.</div>
-                                <Link href="/contact#quote" className="site-button-sweep inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-yellow px-4 py-2 text-xs font-extrabold text-[#222212]">استعلام رایگان <ArrowLeft className="size-3.5" aria-hidden="true" /></Link>
+                                <Link href="/contact#quote" className="brand-action-direct brand-action-quote site-button-sweep inline-flex shrink-0 items-center gap-1.5 px-4 py-2 text-xs font-extrabold">مشاوره رایگان <ArrowLeft className="size-3.5" aria-hidden="true" /></Link>
                               </div>
                             </div>
                           </div>
