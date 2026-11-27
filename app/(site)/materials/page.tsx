@@ -44,7 +44,7 @@ export default async function MaterialsPage() {
         feature="materials"
         title="با چه متریالی تابلوی شما را می‌سازیم"
         crumbs={crumbs}
-        description="کیفیت یک تابلو تقریباً به‌طور کامل به متریال و نحوه اجرای آن بستگی دارد. اینجا بدون کلی‌گویی می‌گوییم از چه چیزی استفاده می‌کنیم، چه گریدهایی وجود دارد و چرا این انتخاب‌ها برای اقلیم مازندران اهمیت دارند."
+        description="کیفیت نهایی تابلو به متریال بستگی دارد. در مکث، هر متریال بر اساس کاربرد، اقلیم مازندران و نوع نصب انتخاب می‌شود. در ادامه توضیح می‌دهیم از چه موادی استفاده می‌کنیم و دلیل انتخاب هر کدام چیست."
       />
 
       <Section className="interior-soft-section">
@@ -67,6 +67,15 @@ export default async function MaterialsPage() {
             </Reveal>
           ))}
         </div>
+      </Section>
+
+      <Section className="interior-soft-section">
+        <SectionHeading title="راهنمای انتخاب" />
+        <ul className="mt-6 grid gap-3 md:grid-cols-2">
+          {["ترکیب نمای کامپوزیت و حروف چلنیوم: گزینه متعادل برای اغلب مغازه‌ها", "استیل ۳۰۴ با نورپردازی آندریک: مناسب برندهای لوکس و نماهای سنگ"].map((item) => (
+            <li key={item} className="interior-card rounded-[25px] border border-navy-100 bg-white p-5 text-navy-900">{item}</li>
+          ))}
+        </ul>
       </Section>
 
       <Section tone="dark" className="interior-dark-section">

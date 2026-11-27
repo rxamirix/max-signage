@@ -49,7 +49,7 @@ export function HeroCopy() {
             aria-hidden="true"
             className="absolute inset-0 translate-x-full bg-gradient-to-l from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:-translate-x-full"
           />
-          <span className="relative">استعلام رایگان</span>
+          <span className="relative">دریافت مشاوره رایگان</span>
           <svg
             viewBox="0 0 20 20"
             className="relative size-4 transition-transform duration-300 group-hover:-translate-x-1 sm:size-5"

@@ -197,6 +197,14 @@ export default async function HomePage() {
           ))}
         </div>
 
+        <div className="mt-6 rounded-[25px] border border-navy-100 bg-white p-4 sm:mt-10 sm:p-6">
+          <h3 className="text-lg font-bold text-navy-900">راهنمای انتخاب</h3>
+          <ul className="mt-3 grid gap-2 text-sm leading-7 text-navy-900 md:grid-cols-2">
+            <li>ترکیب نمای کامپوزیت و حروف چلنیوم: گزینه متعادل برای اغلب مغازه‌ها</li>
+            <li>استیل ۳۰۴ با نورپردازی آندریک: مناسب برندهای لوکس و نماهای سنگ</li>
+          </ul>
+        </div>
+
         <div className="mt-7 text-center sm:mt-12">
           <Button href="/materials" variant="secondary" className="home-view-all">
             جدول کامل متریال و مشخصات
