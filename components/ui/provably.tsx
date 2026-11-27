@@ -378,7 +378,7 @@ const PROVABLY_CSS = `
   --color-cv-body: #545869;
   --color-cv-muted: #8b8e9c;
   --color-cv-line: #eef0f5;
-  --color-cv-violet: #5a4ff0;
+  --color-cv-violet: #004dff;
   --color-cv-violet-deep: #4639e2;
   --color-cv-lavender: #e7e5fe;
   --color-cv-eyebrow: #8a80f2;
@@ -615,7 +615,7 @@ const PROVABLY_CSS = `
 .max-hero .cv-arrow { display: none; }
 .max-hero .cv-actions { direction: rtl; }
 .max-hero .cv-toggle { font-size: 44px; }
-.max-hero .cv-sweep { --cv-gradient: linear-gradient(110deg, #6d60f4, #5a4ff0 55%, #4639d4); }
+.max-hero .cv-sweep { --cv-gradient: linear-gradient(110deg, #3373ff, #004dff 55%, #003dce); }
 .max-hero .cv-solid { background: var(--cv-gradient); color: #fff; }
 .max-hero .cv-stats-card, .max-hero .cv-cert-wrap { font-size: var(--cv-card-font); }
 .max-hero .cv-stats-card { width: 15em; min-height: 8.9em; justify-content: center; }
@@ -731,7 +731,7 @@ const PROVABLY_CSS = `
   background: var(--color-cv-lavender);
   box-shadow:
     inset 0 0.02em 0.06em rgb(70 57 226 / 0.15),
-    0 0.06em 0.2em -0.04em rgb(90 79 240 / 0.45);
+    0 0.06em 0.2em -0.04em rgb(0 77 255 / 0.45);
 }
 
 .cv-toggle:focus-visible {
@@ -859,7 +859,7 @@ const PROVABLY_CSS = `
 
 @layer components {
   .cv-sweep {
-    --cv-gradient: linear-gradient(110deg, #6d7bff, var(--color-cv-violet) 50%, #8a4ff0);
+    --cv-gradient: linear-gradient(110deg, #6d7bff, var(--color-cv-violet) 50%, #3373ff);
     --cv-glint: rgb(255 255 255 / 0.55);
     position: relative;
     isolation: isolate;
@@ -921,7 +921,7 @@ const PROVABLY_CSS = `
   }
 
   .cv-outline {
-    --cv-glint: rgb(90 79 240 / 0.14);
+    --cv-glint: rgb(0 77 255 / 0.14);
     border: 1.5px solid transparent;
     background:
       linear-gradient(#fff, #fff) padding-box,
@@ -932,20 +932,20 @@ const PROVABLY_CSS = `
   .cv-outline:hover,
   .cv-outline:focus-visible {
     background:
-      linear-gradient(#f6f5ff, #f6f5ff) padding-box,
+      linear-gradient(#f4f7ff, #f4f7ff) padding-box,
       var(--cv-gradient) border-box;
-    box-shadow: 0 14px 26px -16px rgb(90 79 240 / 0.55);
+    box-shadow: 0 14px 26px -16px rgb(0 77 255 / 0.55);
   }
 
   .cv-solid {
     background: var(--cv-gradient);
     color: #fff;
-    box-shadow: 0 16px 30px -16px rgb(90 79 240 / 0.8);
+    box-shadow: 0 16px 30px -16px rgb(0 77 255 / 0.8);
   }
 
   .cv-solid:hover,
   .cv-solid:focus-visible {
-    box-shadow: 0 22px 34px -16px rgb(90 79 240 / 0.9);
+    box-shadow: 0 22px 34px -16px rgb(0 77 255 / 0.9);
   }
 
   .cv-sweep.cv-sweep-link {
@@ -1086,7 +1086,7 @@ const PROVABLY_CSS = `
 }
 
 .cv-stats-card[data-active='true'] {
-  border-color: rgb(90 79 240 / 0.14);
+  border-color: rgb(0 77 255 / 0.14);
   box-shadow:
     0 1.1em 2.2em -1em rgb(70 60 200 / 0.32),
     0 0.12em 0.3em rgb(20 21 31 / 0.05);
@@ -1155,7 +1155,7 @@ const PROVABLY_CSS = `
 
 .cv-seal-back {
   transform: rotateY(180deg);
-  background: radial-gradient(circle at 34% 28%, #8a82ff, var(--color-cv-violet) 52%, #3127b0);
+  background: radial-gradient(circle at 34% 28%, #6694ff, var(--color-cv-violet) 52%, #002e9c);
   box-shadow:
     inset 0 0 0 4px rgb(255 255 255 / 0.12),
     inset 0 2px 6px rgb(255 255 255 / 0.32),
@@ -1342,13 +1342,13 @@ const CredentialWaxSeal = ({ top, bottom, lightRef, glowRef, active = true, ...p
     <svg viewBox='0 0 160 160' fill='none' aria-hidden {...props}>
       <defs>
         <radialGradient ref={glowRef} id={`${id}-wax`} cx='31.6%' cy='26.8%' r='75%'>
-          <stop offset='0' stopColor='#8a82ff' />
-          <stop offset='0.45' stopColor='#5a4ff0' />
-          <stop offset='1' stopColor='#3127b0' />
+          <stop offset='0' stopColor='#6694ff' />
+          <stop offset='0.45' stopColor='#004dff' />
+          <stop offset='1' stopColor='#002e9c' />
         </radialGradient>
         <radialGradient id={`${id}-pool`} cx='60%' cy='62%' r='70%'>
           <stop offset='0' stopColor='#5f55f2' />
-          <stop offset='1' stopColor='#4237d4' />
+          <stop offset='1' stopColor='#003dce' />
         </radialGradient>
         <filter id={`${id}-soft`} x='-60%' y='-10%' width='220%' height='120%'>
           <feGaussianBlur stdDeviation='3.5' />
@@ -1374,7 +1374,7 @@ const CredentialWaxSeal = ({ top, bottom, lightRef, glowRef, active = true, ...p
           </feSpecularLighting>
           <feComposite in='gloss' in2='SourceAlpha' operator='in' result='glossIn' />
           <feComposite in='SourceGraphic' in2='glossIn' operator='arithmetic' k2='1' k3='0.6' result='lit' />
-          <feDropShadow in='lit' dx='1.5' dy='3' stdDeviation='2.6' floodColor='#1d1670' floodOpacity='0.38' />
+          <feDropShadow in='lit' dx='1.5' dy='3' stdDeviation='2.6' floodColor='#00236f' floodOpacity='0.38' />
         </filter>
 
         {/* Pressed in: dark along the inner top-left edge, a catch-light along the inner bottom-right */}
@@ -1382,7 +1382,7 @@ const CredentialWaxSeal = ({ top, bottom, lightRef, glowRef, active = true, ...p
           <feOffset in='SourceAlpha' dx='1.6' dy='1.8' result='down' />
           <feComposite in='SourceAlpha' in2='down' operator='out' result='topEdge' />
           <feGaussianBlur in='topEdge' stdDeviation='1.2' result='topSoft' />
-          <feFlood floodColor='#1d1670' floodOpacity={active ? 0.75 : 0.4} />
+          <feFlood floodColor='#00236f' floodOpacity={active ? 0.75 : 0.4} />
           <feComposite in2='topSoft' operator='in' result='shade' />
           <feOffset in='SourceAlpha' dx='-1.2' dy='-1.3' result='up' />
           <feComposite in='SourceAlpha' in2='up' operator='out' result='bottomEdge' />
@@ -1401,11 +1401,11 @@ const CredentialWaxSeal = ({ top, bottom, lightRef, glowRef, active = true, ...p
         <filter id={`${id}-raise`} x='-10%' y='-10%' width='120%' height='120%'>
           <feOffset in='SourceAlpha' dx='0.7' dy='0.8' result='down' />
           <feComposite in='SourceAlpha' in2='down' operator='out' result='rim' />
-          <feFlood floodColor='#d6d2ff' floodOpacity={active ? 0.9 : 0.4} />
+          <feFlood floodColor='#d2dfff' floodOpacity={active ? 0.9 : 0.4} />
           <feComposite in2='rim' operator='in' result='light' />
           <feGaussianBlur in='SourceAlpha' stdDeviation='0.5' result='blur' />
           <feOffset in='blur' dx='0.9' dy='1.1' result='drop' />
-          <feFlood floodColor='#1d1670' floodOpacity={active ? 0.65 : 0.25} />
+          <feFlood floodColor='#00236f' floodOpacity={active ? 0.65 : 0.25} />
           <feComposite in2='drop' operator='in' result='cast' />
           <feMerge>
             <feMergeNode in='cast' />
@@ -1418,9 +1418,9 @@ const CredentialWaxSeal = ({ top, bottom, lightRef, glowRef, active = true, ...p
       <path d={BLOB} fill={ref('wax')} filter={ref('dome')} />
       <circle cx={C} cy={C} r='54' fill={ref('pool')} filter={ref('press')} />
 
-      <g fill='#6158f4' filter={ref('raise')}>
-        <circle cx={C} cy={C} r='51' stroke='#6158f4' strokeWidth='2.4' fill='none' />
-        <circle cx={C} cy={C} r='26.5' stroke='#6158f4' strokeWidth='2.2' fill='none' />
+      <g fill='#1a60ff' filter={ref('raise')}>
+        <circle cx={C} cy={C} r='51' stroke='#1a60ff' strokeWidth='2.4' fill='none' />
+        <circle cx={C} cy={C} r='26.5' stroke='#1a60ff' strokeWidth='2.2' fill='none' />
         <text fontSize='10.5' fontWeight='700'>
           <textPath href={`#${id}-top`} startOffset='1.5%' textLength={TOP_LENGTH} lengthAdjust='spacingAndGlyphs'>
             {top}
@@ -1442,7 +1442,7 @@ const CredentialWaxSeal = ({ top, bottom, lightRef, glowRef, active = true, ...p
         <rect x='65' y='65' width='30' height='30' rx='9' />
         <path
           d='M75.5 88V72.5h5.5a4.6 4.6 0 0 1 0 9.2h-5.5'
-          stroke='#4237d4'
+          stroke='#003dce'
           strokeWidth='2.8'
           strokeLinecap='round'
           strokeLinejoin='round'
@@ -1597,8 +1597,8 @@ const CredentialLogoMark = (props: SVGProps< SVGSVGElement>) => {
       <defs>
         <linearGradient id={`${id}-tile`} x1='5' y1='5' x2='35' y2='35' gradientUnits='userSpaceOnUse'>
           <stop stopColor='#7a8bff' />
-          <stop offset='0.55' stopColor='#5a4ff0' />
-          <stop offset='1' stopColor='#8a4ff0' />
+          <stop offset='0.55' stopColor='#004dff' />
+          <stop offset='1' stopColor='#3373ff' />
         </linearGradient>
         <linearGradient id={`${id}-dot`} x1='24' y1='25' x2='30' y2='31' gradientUnits='userSpaceOnUse'>
           <stop stopColor='#e2dfff' />
@@ -2613,10 +2613,10 @@ type CredentialType = ProvablyCredential
 const ICONS = { pen: PenToolIcon, chart: ChartColumnIcon, type: TypeIcon }
 
 const SHADOWS = {
-  rest: '0 18px 36px -22px rgba(70, 60, 200, 0.32), 0 2px 6px rgba(20, 21, 31, 0.04)',
-  verified: '0 26px 46px -22px rgba(70, 60, 200, 0.45), 0 2px 6px rgba(20, 21, 31, 0.05)',
-  hover: '0 34px 54px -22px rgba(70, 60, 200, 0.5), 0 2px 6px rgba(20, 21, 31, 0.05)',
-  back: '0 10px 24px -18px rgba(70, 60, 200, 0.35), 0 1px 3px rgba(20, 21, 31, 0.04)'
+  rest: '0 18px 36px -22px rgba(0, 61, 206, 0.32), 0 2px 6px rgba(20, 21, 31, 0.04)',
+  verified: '0 26px 46px -22px rgba(0, 61, 206, 0.45), 0 2px 6px rgba(20, 21, 31, 0.05)',
+  hover: '0 34px 54px -22px rgba(0, 61, 206, 0.5), 0 2px 6px rgba(20, 21, 31, 0.05)',
+  back: '0 10px 24px -18px rgba(0, 61, 206, 0.35), 0 1px 3px rgba(20, 21, 31, 0.04)'
 }
 
 const SPRING = { type: 'spring' as const, stiffness: 170, damping: 19 }
@@ -3220,18 +3220,18 @@ const CredentialDialog = () => {
             {...(isMobile
               ? {
                   initial: { y: '100%' },
-                  animate: { y: 0, boxShadow: '0 -20px 60px -30px rgba(70, 60, 200, 0.45)' },
+                  animate: { y: 0, boxShadow: '0 -20px 60px -30px rgba(0, 61, 206, 0.45)' },
                   exit: { y: '100%' },
                   transition: { type: 'spring', stiffness: 320, damping: 34 }
                 }
               : {
                   initial: { rotate: CERTIFICATE.tilt.hover },
-                  animate: { rotate: 0, boxShadow: '0 40px 80px -30px rgba(70, 60, 200, 0.45)' },
+                  animate: { rotate: 0, boxShadow: '0 40px 80px -30px rgba(0, 61, 206, 0.45)' },
                   transition: { type: 'spring', stiffness: 200, damping: 26 }
                 })}
           >
             <motion.div
-              className='rounded-[18px] border border-[rgb(90_79_240/0.16)] p-5 sm:p-7'
+              className='rounded-[18px] border border-[rgb(0_77_255/0.16)] p-5 sm:p-7'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { delay: isMobile ? 0.1 : 0.18, duration: 0.25 } }}
               exit={{ opacity: 0, transition: { duration: 0.08 } }}
@@ -3641,13 +3641,13 @@ const HeroDecor = () => {
       <CredentialArc
         side='left'
         delay={ENTRANCE.decor}
-        className='cv-float cv-arc-left pointer-events-none! hidden h-auto w-[calc(62*var(--cv-u))] text-[#bdb5f7] lg:block'
+        className='cv-float cv-arc-left pointer-events-none! hidden h-auto w-[calc(62*var(--cv-u))] text-[#b5cbff] lg:block'
         style={place(FLOAT.arcLeft.x, FLOAT.arcLeft.y)}
       />
       <CredentialArc
         side='right'
         delay={ENTRANCE.decor + 0.1}
-        className='cv-float cv-arc-right pointer-events-none! hidden h-auto w-[calc(62*var(--cv-u))] text-[#bdb5f7] lg:block'
+        className='cv-float cv-arc-right pointer-events-none! hidden h-auto w-[calc(62*var(--cv-u))] text-[#b5cbff] lg:block'
         style={place(FLOAT.arcRight.x, FLOAT.arcRight.y)}
       />
       <motion.div className='cv-mobile-connector hidden' aria-hidden initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: ENTRANCE.decor + 0.1, duration: 0.45 }}>

@@ -312,7 +312,7 @@ export function LoginPageShell({ children, logo = "/logo-mark-navy.png" }: { chi
           </h1>
         </div>
 
-        <div className="rounded-3xl border border-navy-100 bg-brand-white p-6 shadow-[0_20px_50px_rgba(20,22,63,0.08)]">
+        <div className="rounded-3xl border border-navy-100 bg-brand-white p-6 shadow-[0_20px_50px_rgba(0,22,63,0.08)]">
           {children}
         </div>
 

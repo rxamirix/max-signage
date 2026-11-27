@@ -479,7 +479,7 @@ export function VolumetricStudio({
       <Room
         lightsOn={lightsOn}
         intensity={1}
-        lightColor="234,234,53"
+        lightColor="204, 255, 0"
         spots={[35, 50, 65]}
         isFlickering={isFlickering}
       />

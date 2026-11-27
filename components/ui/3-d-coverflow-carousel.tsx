@@ -240,7 +240,7 @@ export function CoverFlowCarousel({
                   height: "var(--cf-h)",
                   borderRadius: "16px",
                   overflow: "hidden",
-                  backgroundColor: "#261e72",
+                  backgroundColor: "#00236f",
                   border: "1px solid rgba(255,255,255,0.14)",
                   transform,
                   opacity,
@@ -249,8 +249,8 @@ export function CoverFlowCarousel({
                   transition:
                     "transform 700ms cubic-bezier(0.25, 1, 0.5, 1), opacity 700ms cubic-bezier(0.25, 1, 0.5, 1)",
                   boxShadow: isCenter
-                    ? "0 16px 36px rgba(20,22,63,0.28)"
-                    : "0 10px 22px rgba(20,22,63,0.14)",
+                    ? "0 16px 36px rgba(0,22,63,0.28)"
+                    : "0 10px 22px rgba(0,22,63,0.14)",
                   cursor: "pointer",
                 }}
               >

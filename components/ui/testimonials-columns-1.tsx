@@ -18,7 +18,7 @@ function TestimonialCard({
   role,
 }: Testimonial) {
   return (
-    <article className="testimonial-card w-full max-w-[11.5rem] rounded-2xl border border-navy-100 bg-brand-white p-4 shadow-[0_10px_24px_rgba(20,22,63,0.06)] sm:max-w-xs sm:rounded-3xl sm:p-8">
+    <article className="testimonial-card w-full max-w-[11.5rem] rounded-2xl border border-navy-100 bg-brand-white p-4 shadow-[0_10px_24px_rgba(0,22,63,0.06)] sm:max-w-xs sm:rounded-3xl sm:p-8">
       <p className="text-xs leading-6 text-navy-800 sm:text-sm sm:leading-8">{text}</p>
       <div className="mt-3 flex items-center gap-2 sm:mt-5">
         <img

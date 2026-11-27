@@ -5,7 +5,7 @@ import { MeshGradient } from "@paper-design/shaders-react";
 import { cn } from "@/lib/utils";
 
 /** Navy-only mesh — yellow stays on CTA / wordmark, not in the backdrop */
-const meshColors = ["#080720", "#14103d", "#5a4ff0", "#261e72", "#342aa8"];
+const meshColors = ["#080720", "#00133e", "#004dff", "#00236f", "#002e9c"];
 
 export default function ShaderShowcase({
   children,

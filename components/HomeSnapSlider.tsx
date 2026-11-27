@@ -41,7 +41,7 @@ function MaxScrollControls({
         aria-label="اسلاید قبلی"
         disabled={!canPrev}
         onClick={onPrev}
-        className="slide-arrow hidden size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35 md:inline-flex"
+        className="slide-arrow hidden size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(0,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35 md:inline-flex"
       >
         <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
           <path
@@ -62,7 +62,7 @@ function MaxScrollControls({
         aria-label="اسلاید بعدی"
         disabled={!canNext}
         onClick={onNext}
-        className="slide-arrow hidden size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(20,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35 md:inline-flex"
+        className="slide-arrow hidden size-11 items-center justify-center rounded-full border border-navy-200 bg-brand-white text-navy-800 shadow-[0_8px_20px_rgba(0,22,63,0.1)] transition enabled:hover:border-navy-600 enabled:hover:text-navy-600 disabled:opacity-35 md:inline-flex"
       >
         <svg viewBox="0 0 20 20" className="size-5" aria-hidden="true">
           <path

@@ -49,7 +49,7 @@ export function StoryPlayButton({
       aria-label={label}
       className={cn(
         "relative shrink-0 rounded-full p-[2.5px]",
-        "bg-[conic-gradient(from_210deg,#f58529,#dd2a7b,#8134af,#515bd4,#eaea35,#f58529)]",
+        "bg-[conic-gradient(from_210deg,#f58529,#dd2a7b,#8134af,#515bd4,#ccff00,#f58529)]",
         "transition-colors hover:brightness-110 active:brightness-95",
         className,
       )}
@@ -266,7 +266,7 @@ export function StoryPlayer({
             </div>
 
             <div className="mt-3 flex items-center gap-2.5">
-              <span className="grid size-8 shrink-0 place-items-center overflow-hidden rounded-full bg-[conic-gradient(from_210deg,#f58529,#dd2a7b,#8134af,#515bd4,#eaea35,#f58529)] p-[1.5px]">
+              <span className="grid size-8 shrink-0 place-items-center overflow-hidden rounded-full bg-[conic-gradient(from_210deg,#f58529,#dd2a7b,#8134af,#515bd4,#ccff00,#f58529)] p-[1.5px]">
                 <span className="size-full overflow-hidden rounded-full bg-black">
                   {thumb ? (
                     // eslint-disable-next-line @next/next/no-img-element

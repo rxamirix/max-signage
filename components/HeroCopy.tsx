@@ -34,7 +34,7 @@ export function HeroCopy() {
 
         <motion.a
           href="/contact#quote"
-          className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-brand-yellow px-7 py-3 text-[0.95rem] font-bold text-navy-950 shadow-[0_14px_40px_rgba(234,234,53,0.32)] sm:gap-3 sm:px-8 sm:py-3.5 sm:text-base md:px-10 md:py-4 md:text-lg"
+          className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-brand-yellow px-7 py-3 text-[0.95rem] font-bold text-navy-950 shadow-[0_14px_40px_rgba(204, 255, 0,0.32)] sm:gap-3 sm:px-8 sm:py-3.5 sm:text-base md:px-10 md:py-4 md:text-lg"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.85, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}

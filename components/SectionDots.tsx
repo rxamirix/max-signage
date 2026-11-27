@@ -79,7 +79,7 @@ export function SectionDots() {
       aria-label="بخش‌های صفحه"
       className="fixed top-1/2 right-4 z-40 hidden -translate-y-1/2 md:block"
     >
-      <div className="flex flex-col items-center gap-1 rounded-full bg-white/70 px-1.5 py-2 shadow-[0_8px_24px_rgba(20,22,63,0.08)] ring-1 ring-navy-900/10 backdrop-blur-md">
+      <div className="flex flex-col items-center gap-1 rounded-full bg-white/70 px-1.5 py-2 shadow-[0_8px_24px_rgba(0,22,63,0.08)] ring-1 ring-navy-900/10 backdrop-blur-md">
         {sections.map((section) => {
           const isActive = section.id === active;
           return (

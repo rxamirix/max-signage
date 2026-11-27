@@ -29,7 +29,7 @@ export function Faq({
               "faq-card relative overflow-hidden rounded-[20px] border transition-colors duration-300",
               tone === "light"
                 ? isOpen
-                  ? "border-navy-200 bg-white shadow-[0_12px_30px_-22px_rgba(38,30,114,.22)]"
+                  ? "border-navy-200 bg-white shadow-[0_12px_30px_-22px_rgba(0,35,111,.22)]"
                   : "border-[#e7e6ec] bg-white hover:border-navy-200"
                 : isOpen
                   ? "border-brand-yellow/40 bg-brand-white/5"

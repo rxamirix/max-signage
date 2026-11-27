@@ -62,7 +62,7 @@ function dotTexture() {
   if (!ctx) return new THREE.CanvasTexture(canvas);
   const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
   gradient.addColorStop(0, "rgba(254,255,249,1)");
-  gradient.addColorStop(1, "rgba(234,234,53,0)");
+  gradient.addColorStop(1, "rgba(204, 255, 0,0)");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 64, 64);
   return new THREE.CanvasTexture(canvas);
@@ -208,7 +208,7 @@ export function HeroGemScene() {
 
     const dropRestPos = dropMesh.position.clone();
 
-    const floorGlowMap = glowTexture("rgba(234,234,53");
+    const floorGlowMap = glowTexture("rgba(204, 255, 0");
     const floorGlowMat = new THREE.MeshBasicMaterial({
       map: floorGlowMap,
       transparent: true,

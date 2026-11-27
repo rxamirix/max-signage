@@ -436,7 +436,7 @@ export function AccountDashboard() {
         </div>
 
         {!data.jobs.length ? (
-          <div className="mx-auto max-w-xl rounded-3xl border border-navy-100 bg-brand-white p-8 text-center shadow-[0_20px_50px_rgba(20,22,63,0.06)] md:p-12">
+          <div className="mx-auto max-w-xl rounded-3xl border border-navy-100 bg-brand-white p-8 text-center shadow-[0_20px_50px_rgba(0,22,63,0.06)] md:p-12">
             <span className="mx-auto grid size-16 place-items-center rounded-full bg-navy-50 text-navy-400">
               <svg viewBox="0 0 24 24" className="size-8" aria-hidden="true">
                 <path

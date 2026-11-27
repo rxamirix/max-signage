@@ -274,7 +274,7 @@ function ResultsPanel({
       id={id}
       role="listbox"
       className={cn(
-        "max-h-80 w-full overflow-y-auto rounded-[24px] border p-2 shadow-[0_24px_65px_-16px_rgba(38,30,114,.28)] backdrop-blur-xl",
+        "max-h-80 w-full overflow-y-auto rounded-[24px] border p-2 shadow-[0_24px_65px_-16px_rgba(0,35,111,.28)] backdrop-blur-xl",
         tone === "light"
           ? "border-navy-100 bg-white/95"
           : "border-brand-white/10 bg-navy-900 shadow-black/40",
